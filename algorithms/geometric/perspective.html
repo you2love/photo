@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>透视变换 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/geometric/perspective.html">透视变换</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 透视变换算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">透视变换</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">透视变换</h1>
+                    <p class="lead">透视变换是一种更通用的几何变换，能够模拟三维空间中的视角变化，常用于校正图像的透视失真。</p>
+
+                    <h2>算法原理</h2>
+                    <p>透视变换（也称为投影变换）是一种将图像从一个视平面投影到另一个视平面的变换。它能够处理由于相机视角不同而产生的透视失真，例如拍摄矩形物体时由于角度问题导致的梯形变形。</p>
+                    
+                    <p>透视变换使用3×3的投影矩阵来描述变换关系：</p>
+                    <p>[x']   [h11  h12  h13] [x]</p>
+                    <p>[y'] = [h21  h22  h23] [y]</p>
+                    <p>[w ]   [h31  h32  h33] [1]</p>
+                    
+                    <p>其中最终坐标为 (x'/w, y'/w)。透视变换有8个自由度（因为齐次坐标的尺度不变性）。</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>确定变换前后的4对对应点（不共线）</li>
+                        <li>计算透视变换矩阵</li>
+                        <li>对图像中的每个像素点应用变换公式</li>
+                        <li>使用插值方法计算变换后像素值</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def perspective_transform(image_path, src_points, dst_points):
+    """
+    实现透视变换
+    :param image_path: 输入图像路径
+    :param src_points: 原图像中的4个点 [(x1,y1), (x2,y2), (x3,y3), (x4,y4)]
+    :param dst_points: 目标图像中的4个点 [(x1',y1'), (x2',y2'), (x3',y3'), (x4',y4')]
+    :return: 原图和透视变换后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 转换为numpy数组
+    src_points = np.float32(src_points)
+    dst_points = np.float32(dst_points)
+    
+    # 计算透视变换矩阵
+    matrix = cv2.getPerspectiveTransform(src_points, dst_points)
+    
+    # 应用透视变换
+    perspective_img = cv2.warpPerspective(img, matrix, (img.shape[1], img.shape[0]))
+    
+    return img, perspective_img
+
+def manual_perspective_transform(image_path, matrix):
+    """
+    手动实现透视变换
+    :param image_path: 输入图像路径
+    :param matrix: 3x3透视变换矩阵
+    :return: 透视变换后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    height, width = img.shape[:2]
+    
+    # 创建输出图像
+    transformed = np.zeros_like(img)
+    
+    # 对输出图像的每个像素进行反向映射
+    for i in range(height):
+        for j in range(width):
+            # 当前点坐标
+            x, y = j, i
+            
+            # 应用反向透视变换
+            # [x']   [h11  h12  h13] [x]
+            # [y'] = [h21  h22  h23] [y]
+            # [w ]   [h31  h32  h33] [1]
+            
+            w = matrix[2][0]*x + matrix[2][1]*y + matrix[2][2]
+            if abs(w) < 1e-10:  # 避免除零
+                continue
+                
+            orig_x = (matrix[0][0]*x + matrix[0][1]*y + matrix[0][2]) / w
+            orig_y = (matrix[1][0]*x + matrix[1][1]*y + matrix[1][2]) / w
+            
+            # 检查坐标是否在原图范围内
+            if 0 <= orig_x < width and 0 <= orig_y < height:
+                # 使用最近邻插值
+                orig_x_int, orig_y_int = int(orig_x), int(orig_y)
+                
+                if orig_x_int < width - 1 and orig_y_int < height - 1:
+                    # 双线性插值
+                    dx, dy = orig_x - orig_x_int, orig_y - orig_y_int
+                    transformed[i, j] = (
+                        img[orig_y_int, orig_x_int] * (1 - dx) * (1 - dy) +
+                        img[orig_y_int, orig_x_int + 1] * dx * (1 - dy) +
+                        img[orig_y_int + 1, orig_x_int] * (1 - dx) * dy +
+                        img[orig_y_int + 1, orig_x_int + 1] * dx * dy
+                    ).astype(np.uint8)
+                else:
+                    transformed[i, j] = img[orig_y_int, orig_x_int]
+    
+    return img, transformed
+
+def birdseye_view_transform(image_path, src_quad):
+    """
+    将图像转换为鸟瞰视图
+    :param image_path: 输入图像路径
+    :param src_quad: 原图像中的四边形顶点 [(x1,y1), (x2,y2), (x3,y3), (x4,y4)]
+    :return: 原图和鸟瞰视图
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    height, width = img.shape[:2]
+    
+    # 定义目标矩形的四个角点
+    # 假设我们想要一个标准矩形输出
+    rect_width = 400
+    rect_height = 600
+    dst_points = np.float32([
+        [0, 0],
+        [rect_width - 1, 0],
+        [rect_width - 1, rect_height - 1],
+        [0, rect_height - 1]
+    ])
+    
+    src_points = np.float32(src_quad)
+    
+    # 计算透视变换矩阵
+    matrix = cv2.getPerspectiveTransform(src_points, dst_points)
+    
+    # 应用透视变换
+    birdseye = cv2.warpPerspective(img, matrix, (rect_width, rect_height))
+    
+    return img, birdseye
+
+def deskew_image(image_path, corners):
+    """
+    纠正图像倾斜
+    :param image_path: 输入图像路径
+    :param corners: 文档的四个角点 [(x1,y1), (x2,y2), (x3,y3), (x4,y4)]
+    :return: 原图和纠正后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 定义输出图像的尺寸
+    # 计算输出图像的宽度和高度
+    (tl, tr, br, bl) = corners
+    
+    # 计算新图像的宽度
+    widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
+    widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
+    maxWidth = max(int(widthA), int(widthB))
+    
+    # 计算新图像的高度
+    heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
+    heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
+    maxHeight = max(int(heightA), int(heightB))
+    
+    # 定义目标点
+    dst = np.array([
+        [0, 0],
+        [maxWidth - 1, 0],
+        [maxWidth - 1, maxHeight - 1],
+        [0, maxHeight - 1]], dtype="float32")
+    
+    # 计算透视变换矩阵
+    src = np.array(corners, dtype="float32")
+    matrix = cv2.getPerspectiveTransform(src, dst)
+    
+    # 应用透视变换
+    corrected = cv2.warpPerspective(img, matrix, (maxWidth, maxHeight))
+    
+    return img, corrected
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # 定义源点和目标点
+    # src_pts = [(100, 100), (300, 100), (300, 300), (100, 300)]
+    # dst_pts = [(50, 50), (350, 100), (300, 350), (80, 300)]
+    # img, result = perspective_transform('image.jpg', src_pts, dst_pts)
+    # quad = [(100, 100), (400, 100), (400, 300), (100, 300)]
+    # bird_img, bird_result = birdseye_view_transform('image.jpg', quad)
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>能够处理透视失真，模拟不同的观察视角</li>
+                        <li>适用于文档扫描和校正</li>
+                        <li>能够实现更真实的几何变换效果</li>
+                        <li>保持直线的性质（直线变换后仍为直线）</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>需要4对对应点才能确定变换矩阵</li>
+                        <li>计算复杂度较高</li>
+                        <li>对点的定位精度要求较高</li>
+                        <li>变换后可能出现较大的空白区域</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>文档扫描和校正</li>
+                        <li>车牌识别预处理</li>
+                        <li>地图校正</li>
+                        <li>虚拟现实和增强现实</li>
+                        <li>3D重建</li>
+                        <li>鸟瞰图生成</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 几何变换</li>
+                                <li><strong>适用:</strong> 透视校正和视角变换</li>
+                                <li><strong>复杂度:</strong> O(M×N)，其中M和N是图像的行和列</li>
+                                <li><strong>参数:</strong> 透视变换矩阵（8个自由度）</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="affine.html">仿射变换</a></li>
+                                <li><a href="translation.html">平移变换</a></li>
+                                <li><a href="rotation.html">旋转变换</a></li>
+                                <li><a href="scaling.html">缩放变换</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

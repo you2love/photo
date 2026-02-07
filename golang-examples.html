@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golang图像处理示例 - 计算机图像处理教程</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="libs/roboto-font.css" rel="stylesheet">
+    <link href="libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny边缘检测</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Golang示例部分 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Golang图像处理示例</h2>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>环境准备</h6>
+                            <pre><code class="language-bash">go mod init image-processing
+go get golang.org/x/image/...</code></pre>
+                            
+                            <h6 class="mt-4">图像读取与基本操作</h6>
+                            <pre><code class="language-go">package main
+
+import (
+    "image"
+    "image/jpeg"
+    "os"
+    "golang.org/x/image/draw"
+)
+
+func loadImage(filename string) (image.Image, error) {
+    file, err := os.Open(filename)
+    if err != nil {
+        return nil, err
+    }
+    defer file.Close()
+    
+    img, _, err := image.Decode(file)
+    return img, err
+}</code></pre>
+                            
+                            <h6 class="mt-4">几何变换示例</h6>
+                            <pre><code class="language-go">func resizeImage(img image.Image, newWidth, newHeight int) image.Image {
+    bounds := img.Bounds()
+    dst := image.NewRGBA(image.Rect(0, 0, newWidth, newHeight))
+    
+    // 使用双线性插值进行缩放
+    draw.CatmullRom.Scale(dst, dst.Bounds(), img, bounds, draw.Over, nil)
+    
+    return dst
+}</code></pre>
+                            
+                            <h6 class="mt-4">滤波算法示例</h6>
+                            <pre><code class="language-go">func convolve(img image.Image, kernel [][]float64) image.Image {
+    bounds := img.Bounds()
+    width, height := bounds.Dx(), bounds.Dy()
+    
+    // 创建输出图像
+    dst := image.NewRGBA(bounds)
+    
+    // 计算核的中心位置
+    kernelSize := len(kernel)
+    kernelCenter := kernelSize / 2
+    
+    for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+        for x := bounds.Min.X; x < bounds.Max.X; x++ {
+            var rSum, gSum, bSum float64
+            
+            for ky := 0; ky < kernelSize; ky++ {
+                for kx := 0; kx < kernelSize; kx++ {
+                    // 计算图像中的对应位置
+                    imgX := x + kx - kernelCenter
+                    imgY := y + ky - kernelCenter
+                    
+                    // 边界处理：使用镜像填充
+                    if imgX < bounds.Min.X {
+                        imgX = bounds.Min.X + (bounds.Min.X - imgX)
+                    } else if imgX >= bounds.Max.X {
+                        imgX = bounds.Max.X - 1 - (imgX - bounds.Max.X)
+                    }
+                    
+                    if imgY < bounds.Min.Y {
+                        imgY = bounds.Min.Y + (bounds.Min.Y - imgY)
+                    } else if imgY >= bounds.Max.Y {
+                        imgY = bounds.Max.Y - 1 - (imgY - bounds.Max.Y)
+                    }
+                    
+                    // 获取像素值
+                    r, g, b, _ := img.At(imgX, imgY).RGBA()
+                    
+                    // 应用核权重
+                    weight := kernel[ky][kx]
+                    rSum += float64(r>>8) * weight
+                    gSum += float64(g>>8) * weight
+                    bSum += float64(b>>8) * weight
+                }
+            }
+            
+            // 限制值范围并设置像素
+            r := uint8(clamp(rSum, 0, 255))
+            g := uint8(clamp(gSum, 0, 255))
+            b := uint8(clamp(bSum, 0, 255))
+            
+            dst.Set(x, y, color.RGBA{r, g, b, 255})
+        }
+    }
+    
+    return dst
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>

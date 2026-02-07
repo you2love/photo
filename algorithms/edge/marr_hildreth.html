@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marr-Hildreth算子 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/edge/marr_hildreth.html">Marr-Hildreth算子</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Marr-Hildreth算子算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">Marr-Hildreth算子</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">Marr-Hildreth算子</h1>
+                    <p class="lead">Marr-Hildreth算子是一种基于零交叉检测的边缘检测算法，结合了高斯滤波和拉普拉斯算子，也被称为LoG（Laplacian of Gaussian）算子。</p>
+
+                    <h2>算法原理</h2>
+                    <p>Marr-Hildreth算子由David Marr和Ellen Hildreth在1980年提出，是一种基于生物视觉理论的边缘检测方法。该算法分为两个步骤：</p>
+                    
+                    <ol>
+                        <li>使用高斯滤波器平滑图像以减少噪声</li>
+                        <li>应用拉普拉斯算子检测边缘</li>
+                    </ol>
+                    
+                    <p>该算法的核心思想是在不同尺度下检测边缘，通过寻找拉普拉斯算子的零交叉点来确定边缘位置。</p>
+                    
+                    <p>LoG（Laplacian of Gaussian）函数的数学表达式为：</p>
+                    <p>LoG(x, y) = [x² + y² - 2σ²] / [σ⁴] × e^[-(x² + y²)/(2σ²)]</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>选择适当的高斯核标准差σ</li>
+                        <li>对输入图像应用高斯滤波以平滑噪声</li>
+                        <li>对平滑后的图像应用拉普拉斯算子</li>
+                        <li>检测零交叉点以确定边缘位置</li>
+                        <li>应用阈值处理以消除弱边缘响应</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def marr_hildreth_operator(image_path, sigma=1.0, kernel_size=15):
+    """
+    实现Marr-Hildreth算子（LoG算子）
+    :param image_path: 输入图像路径
+    :param sigma: 高斯核标准差
+    :param kernel_size: 核大小
+    :return: 原图和边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # 先应用高斯滤波
+    gaussian_blurred = cv2.GaussianBlur(gray, (kernel_size, kernel_size), sigma)
+    
+    # 应用拉普拉斯算子
+    laplacian = cv2.Laplacian(gaussian_blurred, cv2.CV_64F)
+    
+    # 计算绝对值并转换为uint8
+    laplacian_abs = np.uint8(np.absolute(laplacian))
+    
+    return img, laplacian_abs
+
+def create_log_kernel(size, sigma):
+    """
+    创建LoG (Laplacian of Gaussian) 核
+    :param size: 核大小
+    :param sigma: 高斯核标准差
+    :return: LoG核
+    """
+    kernel = np.zeros((size, size), dtype=np.float32)
+    center = size // 2
+    
+    # 计算LoG核
+    for i in range(size):
+        for j in range(size):
+            x, y = i - center, j - center
+            exp_term = np.exp(-(x**2 + y**2) / (2 * sigma**2))
+            log_term = (x**2 + y**2 - 2 * sigma**2) / (2 * np.pi * sigma**6)
+            kernel[i, j] = log_term * exp_term
+    
+    # 归一化
+    kernel = kernel - np.mean(kernel)
+    
+    return kernel
+
+def manual_marr_hildreth(image_path, sigma=1.0, kernel_size=15):
+    """
+    手动实现Marr-Hildreth算子
+    :param image_path: 输入图像路径
+    :param sigma: 高斯核标准差
+    :param kernel_size: 核大小
+    :return: Marr-Hildreth边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 创建LoG核
+    log_kernel = create_log_kernel(kernel_size, sigma)
+    
+    # 应用LoG核
+    log_result = cv2.filter2D(img, cv2.CV_64F, log_kernel)
+    
+    # 计算绝对值并转换为uint8
+    log_abs = np.uint8(np.absolute(log_result))
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), log_abs
+
+def detect_zero_crossings(image_path, sigma=1.0, threshold=5):
+    """
+    基于零交叉检测的Marr-Hildreth算子
+    :param image_path: 输入图像路径
+    :param sigma: 高斯核标准差
+    :param threshold: 零交叉检测阈值
+    :return: 原图和零交叉边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 应用高斯滤波
+    gaussian_blurred = cv2.GaussianBlur(img, (0, 0), sigma)
+    
+    # 应用拉普拉斯算子
+    laplacian = cv2.Laplacian(gaussian_blurred, cv2.CV_64F)
+    
+    # 检测零交叉
+    height, width = laplacian.shape
+    zero_crossings = np.zeros_like(laplacian, dtype=np.uint8)
+    
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            # 检查周围像素是否发生符号变化
+            neighbors = [
+                laplacian[i-1, j], laplacian[i+1, j],
+                laplacian[i, j-1], laplacian[i, j+1],
+                laplacian[i-1, j-1], laplacian[i-1, j+1],
+                laplacian[i+1, j-1], laplacian[i+1, j+1]
+            ]
+            
+            # 检查是否有零交叉
+            positive_count = sum(1 for n in neighbors if n > threshold)
+            negative_count = sum(1 for n in neighbors if n < -threshold)
+            
+            if positive_count > 0 and negative_count > 0:
+                # 检查中心像素是否接近零
+                if abs(laplacian[i, j]) < threshold * 2:
+                    zero_crossings[i, j] = 255
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), zero_crossings
+
+def multi_scale_marr_hildreth(image_path, sigmas=[0.5, 1.0, 1.5, 2.0]):
+    """
+    多尺度Marr-Hildreth边缘检测
+    :param image_path: 输入图像路径
+    :param sigmas: 不同尺度的sigma值列表
+    :return: 原图和多尺度边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    results = []
+    for sigma in sigmas:
+        # 应用高斯滤波
+        gaussian_blurred = cv2.GaussianBlur(img, (0, 0), sigma)
+        
+        # 应用拉普拉斯算子
+        laplacian = cv2.Laplacian(gaussian_blurred, cv2.CV_64F)
+        
+        # 计算绝对值并转换为uint8
+        laplacian_abs = np.uint8(np.absolute(laplacian))
+        results.append(laplacian_abs)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), results
+
+def compare_log_with_canny(image_path, sigma=1.0):
+    """
+    比较LoG和Canny边缘检测
+    :param image_path: 输入图像路径
+    :param sigma: LoG的sigma值
+    :return: 原图、LoG结果和Canny结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # LoG边缘检测
+    gaussian_blurred = cv2.GaussianBlur(img, (0, 0), sigma)
+    laplacian = cv2.Laplacian(gaussian_blurred, cv2.CV_64F)
+    log_result = np.uint8(np.absolute(laplacian))
+    
+    # Canny边缘检测
+    canny_result = cv2.Canny(img, 50, 150)
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            log_result, 
+            canny_result)
+
+def advanced_zero_crossing_detection(image_path, sigma=1.0, threshold=10):
+    """
+    改进的零交叉检测算法
+    :param image_path: 输入图像路径
+    :param sigma: 高斯核标准差
+    :param threshold: 阈值
+    :return: 原图和改进的零交叉边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 应用高斯滤波
+    gaussian_blurred = cv2.GaussianBlur(img, (0, 0), sigma)
+    
+    # 应用拉普拉斯算子
+    laplacian = cv2.Laplacian(gaussian_blurred, cv2.CV_64F)
+    
+    # 更精确的零交叉检测
+    height, width = laplacian.shape
+    zero_crossings = np.zeros_like(laplacian, dtype=np.uint8)
+    
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            # 检查水平方向零交叉
+            if (laplacian[i, j-1] > threshold and laplacian[i, j+1] < -threshold) or \
+               (laplacian[i, j-1] < -threshold and laplacian[i, j+1] > threshold):
+                zero_crossings[i, j] = 255
+            
+            # 检查垂直方向零交叉
+            elif (laplacian[i-1, j] > threshold and laplacian[i+1, j] < -threshold) or \
+                 (laplacian[i-1, j] < -threshold and laplacian[i+1, j] > threshold):
+                zero_crossings[i, j] = 255
+            
+            # 检查对角方向零交叉
+            elif (laplacian[i-1, j-1] > threshold and laplacian[i+1, j+1] < -threshold) or \
+                 (laplacian[i-1, j-1] < -threshold and laplacian[i+1, j+1] > threshold):
+                zero_crossings[i, j] = 255
+            
+            elif (laplacian[i-1, j+1] > threshold and laplacian[i+1, j-1] < -threshold) or \
+                 (laplacian[i-1, j+1] < -threshold and laplacian[i+1, j-1] > threshold):
+                zero_crossings[i, j] = 255
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), zero_crossings
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = marr_hildreth_operator('image.jpg', 1.0, 15)
+    # manual_img, manual_result = manual_marr_hildreth('image.jpg', 1.0, 15)
+    # zero_img, zero_result = detect_zero_crossings('image.jpg', 1.0, 5)
+    # multi_img, multi_results = multi_scale_marr_hildreth('image.jpg', [0.5, 1.0, 1.5])
+    # comp_img, log_res, canny_res = compare_log_with_canny('image.jpg', 1.0)
+    # adv_img, adv_result = advanced_zero_crossing_detection('image.jpg', 1.0, 10)
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>基于生物视觉理论，有良好的理论基础</li>
+                        <li>能够检测不同尺度的边缘</li>
+                        <li>对噪声相对不敏感（因先进行了高斯滤波）</li>
+                        <li>能够提供边缘的粗略定位</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>计算复杂度较高</li>
+                        <li>边缘定位精度不如Canny算子</li>
+                        <li>对参数选择敏感</li>
+                        <li>可能产生双边缘效应</li>
+                        <li>零交叉检测对噪声仍有一定敏感性</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>多尺度边缘检测</li>
+                        <li>生物视觉模拟</li>
+                        <li>图像分割预处理</li>
+                        <li>特征提取</li>
+                        <li>纹理分析</li>
+                        <li>医学图像处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 边缘检测</li>
+                                <li><strong>适用:</strong> 多尺度边缘检测</li>
+                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>参数:</strong> 高斯核标准差σ、核大小</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="canny.html">Canny算子</a></li>
+                                <li><a href="laplacian.html">Laplacian算子</a></li>
+                                <li><a href="sobel.html">Sobel算子</a></li>
+                                <li><a href="prewitt.html">Prewitt算子</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

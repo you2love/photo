@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>缩放变换 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/geometric/scaling.html">缩放变换</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 缩放变换算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">缩放变换</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">缩放变换</h1>
+                    <p class="lead">缩放变换是改变图像尺寸的基本几何变换，通过调整图像的宽度和高度来放大或缩小图像。</p>
+
+                    <h2>算法原理</h2>
+                    <p>缩放变换是通过改变图像中每个像素点相对于参考点的距离来实现图像尺寸变化的操作。设原始点为(x, y)，缩放因子为(sx, sy)，则变换后的点为(x', y')：</p>
+                    <p>x' = x × sx</p>
+                    <p>y' = y × sy</p>
+                    
+                    <p>在齐次坐标系下，缩放变换可以用矩阵形式表示：</p>
+                    <p>[x']   [sx  0  0] [x]</p>
+                    <p>[y'] = [0  sy  0] [y]</p>
+                    <p>[1 ]   [0   0  1] [1]</p>
+                    
+                    <p>当sx=sy时，称为均匀缩放；当sx≠sy时，称为非均匀缩放。</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>确定缩放中心点和缩放因子(sx, sy)</li>
+                        <li>计算缩放后的图像尺寸</li>
+                        <li>对输出图像的每个像素点，通过反向映射找到原图中的对应点</li>
+                        <li>使用插值方法计算像素值</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def scaling_transform(image_path, fx, fy, interpolation=cv2.INTER_LINEAR):
+    """
+    实现图像缩放变换
+    :param image_path: 输入图像路径
+    :param fx: 水平方向缩放因子
+    :param fy: 垂直方向缩放因子
+    :param interpolation: 插值方法
+    :return: 原图和缩放后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 应用缩放变换
+    scaled = cv2.resize(img, None, fx=fx, fy=fy, interpolation=interpolation)
+    
+    return img, scaled
+
+def manual_scaling(image_path, fx, fy):
+    """
+    手动实现图像缩放变换
+    :param image_path: 输入图像路径
+    :param fx: 水平方向缩放因子
+    :param fy: 垂直方向缩放因子
+    :return: 缩放后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    height, width = img.shape[:2]
+    
+    # 计算新图像尺寸
+    new_width = int(width * fx)
+    new_height = int(height * fy)
+    
+    # 创建输出图像
+    scaled = np.zeros((new_height, new_width, img.shape[2]), dtype=img.dtype)
+    
+    # 进行缩放变换
+    for i in range(new_height):
+        for j in range(new_width):
+            # 计算原图中的对应坐标
+            orig_x = int(j / fx)
+            orig_y = int(i / fy)
+            
+            # 边界检查
+            if 0 <= orig_x < width and 0 <= orig_y < height:
+                scaled[i, j] = img[orig_y, orig_x]
+    
+    return img, scaled
+
+def scaling_with_interpolation(image_path, fx, fy, method='bilinear'):
+    """
+    带插值的缩放变换
+    :param image_path: 输入图像路径
+    :param fx: 水平方向缩放因子
+    :param fy: 垂直方向缩放因子
+    :param method: 插值方法 ('nearest', 'bilinear', 'bicubic')
+    :return: 原图和缩放后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 根据插值方法选择OpenCV函数参数
+    if method == 'nearest':
+        interpolation = cv2.INTER_NEAREST
+    elif method == 'bilinear':
+        interpolation = cv2.INTER_LINEAR
+    elif method == 'bicubic':
+        interpolation = cv2.INTER_CUBIC
+    else:
+        interpolation = cv2.INTER_LINEAR
+    
+    # 应用缩放变换
+    scaled = cv2.resize(img, None, fx=fx, fy=fy, interpolation=interpolation)
+    
+    return img, scaled
+
+def adaptive_scaling(image_path, max_width, max_height):
+    """
+    自适应缩放，保持宽高比
+    :param image_path: 输入图像路径
+    :param max_width: 最大宽度
+    :param max_height: 最大高度
+    :return: 原图和自适应缩放后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    height, width = img.shape[:2]
+    
+    # 计算缩放比例
+    scale_w = max_width / width
+    scale_h = max_height / height
+    scale = min(scale_w, scale_h)  # 保持宽高比
+    
+    # 应用缩放
+    scaled = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+    
+    return img, scaled
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = scaling_transform('image.jpg', 1.5, 1.5)
+    # manual_img, manual_result = manual_scaling('image.jpg', 1.5, 1.5)
+    # interp_img, interp_result = scaling_with_interpolation('image.jpg', 1.5, 1.5, 'bicubic')
+    # adaptive_img, adaptive_result = adaptive_scaling('image.jpg', 800, 600)
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>可以灵活调整图像尺寸</li>
+                        <li>保持图像的长宽比（可选）</li>
+                        <li>广泛应用于图像预处理和显示适配</li>
+                        <li>计算相对简单</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>缩小图像时会丢失细节信息</li>
+                        <li>放大图像时可能出现模糊或锯齿</li>
+                        <li>需要选择合适的插值方法</li>
+                        <li>可能导致图像变形（非均匀缩放）</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>图像尺寸标准化</li>
+                        <li>网页和移动应用图像优化</li>
+                        <li>图像预处理（机器学习）</li>
+                        <li>多分辨率图像生成</li>
+                        <li>图像显示适配</li>
+                        <li>数据增强（机器学习）</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 几何变换</li>
+                                <li><strong>适用:</strong> 图像尺寸调整</li>
+                                <li><strong>复杂度:</strong> O(M×N×k)，其中M和N是输出图像的行和列，k是插值计算复杂度</li>
+                                <li><strong>参数:</strong> 水平缩放因子fx，垂直缩放因子fy，插值方法</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="translation.html">平移变换</a></li>
+                                <li><a href="rotation.html">旋转变换</a></li>
+                                <li><a href="affine.html">仿射变换</a></li>
+                                <li><a href="perspective.html">透视变换</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

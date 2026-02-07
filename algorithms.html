@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像处理常见算法 - 计算机图像处理教程</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="libs/roboto-font.css" rel="stylesheet">
+    <link href="libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny边缘检测</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 常见算法部分 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">图像处理常见算法</h2>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">几何变换</h5>
+                            <ul>
+                                <li><strong>平移</strong>：改变图像位置，使用变换矩阵</li>
+                                <li><strong>旋转</strong>：绕某点旋转图像，保持角度不变</li>
+                                <li><strong>缩放</strong>：改变图像尺寸，可能需要插值</li>
+                                <li><strong>仿射变换</strong>：保持直线和平行线性质</li>
+                                <li><strong>透视变换</strong>：模拟视角变化，保持直线性质</li>
+                                <li><strong>插值方法</strong>：最近邻、双线性、双三次插值</li>
+                                <li><strong>弹性变形</strong>：非刚性几何变换</li>
+                                <li><strong>图像配准</strong>：对齐多幅图像</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">滤波算法</h5>
+                            <ul>
+                                <li><strong>均值滤波</strong>：平滑图像，去除噪声，但会模糊边缘</li>
+                                <li><strong>高斯滤波</strong>：保留边缘的平滑处理，模拟光学模糊</li>
+                                <li><strong>中值滤波</strong>：去除椒盐噪声，保护边缘</li>
+                                <li><strong>双边滤波</strong>：保边去噪，考虑空间和强度距离</li>
+                                <li><strong>维纳滤波</strong>：最小均方误差准则的最优滤波</li>
+                                <li><strong>导向滤波</strong>：边缘保护平滑，计算效率高</li>
+                                <li><strong>非局部均值滤波</strong>：利用图像自相似性去噪</li>
+                                <li><strong>各向异性扩散</strong>：Perona-Malik方程</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">边缘检测</h5>
+                            <ul>
+                                <li><strong>Sobel算子</strong>：检测梯度变化，对噪声敏感</li>
+                                <li><strong>Canny算子</strong>：多阶段边缘检测，最优边缘检测器</li>
+                                <li><strong>Prewitt算子</strong>：类似Sobel，对水平和垂直边缘敏感</li>
+                                <li><strong>Laplacian算子</strong>：二阶导数检测，对噪声敏感</li>
+                                <li><strong>Marr-Hildreth</strong>：先高斯平滑再Laplacian检测</li>
+                                <li><strong>Roberts算子</strong>：对角方向边缘检测，计算简单</li>
+                                <li><strong>LoG算子</strong>：高斯拉普拉斯算子</li>
+                                <li><strong>Difference of Gaussians</strong>：高斯差分近似LoG</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">直线检测</h5>
+                            <ul>
+                                <li><strong>Hough变换</strong>：检测直线、圆等几何形状</li>
+                                <li><strong>Probabilistic Hough</strong>：概率霍夫变换，计算效率更高</li>
+                                <li><strong>Line Segment Detector</strong>：线段检测器，无需参数调节</li>
+                                <li><strong>RANSAC算法</strong>：随机抽样一致性，用于拟合直线</li>
+                                <li><strong>Radon变换</strong>：积分变换，用于检测直线</li>
+                                <li><strong>梯度方向直方图</strong>：基于边缘方向的直线检测</li>
+                                <li><strong>Split-and-Merge</strong>：分割合并算法检测线段</li>
+                                <li><strong>最小二乘拟合</strong>：数学方法拟合直线</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">形态学操作</h5>
+                            <ul>
+                                <li><strong>腐蚀</strong>：缩小前景对象，消除小突起</li>
+                                <li><strong>膨胀</strong>：扩大前景对象，填补小孔洞</li>
+                                <li><strong>开运算</strong>：先腐蚀后膨胀，去除小对象</li>
+                                <li><strong>闭运算</strong>：先膨胀后腐蚀，填补孔洞</li>
+                                <li><strong>击中-击不中变换</strong>：检测特定形状模式</li>
+                                <li><strong>骨架化</strong>：提取对象的中心线</li>
+                                <li><strong>顶帽变换</strong>：原图像与开运算结果之差</li>
+                                <li><strong>底帽变换</strong>：闭运算结果与原图像之差</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">频域处理</h5>
+                            <ul>
+                                <li><strong>傅里叶变换</strong>：时域到频域转换，分析频率成分</li>
+                                <li><strong>离散余弦变换(DCT)</strong>：JPEG压缩基础</li>
+                                <li><strong>小波变换</strong>：多尺度分析，局部化好</li>
+                                <li><strong>频域滤波</strong>：低通、高通、带通滤波</li>
+                                <li><strong>快速傅里叶变换(FFT)</strong>：高效计算算法</li>
+                                <li><strong>短时傅里叶变换</strong>：时频分析</li>
+                                <li><strong>小波包变换</strong>：小波变换的推广</li>
+                                <li><strong>脊波变换</strong>：处理线状奇异性的方法</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">特征提取</h5>
+                            <ul>
+                                <li><strong>HOG特征</strong>：方向梯度直方图，行人检测</li>
+                                <li><strong>SIFT特征</strong>：尺度不变特征变换</li>
+                                <li><strong>SURF特征</strong>：加速稳健特征，速度更快</li>
+                                <li><strong>ORB特征</strong>：Oriented FAST and Rotated BRIEF</li>
+                                <li><strong>纹理分析</strong>：灰度共生矩阵(GLCM)等方法</li>
+                                <li><strong>矩特征</strong>：Hu矩等不变矩</li>
+                                <li><strong>局部二值模式(LBP)</strong>：纹理描述算子</li>
+                                <li><strong>Gabor滤波器</strong>：纹理和边缘检测</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">图像增强</h5>
+                            <ul>
+                                <li><strong>直方图均衡化</strong>：改善图像对比度</li>
+                                <li><strong>直方图规定化</strong>：匹配特定直方图</li>
+                                <li><strong>锐化</strong>：增强边缘和细节</li>
+                                <li><strong>同态滤波</strong>：同时调整亮度和对比度</li>
+                                <li><strong>伽马校正</strong>：调整图像亮度</li>
+                                <li><strong>逆滤波</strong>：去除已知退化</li>
+                                <li><strong>维纳滤波</strong>：最优复原滤波器</li>
+                                <li><strong>约束最小二乘滤波</strong>：平滑约束的复原</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">二值化算法</h5>
+                            <ul>
+                                <li><strong>全局阈值</strong>：使用单一阈值分割整幅图像</li>
+                                <li><strong>Otsu算法</strong>：自动计算最优阈值，最大化类间方差</li>
+                                <li><strong>迭代阈值</strong>：通过迭代优化找到最佳阈值</li>
+                                <li><strong>局部阈值</strong>：根据像素邻域动态计算阈值</li>
+                                <li><strong>Sauvola算法</strong>：适用于光照不均的文本图像</li>
+                                <li><strong>Niblack算法</strong>：基于局部均值和标准差的自适应阈值</li>
+                                <li><strong>三角算法</strong>：基于直方图峰值的阈值选择</li>
+                                <li><strong>双峰算法</strong>：寻找直方图中两个峰值的中点</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">图像分割</h5>
+                            <ul>
+                                <li><strong>阈值分割</strong>：基于像素强度分类</li>
+                                <li><strong>区域生长</strong>：基于相似性合并像素</li>
+                                <li><strong>分裂合并</strong>：递归分割策略</li>
+                                <li><strong>边缘分割</strong>：基于边缘检测结果</li>
+                                <li><strong>主动轮廓模型</strong>：Snake、C-V模型</li>
+                                <li><strong>分水岭算法</strong>：基于拓扑理论</li>
+                                <li><strong>图割算法</strong>：基于图论的分割方法</li>
+                                <li><strong>K-means聚类</strong>：无监督分割方法</li>
+                                <li><strong>Mean Shift分割</strong>：基于密度的聚类方法</li>
+                                <li><strong>GrabCut算法</strong>：交互式前景提取</li>
+                                <li><strong>随机游走分割</strong>：基于图论的概率分割</li>
+                                <li><strong>图谱分割</strong>：基于特征向量的分割</li>
+                                <li><strong>超像素分割</strong>：SLIC、Felzenszwalb等算法</li>
+                                <li><strong>深度学习分割</strong>：FCN、U-Net、Mask R-CNN</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">图像复原</h5>
+                            <ul>
+                                <li><strong>运动模糊复原</strong>：去除相机或物体运动造成的模糊</li>
+                                <li><strong>离焦模糊复原</strong>：去除镜头焦点不准造成的模糊</li>
+                                <li><strong>去雾算法</strong>：恢复大气散射影响的图像</li>
+                                <li><strong>去噪算法</strong>：去除各种类型的噪声</li>
+                                <li><strong>超分辨率重建</strong>：提高图像分辨率</li>
+                                <li><strong>图像修复</strong>：填补图像缺失区域</li>
+                                <li><strong>盲去卷积</strong>：不知道点扩散函数的复原</li>
+                                <li><strong>稀疏表示</strong>：基于稀疏先验的复原方法</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">图像配准</h5>
+                            <ul>
+                                <li><strong>基于特征的配准</strong>：利用关键点进行配准</li>
+                                <li><strong>基于强度的配准</strong>：直接比较像素强度</li>
+                                <li><strong>刚性配准</strong>：只允许平移和旋转</li>
+                                <li><strong>仿射配准</strong>：允许缩放和剪切</li>
+                                <li><strong>非刚性配准</strong>：允许弹性变形</li>
+                                <li><strong>互信息配准</strong>：基于信息论的相似性度量</li>
+                                <li><strong>相位相关</strong>：基于频域的配准方法</li>
+                                <li><strong>光流法</strong>：估计像素运动场</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">图像压缩</h5>
+                            <ul>
+                                <li><strong>无损压缩</strong>：完全恢复原始图像</li>
+                                <li><strong>有损压缩</strong>：牺牲质量换取高压缩比</li>
+                                <li><strong>预测编码</strong>：利用空间冗余</li>
+                                <li><strong>变换编码</strong>：DCT、小波变换等</li>
+                                <li><strong>矢量量化</strong>：将图像块映射到码本</li>
+                                <li><strong>JPEG标准</strong>：基于DCT的压缩</li>
+                                <li><strong>JPEG2000标准</strong>：基于小波的压缩</li>
+                                <li><strong>帧间预测</strong>：视频压缩中的时间冗余利用</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">模式识别与分类</h5>
+                            <ul>
+                                <li><strong>模板匹配</strong>：寻找图像中的特定模式</li>
+                                <li><strong>支持向量机(SVM)</strong>：有效的分类算法</li>
+                                <li><strong>K近邻算法</strong>：基于相似性的分类</li>
+                                <li><strong>贝叶斯分类器</strong>：基于概率的分类</li>
+                                <li><strong>决策树</strong>：树形结构的分类器</li>
+                                <li><strong>主成分分析(PCA)</strong>：降维和特征提取</li>
+                                <li><strong>线性判别分析(LDA)</strong>：有监督的降维方法</li>
+                                <li><strong>聚类算法</strong>：K-means、层次聚类等</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>

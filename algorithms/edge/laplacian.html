@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laplacian算子 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/edge/laplacian.html">Laplacian算子</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Laplacian算子算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">Laplacian算子</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">Laplacian算子</h1>
+                    <p class="lead">Laplacian算子是一种各向同性的二阶导数算子，用于检测图像中的边缘和细节，对边缘方向不敏感。</p>
+
+                    <h2>算法原理</h2>
+                    <p>Laplacian算子是一个二阶微分算子，用于检测图像中的边缘。它通过对图像进行二阶微分来突出图像中的快速变化区域（如边缘）。Laplacian算子的数学表达式为：</p>
+                    
+                    <p>∇²f = ∂²f/∂x² + ∂²f/∂y²</p>
+                    
+                    <p>在离散图像中，Laplacian算子通常用以下3×3核表示：</p>
+                    
+                    <p><strong>标准Laplacian核:</strong></p>
+                    <p>[ 0  -1   0]</p>
+                    <p>[-1   4  -1]</p>
+                    <p>[ 0  -1   0]</p>
+                    
+                    <p><strong>对角Laplacian核:</strong></p>
+                    <p>[-1  -1  -1]</p>
+                    <p>[-1   8  -1]</p>
+                    <p>[-1  -1  -1]</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>将输入图像转换为灰度图像</li>
+                        <li>应用Laplacian核进行卷积运算</li>
+                        <li>计算绝对值以获得边缘强度</li>
+                        <li>应用阈值处理以获得二值边缘图</li>
+                        <li>可选：与高斯滤波结合形成LoG（Laplacian of Gaussian）算子</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def laplacian_operator_builtin(image_path):
+    """
+    使用OpenCV内置函数实现Laplacian算子
+    :param image_path: 输入图像路径
+    :return: 原图和边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # 应用Laplacian算子
+    laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+    
+    # 计算绝对值并转换为uint8
+    laplacian_abs = np.uint8(np.absolute(laplacian))
+    
+    return img, laplacian_abs
+
+def manual_laplacian_operator(image_path):
+    """
+    手动实现Laplacian算子
+    :param image_path: 输入图像路径
+    :return: Laplacian边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    height, width = img.shape
+    
+    # 定义Laplacian核（对角版本）
+    laplacian_kernel = np.array([[0, -1, 0], 
+                                 [-1, 4, -1], 
+                                 [0, -1, 0]], dtype=np.float32)
+    
+    # 创建输出图像
+    result = np.zeros_like(img, dtype=np.float32)
+    
+    # 应用Laplacian核（卷积）
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            # 计算卷积
+            result[i, j] = np.sum(img[i-1:i+2, j-1:j+2] * laplacian_kernel)
+    
+    # 计算绝对值并转换为uint8
+    result = np.uint8(np.absolute(result))
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), result
+
+def laplacian_with_gaussian(image_path, kernel_size=3, sigma=1.0):
+    """
+    LoG (Laplacian of Gaussian) 算子 - 先高斯滤波再Laplacian
+    :param image_path: 输入图像路径
+    :param kernel_size: 高斯核大小
+    :param sigma: 高斯核标准差
+    :return: 原图和LoG边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 先应用高斯滤波
+    gaussian_blurred = cv2.GaussianBlur(img, (kernel_size, kernel_size), sigma)
+    
+    # 再应用Laplacian算子
+    laplacian = cv2.Laplacian(gaussian_blurred, cv2.CV_64F)
+    
+    # 计算绝对值并转换为uint8
+    laplacian_abs = np.uint8(np.absolute(laplacian))
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), laplacian_abs
+
+def log_operator(image_path, kernel_size=15, sigma=1.0):
+    """
+    实现真正的LoG (Laplacian of Gaussian) 算子
+    :param image_path: 输入图像路径
+    :param kernel_size: 核大小
+    :param sigma: 高斯核标准差
+    :return: 原图和LoG边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 创建LoG核
+    def create_log_kernel(size, sigma):
+        kernel = np.zeros((size, size), dtype=np.float32)
+        center = size // 2
+        
+        # 计算LoG核
+        for i in range(size):
+            for j in range(size):
+                x, y = i - center, j - center
+                exp_term = np.exp(-(x**2 + y**2) / (2 * sigma**2))
+                log_term = (x**2 + y**2 - 2 * sigma**2) / (2 * np.pi * sigma**6)
+                kernel[i, j] = log_term * exp_term
+        
+        # 归一化
+        kernel = kernel - np.mean(kernel)
+        
+        return kernel
+    
+    # 创建LoG核
+    log_kernel = create_log_kernel(kernel_size, sigma)
+    
+    # 应用LoG核
+    log_result = cv2.filter2D(img, cv2.CV_64F, log_kernel)
+    
+    # 计算绝对值并转换为uint8
+    log_abs = np.uint8(np.absolute(log_result))
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), log_abs
+
+def diagonal_laplacian(image_path):
+    """
+    使用对角Laplacian核
+    :param image_path: 输入图像路径
+    :return: 原图和对角Laplacian边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 定义对角Laplacian核
+    diagonal_kernel = np.array([[-1, -1, -1], 
+                                [-1,  8, -1], 
+                                [-1, -1, -1]], dtype=np.float32)
+    
+    # 应用对角Laplacian核
+    diagonal_result = cv2.filter2D(img, cv2.CV_64F, diagonal_kernel)
+    
+    # 计算绝对值并转换为uint8
+    diagonal_abs = np.uint8(np.absolute(diagonal_result))
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), diagonal_abs
+
+def laplacian_zero_crossings(image_path, threshold=5):
+    """
+    基于零交叉的Laplacian边缘检测
+    :param image_path: 输入图像路径
+    :param threshold: 零交叉检测阈值
+    :return: 原图和零交叉边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 应用Laplacian算子
+    laplacian = cv2.Laplacian(img, cv2.CV_64F)
+    
+    # 检测零交叉
+    height, width = laplacian.shape
+    zero_crossings = np.zeros_like(laplacian, dtype=np.uint8)
+    
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            # 检查周围像素是否发生符号变化
+            neighbors = [
+                laplacian[i-1, j], laplacian[i+1, j],
+                laplacian[i, j-1], laplacian[i, j+1],
+                laplacian[i-1, j-1], laplacian[i-1, j+1],
+                laplacian[i+1, j-1], laplacian[i+1, j+1]
+            ]
+            
+            # 检查是否有零交叉
+            positive_count = sum(1 for n in neighbors if n > threshold)
+            negative_count = sum(1 for n in neighbors if n < -threshold)
+            
+            if positive_count > 0 and negative_count > 0:
+                zero_crossings[i, j] = 255
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), zero_crossings
+
+def compare_laplacian_kernels(image_path):
+    """
+    比较不同Laplacian核的效果
+    :param image_path: 输入图像路径
+    :return: 原图和不同Laplacian核的结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 标准Laplacian核
+    standard_kernel = np.array([[0, -1, 0], 
+                                [-1, 4, -1], 
+                                [0, -1, 0]], dtype=np.float32)
+    
+    # 对角Laplacian核
+    diagonal_kernel = np.array([[-1, -1, -1], 
+                                [-1,  8, -1], 
+                                [-1, -1, -1]], dtype=np.float32)
+    
+    # 应用不同核
+    standard_result = cv2.filter2D(img, cv2.CV_64F, standard_kernel)
+    diagonal_result = cv2.filter2D(img, cv2.CV_64F, diagonal_kernel)
+    
+    # 计算绝对值并转换为uint8
+    standard_abs = np.uint8(np.absolute(standard_result))
+    diagonal_abs = np.uint8(np.absolute(diagonal_result))
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            standard_abs, 
+            diagonal_abs)
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = laplacian_operator_builtin('image.jpg')
+    # manual_img, manual_result = manual_laplacian_operator('image.jpg')
+    # log_img, log_result = laplacian_with_gaussian('image.jpg', 5, 1.0)
+    # true_log_img, true_log_result = log_operator('image.jpg', 15, 1.0)
+    # diag_img, diag_result = diagonal_laplacian('image.jpg')
+    # zero_img, zero_result = laplacian_zero_crossings('image.jpg', 5)
+    # comp_img, std_result, diag_result = compare_laplacian_kernels('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>各向同性，对边缘方向不敏感</li>
+                        <li>能够检测边缘的双边缘结构</li>
+                        <li>计算简单，效率较高</li>
+                        <li>对细节敏感，能检测细小边缘</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>对噪声非常敏感</li>
+                        <li>会产生双边缘效应</li>
+                        <li>无法提供边缘方向信息</li>
+                        <li>边缘定位不够精确</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>图像锐化</li>
+                        <li>边缘检测（通常与高斯滤波结合）</li>
+                        <li>特征提取</li>
+                        <li>图像增强</li>
+                        <li>纹理分析</li>
+                        <li>医学图像处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 边缘检测</li>
+                                <li><strong>适用:</strong> 二阶导数边缘检测</li>
+                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>参数:</strong> 核大小</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="sobel.html">Sobel算子</a></li>
+                                <li><a href="canny.html">Canny算子</a></li>
+                                <li><a href="prewitt.html">Prewitt算子</a></li>
+                                <li><a href="marr_hildreth.html">Marr-Hildreth算子</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

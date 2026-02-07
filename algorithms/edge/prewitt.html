@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prewitt算子 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/edge/prewitt.html">Prewitt算子</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Prewitt算子算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">Prewitt算子</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">Prewitt算子</h1>
+                    <p class="lead">Prewitt算子是一种离散微分算子，用于计算图像亮度函数的梯度近似值，在图像处理中用于边缘检测，与Sobel算子类似但权重分布不同。</p>
+
+                    <h2>算法原理</h2>
+                    <p>Prewitt算子通过计算图像在水平和垂直方向上的梯度来检测边缘。它使用两个3×3的卷积核分别计算x方向和y方向的梯度：</p>
+                    
+                    <p><strong>x方向核 (Px):</strong></p>
+                    <p>[-1  0  +1]</p>
+                    <p>[-1  0  +1]</p>
+                    <p>[-1  0  +1]</p>
+                    
+                    <p><strong>y方向核 (Py):</strong></p>
+                    <p>[-1  -1  -1]</p>
+                    <p>[ 0   0   0]</p>
+                    <p>[+1  +1  +1]</p>
+                    
+                    <p>边缘强度和方向的计算公式为：</p>
+                    <p>Gradient Magnitude: G = |Gx| + |Gy| （或 G = √(Gx² + Gy²)）</p>
+                    <p>Edge Direction: θ = arctan(Gy / Gx)</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>将输入图像转换为灰度图像</li>
+                        <li>使用Prewitt x核计算水平方向的梯度</li>
+                        <li>使用Prewitt y核计算垂直方向的梯度</li>
+                        <li>计算梯度幅值和方向</li>
+                        <li>应用阈值处理以获得二值边缘图</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def prewitt_operator(image_path):
+    """
+    实现Prewitt算子
+    :param image_path: 输入图像路径
+    :return: 原图和边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # 定义Prewitt核
+    prewitt_x = np.array([[-1, 0, 1], 
+                          [-1, 0, 1], 
+                          [-1, 0, 1]], dtype=np.float32)
+    
+    prewitt_y = np.array([[-1, -1, -1], 
+                          [ 0,  0,  0], 
+                          [ 1,  1,  1]], dtype=np.float32)
+    
+    # 计算x和y方向的梯度
+    grad_x = cv2.filter2D(gray, cv2.CV_64F, prewitt_x)
+    grad_y = cv2.filter2D(gray, cv2.CV_64F, prewitt_y)
+    
+    # 计算梯度幅值 (使用曼哈顿距离)
+    magnitude = np.abs(grad_x) + np.abs(grad_y)
+    
+    # 归一化到0-255范围
+    magnitude = np.uint8(255 * magnitude / np.max(magnitude))
+    
+    return img, magnitude
+
+def manual_prewitt_operator(image_path):
+    """
+    手动实现Prewitt算子
+    :param image_path: 输入图像路径
+    :return: Prewitt边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    height, width = img.shape
+    
+    # 定义Prewitt核
+    prewitt_x = np.array([[-1, 0, 1], 
+                          [-1, 0, 1], 
+                          [-1, 0, 1]], dtype=np.float32)
+    
+    prewitt_y = np.array([[-1, -1, -1], 
+                          [ 0,  0,  0], 
+                          [ 1,  1,  1]], dtype=np.float32)
+    
+    # 创建输出图像
+    grad_x = np.zeros_like(img, dtype=np.float32)
+    grad_y = np.zeros_like(img, dtype=np.float32)
+    
+    # 应用Prewitt核（卷积）
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            # 计算x方向梯度
+            grad_x[i, j] = np.sum(img[i-1:i+2, j-1:j+2] * prewitt_x)
+            # 计算y方向梯度
+            grad_y[i, j] = np.sum(img[i-1:i+2, j-1:j+2] * prewitt_y)
+    
+    # 计算梯度幅值 (使用欧几里得距离)
+    magnitude = np.sqrt(grad_x**2 + grad_y**2)
+    
+    # 归一化到0-255范围
+    magnitude = np.uint8(255 * magnitude / np.max(magnitude))
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), magnitude
+
+def prewitt_with_direction(image_path):
+    """
+    Prewitt算子计算边缘强度和方向
+    :param image_path: 输入图像路径
+    :return: 原图、边缘强度图和边缘方向图
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 定义Prewitt核
+    prewitt_x = np.array([[-1, 0, 1], 
+                          [-1, 0, 1], 
+                          [-1, 0, 1]], dtype=np.float32)
+    
+    prewitt_y = np.array([[-1, -1, -1], 
+                          [ 0,  0,  0], 
+                          [ 1,  1,  1]], dtype=np.float32)
+    
+    # 计算x和y方向的梯度
+    grad_x = cv2.filter2D(img, cv2.CV_64F, prewitt_x)
+    grad_y = cv2.filter2D(img, cv2.CV_64F, prewitt_y)
+    
+    # 计算梯度幅值
+    magnitude = np.sqrt(grad_x**2 + grad_y**2)
+    
+    # 计算梯度方向
+    direction = np.arctan2(grad_y, grad_x)
+    
+    # 归一化梯度幅值到0-255范围
+    magnitude = np.uint8(255 * magnitude / np.max(magnitude))
+    
+    # 将方向转换为度数并映射到0-255范围
+    direction_deg = np.abs(direction * 180 / np.pi)
+    direction_normalized = np.uint8(255 * direction_deg / 180)
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            magnitude, 
+            direction_normalized)
+
+def prewitt_threshold(image_path, threshold=50):
+    """
+    带阈值处理的Prewitt边缘检测
+    :param image_path: 输入图像路径
+    :param threshold: 阈值
+    :return: 原图和阈值处理后的边缘图
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 定义Prewitt核
+    prewitt_x = np.array([[-1, 0, 1], 
+                          [-1, 0, 1], 
+                          [-1, 0, 1]], dtype=np.float32)
+    
+    prewitt_y = np.array([[-1, -1, -1], 
+                          [ 0,  0,  0], 
+                          [ 1,  1,  1]], dtype=np.float32)
+    
+    # 计算x和y方向的梯度
+    grad_x = cv2.filter2D(img, cv2.CV_64F, prewitt_x)
+    grad_y = cv2.filter2D(img, cv2.CV_64F, prewitt_y)
+    
+    # 计算梯度幅值
+    magnitude = np.sqrt(grad_x**2 + grad_y**2)
+    
+    # 应用阈值
+    _, thresholded = cv2.threshold(magnitude, threshold, 255, cv2.THRESH_BINARY)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), np.uint8(thresholded)
+
+def compare_sobel_prewitt(image_path):
+    """
+    比较Sobel和Prewitt算子
+    :param image_path: 输入图像路径
+    :return: 原图、Sobel结果和Prewitt结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # Sobel算子
+    sobel_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
+    sobel_y = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=3)
+    sobel_magnitude = np.sqrt(sobel_x**2 + sobel_y**2)
+    sobel_result = np.uint8(255 * sobel_magnitude / np.max(sobel_magnitude))
+    
+    # Prewitt算子
+    prewitt_x = np.array([[-1, 0, 1], 
+                          [-1, 0, 1], 
+                          [-1, 0, 1]], dtype=np.float32)
+    
+    prewitt_y = np.array([[-1, -1, -1], 
+                          [ 0,  0,  0], 
+                          [ 1,  1,  1]], dtype=np.float32)
+    
+    grad_x = cv2.filter2D(img, cv2.CV_64F, prewitt_x)
+    grad_y = cv2.filter2D(img, cv2.CV_64F, prewitt_y)
+    prewitt_magnitude = np.sqrt(grad_x**2 + grad_y**2)
+    prewitt_result = np.uint8(255 * prewitt_magnitude / np.max(prewitt_magnitude))
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            sobel_result, 
+            prewitt_result)
+
+def prewitt_extended_kernel(image_path):
+    """
+    使用扩展的Prewitt核（5x5）
+    :param image_path: 输入图像路径
+    :return: 原图和扩展Prewitt核的边缘检测结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 定义扩展的Prewitt核 (5x5)
+    extended_prewitt_x = np.array([
+        [-2, -1, 0, 1, 2],
+        [-2, -1, 0, 1, 2],
+        [-2, -1, 0, 1, 2],
+        [-2, -1, 0, 1, 2],
+        [-2, -1, 0, 1, 2]
+    ], dtype=np.float32)
+    
+    extended_prewitt_y = np.array([
+        [-2, -2, -2, -2, -2],
+        [-1, -1, -1, -1, -1],
+        [ 0,  0,  0,  0,  0],
+        [ 1,  1,  1,  1,  1],
+        [ 2,  2,  2,  2,  2]
+    ], dtype=np.float32)
+    
+    # 应用扩展的Prewitt核
+    grad_x = cv2.filter2D(img, cv2.CV_64F, extended_prewitt_x)
+    grad_y = cv2.filter2D(img, cv2.CV_64F, extended_prewitt_y)
+    
+    # 计算梯度幅值
+    magnitude = np.sqrt(grad_x**2 + grad_y**2)
+    
+    # 归一化到0-255范围
+    magnitude = np.uint8(255 * magnitude / np.max(magnitude))
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), magnitude
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = prewitt_operator('image.jpg')
+    # manual_img, manual_result = manual_prewitt_operator('image.jpg')
+    # dir_img, mag_result, dir_result = prewitt_with_direction('image.jpg')
+    # thresh_img, thresh_result = prewitt_threshold('image.jpg', 50)
+    # comp_img, sobel_res, prewitt_res = compare_sobel_prewitt('image.jpg')
+    # ext_img, ext_result = prewitt_extended_kernel('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>计算简单，效率高</li>
+                        <li>对边缘方向敏感</li>
+                        <li>能够检测边缘的方向信息</li>
+                        <li>与Sobel算子类似，但权重分布更均匀</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>对噪声敏感</li>
+                        <li>边缘定位不够精确</li>
+                        <li>边缘较粗，不如Canny算子精细</li>
+                        <li>检测到的边缘可能不连续</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>实时边缘检测</li>
+                        <li>图像预处理</li>
+                        <li>特征提取</li>
+                        <li>纹理分析</li>
+                        <li>形状识别</li>
+                        <li>计算机视觉预处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 边缘检测</li>
+                                <li><strong>适用:</strong> 梯度计算和边缘检测</li>
+                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>参数:</strong> 核大小</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="sobel.html">Sobel算子</a></li>
+                                <li><a href="canny.html">Canny算子</a></li>
+                                <li><a href="laplacian.html">Laplacian算子</a></li>
+                                <li><a href="marr_hildreth.html">Marr-Hildreth算子</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

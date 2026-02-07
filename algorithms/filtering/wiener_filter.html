@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>维纳滤波 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/filtering/wiener_filter.html">维纳滤波</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 维纳滤波算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">维纳滤波</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">维纳滤波</h1>
+                    <p class="lead">维纳滤波是一种基于统计学原理的最优滤波技术，旨在最小化估计误差的均方值，常用于图像复原和去模糊。</p>
+
+                    <h2>算法原理</h2>
+                    <p>维纳滤波是由数学家诺伯特·维纳提出的线性滤波技术，用于估计原始信号。它假设信号和噪声都是平稳线性随机过程，并且已知它们的谱特性或统计特性。</p>
+                    
+                    <p>在频域中，维纳滤波器的传递函数为：</p>
+                    <p>H(u,v) = [S_f(u,v)] / [S_f(u,v) + S_n(u,v)]</p>
+                    
+                    <p>其中：</p>
+                    <ul>
+                        <li>S_f(u,v) 是未退化图像的功率谱</li>
+                        <li>S_n(u,v) 是噪声的功率谱</li>
+                    </ul>
+                    
+                    <p>在实际应用中，通常使用近似形式：</p>
+                    <p>H(u,v) = [1/H(u,v)] × [|H(u,v)|² / (|H(u,v)|² + K)]</p>
+                    
+                    <p>其中K是信噪比参数。</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>获取退化图像的傅里叶变换</li>
+                        <li>估计点扩散函数(PSF)的傅里叶变换</li>
+                        <li>计算维纳滤波器的频率响应</li>
+                        <li>将退化图像的频谱乘以维纳滤波器</li>
+                        <li>对结果进行逆傅里叶变换得到复原图像</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import ndimage
+from scipy.signal import convolve2d
+
+def wiener_filter_builtin(image_path, blur_kernel_size=5, noise_power=0.01):
+    """
+    使用OpenCV实现维纳滤波（通过去卷积近似）
+    :param image_path: 输入图像路径
+    :param blur_kernel_size: 模糊核大小
+    :param noise_power: 噪声功率
+    :return: 原图和滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+    
+    # 创建模糊核（模拟退化过程）
+    kernel = np.ones((blur_kernel_size, blur_kernel_size), np.float32) / (blur_kernel_size ** 2)
+    
+    # 应用维纳滤波
+    # OpenCV没有直接的维纳滤波函数，这里使用去卷积近似
+    deconvolved = cv2.deconvblind(img, kernel)[0]
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), cv2.cvtColor(deconvolved.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def manual_wiener_filter(image_path, kernel_size=5, noise_var=0.01):
+    """
+    手动实现维纳滤波
+    :param image_path: 输入图像路径
+    :param kernel_size: 模糊核大小
+    :param noise_var: 噪声方差
+    :return: 维纳滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+    height, width = img.shape
+    
+    # 创建模糊核（模拟退化过程）
+    kernel = np.ones((kernel_size, kernel_size), np.float32) / (kernel_size ** 2)
+    
+    # 对图像和核进行零填充，使其大小相同
+    padded_kernel = np.zeros_like(img)
+    kh, kw = kernel.shape
+    padded_kernel[:kh, :kw] = kernel
+    
+    # 将核移到中心位置（为了FFT）
+    padded_kernel = np.roll(padded_kernel, -kh//2, axis=0)
+    padded_kernel = np.roll(padded_kernel, -kw//2, axis=1)
+    
+    # 计算FFT
+    img_fft = np.fft.fft2(img)
+    kernel_fft = np.fft.fft2(padded_kernel)
+    
+    # 计算维纳滤波器
+    kernel_power = np.abs(kernel_fft) ** 2
+    wiener_filter = np.conj(kernel_fft) / (kernel_power + noise_var)
+    
+    # 应用维纳滤波器
+    filtered_fft = img_fft * wiener_filter
+    
+    # 逆FFT
+    filtered = np.real(np.fft.ifft2(filtered_fft))
+    
+    # 确保像素值在有效范围内
+    filtered = np.clip(filtered, 0, 255)
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), cv2.cvtColor(filtered.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def motion_deblur_wiener(image_path, motion_angle=0, motion_dist=10):
+    """
+    运动模糊的维纳滤波去模糊
+    :param image_path: 输入图像路径
+    :param motion_angle: 运动角度（度）
+    :param motion_dist: 运动距离
+    :return: 原图和去模糊后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+    
+    # 创建运动模糊核
+    def motion_kernel(size, angle, dist):
+        kernel = np.zeros((size, size))
+        center = size // 2
+        
+        # 计算运动方向的单位向量
+        rad = np.deg2rad(angle)
+        dx = np.cos(rad)
+        dy = np.sin(rad)
+        
+        # 在运动路径上设置值
+        for i in range(dist):
+            x = int(center + dx * i)
+            y = int(center + dy * i)
+            if 0 <= x < size and 0 <= y < size:
+                kernel[y, x] = 1
+        
+        # 归一化
+        kernel = kernel / np.sum(kernel)
+        return kernel
+    
+    # 生成运动模糊核
+    kernel_size = max(15, motion_dist + 5)  # 确保核足够大
+    motion_kernel_mat = motion_kernel(kernel_size, motion_angle, motion_dist)
+    
+    # 对图像和核进行零填充
+    padded_kernel = np.zeros_like(img)
+    kh, kw = motion_kernel_mat.shape
+    start_row = max(0, (height - kh) // 2)
+    start_col = max(0, (width - kw) // 2)
+    padded_kernel[start_row:start_row+kh, start_col:start_col+kw] = motion_kernel_mat
+    
+    # 计算FFT
+    img_fft = np.fft.fft2(img)
+    kernel_fft = np.fft.fft2(padded_kernel)
+    
+    # 维纳滤波参数
+    noise_power = 0.01
+    kernel_power = np.abs(kernel_fft) ** 2
+    
+    # 避免除零
+    wiener_filter = np.zeros_like(kernel_fft)
+    mask = kernel_power > 1e-8
+    wiener_filter[mask] = np.conj(kernel_fft[mask]) / (kernel_power[mask] + noise_power)
+    
+    # 应用维纳滤波器
+    filtered_fft = img_fft * wiener_filter
+    
+    # 逆FFT
+    filtered = np.real(np.fft.ifft2(filtered_fft))
+    
+    # 确保像素值在有效范围内
+    filtered = np.clip(filtered, 0, 255)
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), cv2.cvtColor(filtered.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def gaussian_deblur_wiener(image_path, sigma=2):
+    """
+    高斯模糊的维纳滤波去模糊
+    :param image_path: 输入图像路径
+    :param sigma: 高斯核的标准差
+    :return: 原图和去模糊后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+    height, width = img.shape
+    
+    # 创建高斯模糊核
+    def gaussian_kernel(size, sigma):
+        kernel = np.zeros((size, size))
+        center = size // 2
+        for i in range(size):
+            for j in range(size):
+                x, y = i - center, j - center
+                kernel[i, j] = np.exp(-(x**2 + y**2) / (2 * sigma**2))
+        return kernel / np.sum(kernel)
+    
+    kernel_size = int(2 * np.ceil(3 * sigma) + 1)  # 确保核大小合适
+    gaussian_kernel_mat = gaussian_kernel(kernel_size, sigma)
+    
+    # 对图像和核进行零填充
+    padded_kernel = np.zeros_like(img)
+    kh, kw = gaussian_kernel_mat.shape
+    start_row = max(0, (height - kh) // 2)
+    start_col = max(0, (width - kw) // 2)
+    padded_kernel[start_row:start_row+kh, start_col:start_col+kw] = gaussian_kernel_mat
+    
+    # 计算FFT
+    img_fft = np.fft.fft2(img)
+    kernel_fft = np.fft.fft2(padded_kernel)
+    
+    # 维纳滤波参数
+    noise_power = 0.001
+    kernel_power = np.abs(kernel_fft) ** 2
+    
+    # 避免除零
+    wiener_filter = np.zeros_like(kernel_fft)
+    mask = kernel_power > 1e-8
+    wiener_filter[mask] = np.conj(kernel_fft[mask]) / (kernel_power[mask] + noise_power)
+    
+    # 应用维纳滤波器
+    filtered_fft = img_fft * wiener_filter
+    
+    # 逆FFT
+    filtered = np.real(np.fft.ifft2(filtered_fft))
+    
+    # 确保像素值在有效范围内
+    filtered = np.clip(filtered, 0, 255)
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), cv2.cvtColor(filtered.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def add_motion_blur(image, angle=0, distance=10):
+    """
+    为图像添加运动模糊
+    :param image: 输入图像
+    :param angle: 运动角度
+    :param distance: 运动距离
+    :return: 添加运动模糊后的图像
+    """
+    # 创建运动模糊核
+    kernel = np.zeros((distance, distance))
+    center = distance // 2
+    
+    # 计算运动方向的单位向量
+    rad = np.deg2rad(angle)
+    dx = np.cos(rad)
+    dy = np.sin(rad)
+    
+    # 在运动路径上设置值
+    for i in range(distance):
+        x = int(center + dx * i)
+        y = int(center + dy * i)
+        if 0 <= x < distance and 0 <= y < distance:
+            kernel[y, x] = 1
+    
+    # 归一化
+    kernel = kernel / np.sum(kernel)
+    
+    # 应用卷积
+    blurred = cv2.filter2D(image, -1, kernel)
+    
+    return blurred
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = wiener_filter_builtin('image.jpg', 5, 0.01)
+    # manual_img, manual_result = manual_wiener_filter('image.jpg', 5, 0.01)
+    # motion_img, motion_result = motion_deblur_wiener('image.jpg', 45, 10)
+    # gaussian_img, gaussian_result = gaussian_deblur_wiener('image.jpg', 2)
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>理论上是最优的线性滤波器</li>
+                        <li>能够有效复原模糊图像</li>
+                        <li>基于统计模型，有坚实的理论基础</li>
+                        <li>在信噪比已知的情况下效果最佳</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>需要知道噪声和信号的统计特性</li>
+                        <li>计算复杂度高</li>
+                        <li>对模型假设敏感</li>
+                        <li>在某些情况下可能产生振铃效应</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>图像去模糊</li>
+                        <li>天文图像处理</li>
+                        <li>医学图像复原</li>
+                        <li>历史照片修复</li>
+                        <li>视频质量改善</li>
+                        <li>遥感图像处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 线性滤波</li>
+                                <li><strong>适用:</strong> 图像复原、去模糊</li>
+                                <li><strong>复杂度:</strong> O(M×N×log(M×N))，其中M和N是图像尺寸</li>
+                                <li><strong>参数:</strong> 退化函数、噪声功率谱</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="mean_filter.html">均值滤波</a></li>
+                                <li><a href="gaussian_filter.html">高斯滤波</a></li>
+                                <li><a href="median_filter.html">中值滤波</a></li>
+                                <li><a href="bilateral_filter.html">双边滤波</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

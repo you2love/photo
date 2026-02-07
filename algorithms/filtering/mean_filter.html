@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>均值滤波 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/filtering/mean_filter.html">均值滤波</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 均值滤波算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">均值滤波</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">均值滤波</h1>
+                    <p class="lead">均值滤波是一种线性滤波技术，通过计算像素邻域内的平均值来平滑图像，常用于去除噪声和平滑图像。</p>
+
+                    <h2>算法原理</h2>
+                    <p>均值滤波是一种简单的线性滤波器，它将每个像素的值替换为其邻域内所有像素值的平均值。这种操作可以有效地减少图像中的噪声，但同时也会降低图像的锐度。</p>
+                    
+                    <p>对于一个大小为M×N的滤波窗口，输出像素值的计算公式为：</p>
+                    <p>g(i, j) = (1/(M×N)) × Σ Σ f(i+m, j+n)</p>
+                    <p>其中求和范围是 m ∈ [-M/2, M/2], n ∈ [-N/2, N/2]</p>
+                    
+                    <p>最常用的均值滤波器是3×3的模板，其权重矩阵为：</p>
+                    <p>1/9 × [1 1 1]</p>
+                    <p>      [1 1 1]</p>
+                    <p>      [1 1 1]</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>选择合适的滤波窗口大小（如3×3、5×5等）</li>
+                        <li>将滤波器模板在图像上滑动</li>
+                        <li>对每个位置，计算窗口内所有像素的平均值</li>
+                        <li>将计算得到的平均值作为输出图像对应位置的像素值</li>
+                        <li>处理图像边界，通常采用零填充、反射填充等方式</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def mean_filter_builtin(image_path, kernel_size=3):
+    """
+    使用OpenCV内置函数实现均值滤波
+    :param image_path: 输入图像路径
+    :param kernel_size: 滤波器大小，必须为奇数
+    :return: 原图和滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 应用均值滤波
+    filtered = cv2.blur(img, (kernel_size, kernel_size))
+    
+    return img, filtered
+
+def manual_mean_filter(image_path, kernel_size=3):
+    """
+    手动实现均值滤波
+    :param image_path: 输入图像路径
+    :param kernel_size: 滤波器大小，必须为奇数
+    :return: 均值滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    img_float = img.astype(np.float32)
+    height, width, channels = img.shape
+    
+    # 计算边界填充大小
+    pad_size = kernel_size // 2
+    
+    # 对图像进行边界填充
+    padded_img = np.pad(img_float, ((pad_size, pad_size), (pad_size, pad_size), (0, 0)), mode='edge')
+    
+    # 创建输出图像
+    filtered = np.zeros_like(img_float)
+    
+    # 应用均值滤波
+    for i in range(height):
+        for j in range(width):
+            for c in range(channels):
+                # 提取当前窗口
+                window = padded_img[i:i+kernel_size, j:j+kernel_size, c]
+                # 计算平均值
+                filtered[i, j, c] = np.mean(window)
+    
+    return img, filtered.astype(np.uint8)
+
+def separable_mean_filter(image_path, kernel_size=3):
+    """
+    使用可分离滤波器实现均值滤波（提高效率）
+    :param image_path: 输入图像路径
+    :param kernel_size: 滤波器大小，必须为奇数
+    :return: 原图和滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 创建一维均值滤波器
+    kernel_1d = np.ones(kernel_size) / kernel_size
+    
+    # 分别在水平和垂直方向应用滤波器
+    temp = cv2.filter2D(img, -1, kernel_1d.reshape(1, -1))  # 水平方向
+    filtered = cv2.filter2D(temp, -1, kernel_1d.reshape(-1, 1))  # 垂直方向
+    
+    return img, filtered
+
+def adaptive_mean_filter(image_path, noise_variance, kernel_size=3):
+    """
+    自适应均值滤波
+    :param image_path: 输入图像路径
+    :param noise_variance: 噪声方差估计
+    :param kernel_size: 滤波器大小
+    :return: 原图和自适应滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+    height, width = img.shape
+    
+    # 计算边界填充大小
+    pad_size = kernel_size // 2
+    
+    # 对图像进行边界填充
+    padded_img = np.pad(img, pad_size, mode='edge')
+    
+    # 创建输出图像
+    filtered = np.zeros_like(img)
+    
+    # 计算局部统计信息
+    for i in range(height):
+        for j in range(width):
+            # 提取当前窗口
+            window = padded_img[i:i+kernel_size, j:j+kernel_size]
+            
+            # 计算局部均值和方差
+            local_mean = np.mean(window)
+            local_variance = np.var(window)
+            
+            # 如果局部方差小于噪声方差，则认为该区域是平坦区域
+            # 否则应用自适应滤波
+            if local_variance == 0:
+                filtered[i, j] = img[i, j]
+            else:
+                weight = min(noise_variance / local_variance, 1)
+                filtered[i, j] = img[i, j] - weight * (img[i, j] - local_mean)
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), cv2.cvtColor(filtered.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def weighted_mean_filter(image_path, weights=None):
+    """
+    加权均值滤波
+    :param image_path: 输入图像路径
+    :param weights: 自定义权重矩阵
+    :return: 原图和加权滤波后的图像
+    """
+    if weights is None:
+        # 默认使用高斯权重
+        weights = np.array([
+            [1, 2, 1],
+            [2, 4, 2],
+            [1, 2, 1]
+        ], dtype=np.float32)
+        weights /= np.sum(weights)
+    
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 应用加权均值滤波
+    filtered = cv2.filter2D(img, -1, weights)
+    
+    return img, filtered
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = mean_filter_builtin('image.jpg', 5)
+    # manual_img, manual_result = manual_mean_filter('image.jpg', 5)
+    # sep_img, sep_result = separable_mean_filter('image.jpg', 5)
+    # adapt_img, adapt_result = adaptive_mean_filter('image.jpg', 10, 5)
+    # weight_img, weight_result = weighted_mean_filter('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>实现简单，计算效率高</li>
+                        <li>有效减少随机噪声</li>
+                        <li>平滑效果均匀</li>
+                        <li>适合处理高斯噪声</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>会使图像变得模糊，降低边缘清晰度</li>
+                        <li>无法有效处理脉冲噪声（椒盐噪声）</li>
+                        <li>对所有区域采用相同的处理方式，缺乏自适应性</li>
+                        <li>可能丢失重要的图像细节</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>图像去噪预处理</li>
+                        <li>图像平滑处理</li>
+                        <li>减少图像中的高频噪声</li>
+                        <li>作为其他算法的预处理步骤</li>
+                        <li>医学图像处理</li>
+                        <li>遥感图像处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 线性滤波</li>
+                                <li><strong>适用:</strong> 去除高斯噪声</li>
+                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是滤波器大小</li>
+                                <li><strong>参数:</strong> 滤波器大小</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="gaussian_filter.html">高斯滤波</a></li>
+                                <li><a href="median_filter.html">中值滤波</a></li>
+                                <li><a href="bilateral_filter.html">双边滤波</a></li>
+                                <li><a href="wiener_filter.html">维纳滤波</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

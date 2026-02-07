@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>计算机图像处理教程</title>
+    <title>Python图像处理示例 - 计算机图像处理教程</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="libs/roboto-font.css" rel="stylesheet">
     <link href="libs/material-icons.css" rel="stylesheet">
@@ -24,6 +24,9 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="algorithms.html">常见算法</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,26 +50,68 @@
         </div>
     </nav>
 
-    <!-- 主页内容 -->
-    <section class="py-5 bg-gradient text-white">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">计算机图像处理教程</h1>
-                    <p class="lead mb-4">从基础知识到实践应用，掌握图像处理的核心概念与算法</p>
-                    <a class="btn btn-light btn-lg me-2" href="basics.html">基础知识</a>
-                    <a class="btn btn-outline-light btn-lg" href="algorithms.html">常见算法</a>
-                </div>
-                <div class="col-lg-6 d-none d-lg-block">
-                    <div class="card bg-light text-dark">
+    <!-- Python示例部分 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Python图像处理示例</h2>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">学习路径</h5>
-                            <ol>
-                                <li>从<a href="basics.html">基础知识</a>开始，了解图像表示和色彩模型</li>
-                                <li>学习<a href="algorithms.html">常见算法</a>，掌握图像处理核心技术</li>
-                                <li>通过<a href="python-examples.html">Python示例</a>实践编程技能</li>
-                                <li>使用<a href="golang-examples.html">Golang示例</a>扩展知识面</li>
-                            </ol>
+                            <h6>环境准备</h6>
+                            <pre><code class="language-bash">pip install opencv-python pillow numpy matplotlib scikit-image</code></pre>
+                            
+                            <h6 class="mt-4">图像读取与显示</h6>
+                            <pre><code class="language-python">import cv2
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+
+# 读取图像
+img = cv2.imread('image.jpg')
+# OpenCV使用BGR格式，转换为RGB用于显示
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# 显示图像
+plt.imshow(img_rgb)
+plt.axis('off')
+plt.show()</code></pre>
+                            
+                            <h6 class="mt-4">几何变换示例</h6>
+                            <pre><code class="language-python">def resize_image(img_path, new_width, new_height):
+    img = cv2.imread(img_path)
+    resized = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
+    return resized
+
+def rotate_image(img, angle):
+    height, width = img.shape[:2]
+    center = (width//2, height//2)
+    rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+    rotated = cv2.warpAffine(img, rotation_matrix, (width, height))
+    return rotated</code></pre>
+                            
+                            <h6 class="mt-4">滤波算法示例</h6>
+                            <pre><code class="language-python">def apply_filters(img_path):
+    img = cv2.imread(img_path)
+    
+    # 均值滤波
+    mean_filtered = cv2.blur(img, (5, 5))
+    
+    # 高斯滤波
+    gaussian_filtered = cv2.GaussianBlur(img, (5, 5), 0)
+    
+    # 中值滤波
+    median_filtered = cv2.medianBlur(img, 5)
+    
+    return {
+        'original': img,
+        'mean': mean_filtered,
+        'gaussian': gaussian_filtered,
+        'median': median_filtered
+    }</code></pre>
                         </div>
                     </div>
                 </div>

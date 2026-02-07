@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中值滤波 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/filtering/median_filter.html">中值滤波</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 中值滤波算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">中值滤波</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">中值滤波</h1>
+                    <p class="lead">中值滤波是一种非线性滤波技术，通过将像素邻域内的中值作为输出值来去除噪声，特别适用于去除椒盐噪声。</p>
+
+                    <h2>算法原理</h2>
+                    <p>中值滤波是一种非线性滤波方法，它将每个像素的值替换为其邻域内所有像素值的中值。与均值滤波不同，中值滤波不会将噪声值平均到输出中，因此对脉冲噪声（如椒盐噪声）特别有效。</p>
+                    
+                    <p>对于一个大小为M×N的滤波窗口，输出像素值的计算公式为：</p>
+                    <p>g(i, j) = median{f(i+m, j+n)}</p>
+                    <p>其中m ∈ [-M/2, M/2], n ∈ [-N/2, N/2]</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>选择合适的滤波窗口大小（如3×3、5×5等）</li>
+                        <li>将滤波器窗口在图像上滑动</li>
+                        <li>对每个位置，收集窗口内所有像素值</li>
+                        <li>对收集到的像素值进行排序</li>
+                        <li>选择排序后的中间值作为输出像素值</li>
+                        <li>处理图像边界</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def median_filter_builtin(image_path, kernel_size=3):
+    """
+    使用OpenCV内置函数实现中值滤波
+    :param image_path: 输入图像路径
+    :param kernel_size: 滤波器大小，必须为奇数
+    :return: 原图和滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 应用中值滤波
+    filtered = cv2.medianBlur(img, kernel_size)
+    
+    return img, filtered
+
+def manual_median_filter(image_path, kernel_size=3):
+    """
+    手动实现中值滤波
+    :param image_path: 输入图像路径
+    :param kernel_size: 滤波器大小，必须为奇数
+    :return: 中值滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    img_float = img.astype(np.float32)
+    height, width, channels = img.shape
+    
+    # 计算边界填充大小
+    pad_size = kernel_size // 2
+    
+    # 对图像进行边界填充
+    padded_img = np.pad(img_float, ((pad_size, pad_size), (pad_size, pad_size), (0, 0)), mode='edge')
+    
+    # 创建输出图像
+    filtered = np.zeros_like(img_float)
+    
+    # 应用中值滤波
+    for i in range(height):
+        for j in range(width):
+            for c in range(channels):
+                # 提取当前窗口
+                window = padded_img[i:i+kernel_size, j:j+kernel_size, c]
+                # 计算中值
+                filtered[i, j, c] = np.median(window)
+    
+    return img, filtered.astype(np.uint8)
+
+def adaptive_median_filter(image_path, max_kernel_size=7):
+    """
+    自适应中值滤波
+    :param image_path: 输入图像路径
+    :param max_kernel_size: 最大滤波器大小
+    :return: 原图和自适应滤波后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    height, width = img.shape
+    
+    # 创建输出图像
+    filtered = np.zeros_like(img)
+    
+    for i in range(height):
+        for j in range(width):
+            # 从最小窗口开始
+            kernel_size = 3
+            while kernel_size <= max_kernel_size:
+                # 计算边界填充大小
+                pad_size = kernel_size // 2
+                
+                # 提取当前窗口
+                # 需要处理边界情况
+                row_start = max(0, i - pad_size)
+                row_end = min(height, i + pad_size + 1)
+                col_start = max(0, j - pad_size)
+                col_end = min(width, j + pad_size + 1)
+                
+                window = img[row_start:row_end, col_start:col_end]
+                
+                # 计算窗口的中值、最小值和最大值
+                z_min = np.min(window)
+                z_max = np.max(window)
+                z_med = np.median(window)
+                
+                # 计算中心像素值
+                z_xy = img[i, j]
+                
+                # 第一级判断：检查中值是否在非噪声范围内
+                if z_min < z_med < z_max:
+                    # 第二级判断：检查中心像素是否在非噪声范围内
+                    if z_min < z_xy < z_max:
+                        # 输出中心像素值
+                        filtered[i, j] = z_xy
+                        break  # 退出循环，不再增大窗口
+                    else:
+                        # 输出中值
+                        filtered[i, j] = z_med
+                        break  # 退出循环，不再增大窗口
+                else:
+                    # 增大窗口继续处理
+                    kernel_size += 2
+                    if kernel_size > max_kernel_size:
+                        # 如果达到最大窗口大小，输出中值
+                        filtered[i, j] = z_med
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(filtered, cv2.COLOR_GRAY2BGR)
+
+def weighted_median_filter(image_path, kernel_size=3, weights=None):
+    """
+    加权中值滤波
+    :param image_path: 输入图像路径
+    :param kernel_size: 滤波器大小，必须为奇数
+    :param weights: 权重矩阵
+    :return: 原图和加权滤波后的图像
+    """
+    if weights is None:
+        # 默认使用中心权重较高的权重矩阵
+        weights = np.array([
+            [1, 1, 1],
+            [1, 2, 1],
+            [1, 1, 1]
+        ], dtype=int)
+    
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    height, width = img.shape
+    
+    # 计算边界填充大小
+    pad_size = kernel_size // 2
+    
+    # 对图像进行边界填充
+    padded_img = np.pad(img, pad_size, mode='edge')
+    
+    # 创建输出图像
+    filtered = np.zeros_like(img)
+    
+    # 应用加权中值滤波
+    for i in range(height):
+        for j in range(width):
+            # 提取当前窗口
+            window = padded_img[i:i+kernel_size, j:j+kernel_size]
+            
+            # 创建加权像素值列表
+            weighted_pixels = []
+            for ki in range(kernel_size):
+                for kj in range(kernel_size):
+                    pixel_value = window[ki, kj]
+                    weight = weights[ki, kj]
+                    # 重复添加像素值，次数等于权重
+                    weighted_pixels.extend([pixel_value] * weight)
+            
+            # 计算加权中值
+            weighted_pixels.sort()
+            mid_index = len(weighted_pixels) // 2
+            filtered[i, j] = weighted_pixels[mid_index]
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(filtered, cv2.COLOR_GRAY2BGR)
+
+def salt_pepper_noise(image, salt_prob=0.1, pepper_prob=0.1):
+    """
+    为图像添加椒盐噪声
+    :param image: 输入图像
+    :param salt_prob: 椒噪声概率
+    :param pepper_prob: 盐噪声概率
+    :return: 添加噪声后的图像
+    """
+    noisy_img = np.copy(image)
+    
+    # 添加椒噪声 (黑色)
+    pepper_coords = [np.random.randint(0, i - 1, int(salt_prob * image.size / image.ndim))
+                     for i in image.shape]
+    noisy_img[pepper_coords] = 0
+    
+    # 添加盐噪声 (白色)
+    salt_coords = [np.random.randint(0, i - 1, int(pepper_prob * image.size / image.ndim))
+                   for i in image.shape]
+    noisy_img[salt_coords] = 255
+    
+    return noisy_img
+
+def compare_filters(image_path):
+    """
+    比较不同滤波器对椒盐噪声的处理效果
+    :param image_path: 输入图像路径
+    :return: 原图、含噪声图像、均值滤波结果、中值滤波结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 添加椒盐噪声
+    noisy_img = salt_pepper_noise(img, 0.05, 0.05)
+    
+    # 均值滤波
+    mean_filtered = cv2.blur(noisy_img, (5, 5))
+    
+    # 中值滤波
+    median_filtered = cv2.medianBlur(noisy_img, 5)
+    
+    # 转换为BGR格式以便统一返回
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(noisy_img, cv2.COLOR_GRAY2BGR),
+            cv2.cvtColor(mean_filtered, cv2.COLOR_GRAY2BGR),
+            cv2.cvtColor(median_filtered, cv2.COLOR_GRAY2BGR))
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = median_filter_builtin('image.jpg', 5)
+    # manual_img, manual_result = manual_median_filter('image.jpg', 5)
+    # adapt_img, adapt_result = adaptive_median_filter('image.jpg', 7)
+    # weight_img, weight_result = weighted_median_filter('image.jpg', 5)
+    # orig, noisy, mean_res, median_res = compare_filters('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>有效去除椒盐噪声等脉冲噪声</li>
+                        <li>较好地保持边缘信息</li>
+                        <li>对异常值不敏感</li>
+                        <li>适合处理二值图像</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>计算复杂度较高（需要排序操作）</li>
+                        <li>对高斯噪声效果不如线性滤波</li>
+                        <li>可能使图像细节变模糊</li>
+                        <li>不适合处理纹理丰富的区域</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>去除椒盐噪声</li>
+                        <li>医学图像处理</li>
+                        <li>雷达图像处理</li>
+                        <li>二值图像处理</li>
+                        <li>图像预处理</li>
+                        <li>保护边缘的去噪</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 非线性滤波</li>
+                                <li><strong>适用:</strong> 去除脉冲噪声</li>
+                                <li><strong>复杂度:</strong> O(M×N×k²×log(k²))，其中k是滤波器大小</li>
+                                <li><strong>参数:</strong> 滤波器大小</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="mean_filter.html">均值滤波</a></li>
+                                <li><a href="gaussian_filter.html">高斯滤波</a></li>
+                                <li><a href="bilateral_filter.html">双边滤波</a></li>
+                                <li><a href="wiener_filter.html">维纳滤波</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像处理算法详解 - 计算机图像处理教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="../libs/roboto-font.css" rel="stylesheet">
+    <link href="../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../basics.html">基础知识</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item active" href="../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny边缘检测</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 算法索引页面 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">图像处理算法详解</h2>
+                <p class="text-muted">从原理到代码实现的全面介绍</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">算法分类</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h5>几何变换</h5>
+                                    <ul class="list-unstyled">
+                                        <li><a href="geometric/translation.html">平移变换</a></li>
+                                        <li><a href="geometric/rotation.html">旋转变换</a></li>
+                                        <li><a href="geometric/scaling.html">缩放变换</a></li>
+                                        <li><a href="geometric/affine.html">仿射变换</a></li>
+                                        <li><a href="geometric/perspective.html">透视变换</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>滤波算法</h5>
+                                    <ul class="list-unstyled">
+                                        <li><a href="filtering/mean_filter.html">均值滤波</a></li>
+                                        <li><a href="filtering/gaussian_filter.html">高斯滤波</a></li>
+                                        <li><a href="filtering/median_filter.html">中值滤波</a></li>
+                                        <li><a href="filtering/bilateral_filter.html">双边滤波</a></li>
+                                        <li><a href="filtering/wiener_filter.html">维纳滤波</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>边缘检测</h5>
+                                    <ul class="list-unstyled">
+                                        <li><a href="edge/sobel.html">Sobel算子</a></li>
+                                        <li><a href="edge/canny.html">Canny算子</a></li>
+                                        <li><a href="edge/laplacian.html">Laplacian算子</a></li>
+                                        <li><a href="edge/prewitt.html">Prewitt算子</a></li>
+                                        <li><a href="edge/marr_hildreth.html">Marr-Hildreth算子</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <h5>直线检测</h5>
+                                    <ul class="list-unstyled">
+                                        <li><a href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
+                                        <li><a href="#">概率霍夫变换</a></li>
+                                        <li><a href="#">线段检测器(LSD)</a></li>
+                                        <li><a href="#">RANSAC算法</a></li>
+                                        <li><a href="#">Radon变换</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>形态学操作</h5>
+                                    <ul class="list-unstyled">
+                                        <li><a href="#">腐蚀</a></li>
+                                        <li><a href="#">膨胀</a></li>
+                                        <li><a href="#">开运算</a></li>
+                                        <li><a href="#">闭运算</a></li>
+                                        <li><a href="#">骨架化</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>二值化算法</h5>
+                                    <ul class="list-unstyled">
+                                        <li><a href="#">全局阈值</a></li>
+                                        <li><a href="#">Otsu算法</a></li>
+                                        <li><a href="#">Niblack算法</a></li>
+                                        <li><a href="#">Sauvola算法</a></li>
+                                        <li><a href="#">局部阈值</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../js/main.js"></script>
+</body>
+</html>
