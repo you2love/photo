@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开运算 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/morphology/opening.html">开运算</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 开运算算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">开运算</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">开运算</h1>
+                    <p class="lead">开运算是数学形态学的基本复合操作，定义为先腐蚀后膨胀，常用于去除小的噪声点和分离相连的对象。</p>
+
+                    <h2>算法原理</h2>
+                    <p>开运算是数学形态学中的一种复合操作，定义为先对图像进行腐蚀操作，然后再进行膨胀操作。用数学公式表示为：</p>
+                    
+                    <p>A ○ B = (A ⊖ B) ⊕ B</p>
+                    
+                    <p>其中A是输入图像，B是结构元素，⊖表示腐蚀操作，⊕表示膨胀操作。</p>
+                    
+                    <p>开运算的特点：</p>
+                    <ul>
+                        <li>能够去除比结构元素小的噪声点</li>
+                        <li>保持图像中较大对象的形状基本不变</li>
+                        <li>分离相接触的小对象</li>
+                        <li>平滑对象的轮廓</li>
+                    </ul>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>选择合适的结构元素（通常为3×3或5×5的矩形、圆形或十字形）</li>
+                        <li>对输入图像执行腐蚀操作</li>
+                        <li>对腐蚀结果执行膨胀操作</li>
+                        <li>处理图像边界</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def opening_builtin(image_path, kernel_size=3, iterations=1):
+    """
+    使用OpenCV内置函数实现开运算
+    :param image_path: 输入图像路径
+    :param kernel_size: 结构元素大小
+    :param iterations: 开运算次数
+    :return: 原图和开运算后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 创建结构元素
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
+    
+    # 应用开运算
+    opened = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel, iterations=iterations)
+    
+    return img, opened
+
+def manual_opening(image_path, kernel_size=3):
+    """
+    手动实现开运算（先腐蚀后膨胀）
+    :param image_path: 输入图像路径
+    :param kernel_size: 结构元素大小
+    :return: 开运算后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    height, width = binary.shape
+    pad_size = kernel_size // 2
+    
+    # 对图像进行填充
+    padded = np.pad(binary, pad_size, mode='constant', constant_values=255)
+    
+    # 第一步：腐蚀
+    eroded = np.zeros_like(binary)
+    for i in range(height):
+        for j in range(width):
+            window = padded[i:i+kernel_size, j:j+kernel_size]
+            if np.min(window) == 255:  # 只有当所有像素都是白色时，输出才是白色
+                eroded[i, j] = 255
+            else:
+                eroded[i, j] = 0
+    
+    # 对腐蚀结果进行填充（用于膨胀）
+    padded_eroded = np.pad(eroded, pad_size, mode='constant', constant_values=0)
+    
+    # 第二步：膨胀
+    dilated = np.zeros_like(eroded)
+    for i in range(height):
+        for j in range(width):
+            window = padded_eroded[i:i+kernel_size, j:j+kernel_size]
+            if np.max(window) == 255:  # 如果窗口中存在白色像素，输出就是白色
+                dilated[i, j] = 255
+            else:
+                dilated[i, j] = 0
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(dilated, cv2.COLOR_GRAY2BGR)
+
+def opening_with_different_shapes(image_path):
+    """
+    使用不同形状的结构元素进行开运算
+    :param image_path: 输入图像路径
+    :return: 原图和不同形状结构元素的开运算结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 创建不同形状的结构元素
+    kernels = {
+        'Rectangle': cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)),
+        'Ellipse': cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)),
+        'Cross': cv2.getStructuringElement(cv2.MORPH_CROSS, (5, 5))
+    }
+    
+    results = {}
+    for name, kernel in kernels.items():
+        opened = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
+        results[name] = cv2.cvtColor(opened, cv2.COLOR_GRAY2BGR)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), results
+
+def noise_removal_opening(image_path):
+    """
+    使用开运算去除噪声
+    :param image_path: 输入图像路径
+    :return: 原图、含噪声图像和去噪声后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 添加椒盐噪声
+    def add_salt_pepper_noise(image, salt_prob=0.02, pepper_prob=0.02):
+        noisy_img = image.copy()
+        total_pixels = image.size
+        
+        # 添加盐噪声（白色点）
+        num_salt = int(salt_prob * total_pixels)
+        coords = [np.random.randint(0, i - 1, num_salt) for i in image.shape]
+        noisy_img[coords] = 255
+        
+        # 添加椒噪声（黑色点）
+        num_pepper = int(pepper_prob * total_pixels)
+        coords = [np.random.randint(0, i - 1, num_pepper) for i in image.shape]
+        noisy_img[coords] = 0
+        
+        return noisy_img
+    
+    # 创建含噪声图像
+    noisy_img = add_salt_pepper_noise(img)
+    
+    # 应用开运算去除噪声
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    opened = cv2.morphologyEx(noisy_img, cv2.MORPH_OPEN, kernel)
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(noisy_img, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(opened, cv2.COLOR_GRAY2BGR))
+
+def object_separation_opening(image_path):
+    """
+    使用开运算分离相连的对象
+    :param image_path: 输入图像路径
+    :return: 原图、相连对象图像和分离对象后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 创建相连的对象（通过膨胀使对象连接）
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    connected = cv2.dilate(binary, kernel, iterations=2)
+    
+    # 使用开运算分离对象
+    separated = cv2.morphologyEx(connected, cv2.MORPH_OPEN, kernel)
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(connected, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(separated, cv2.COLOR_GRAY2BGR))
+
+def top_hat_transform_opening(image_path):
+    """
+    顶帽变换 - 原图减去开运算结果
+    :param image_path: 输入图像路径
+    :return: 原图和顶帽变换结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 创建结构元素
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9))
+    
+    # 开运算
+    opened = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+    
+    # 顶帽变换（原图减去开运算结果）
+    top_hat = cv2.subtract(img, opened)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(top_hat, cv2.COLOR_GRAY2BGR)
+
+def adaptive_opening(image_path):
+    """
+    自适应开运算 - 根据局部特性调整结构元素大小
+    :param image_path: 输入图像路径
+    :return: 原图和自适应开运算结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 计算局部方差
+    block_size = 15
+    mean_local = cv2.blur(img, (block_size, block_size))
+    squared_img = img.astype(np.float64) ** 2
+    mean_squared_local = cv2.blur(squared_img, (block_size, block_size))
+    variance_local = mean_squared_local - mean_local.astype(np.float64) ** 2
+    
+    # 根据局部方差调整开运算核大小
+    height, width = img.shape
+    result = img.copy()
+    
+    # 为了演示，我们使用分块处理
+    for i in range(0, height, 10):
+        for j in range(0, width, 10):
+            # 获取局部方差
+            end_i = min(i + 10, height)
+            end_j = min(j + 10, width)
+            local_var = np.mean(variance_local[i:end_i, j:end_j])
+            
+            # 根据方差大小调整核大小
+            if local_var < 1000:  # 平坦区域
+                kernel_size = 3
+            elif local_var < 5000:  # 中等纹理区域
+                kernel_size = 5
+            else:  # 高纹理区域
+                kernel_size = 7
+            
+            # 创建结构元素并应用开运算
+            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
+            roi = img[i:end_i, j:end_j]
+            opened_roi = cv2.morphologyEx(roi, cv2.MORPH_OPEN, kernel)
+            result[i:end_i, j:end_j] = opened_roi
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(result, cv2.COLOR_GRAY2BGR)
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = opening_builtin('image.jpg', 3, 1)
+    # manual_img, manual_result = manual_opening('image.jpg', 3)
+    # shape_img, shape_results = opening_with_different_shapes('image.jpg')
+    # noise_orig, noise_img, noise_result = noise_removal_opening('image.jpg')
+    # obj_orig, obj_img, obj_result = object_separation_opening('image.jpg')
+    # tophat_img, tophat_result = top_hat_transform_opening('image.jpg')
+    # adapt_img, adapt_result = adaptive_opening('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>有效去除小的噪声点</li>
+                        <li>能够分离相连的对象</li>
+                        <li>保持较大对象的形状基本不变</li>
+                        <li>操作简单，易于理解</li>
+                        <li>计算效率高</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>可能会过度分离对象</li>
+                        <li>对所有区域采用相同的处理方式</li>
+                        <li>需要选择合适的结构元素</li>
+                        <li>可能轻微改变对象的形状</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>去除图像中的小噪声点</li>
+                        <li>分离相连的字符或对象</li>
+                        <li>图像预处理</li>
+                        <li>特征提取</li>
+                        <li>OCR（光学字符识别）预处理</li>
+                        <li>医学图像处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 形态学操作</li>
+                                <li><strong>适用:</strong> 二值图像、灰度图像</li>
+                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>参数:</strong> 结构元素形状、大小、迭代次数</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="erosion.html">腐蚀</a></li>
+                                <li><a href="dilation.html">膨胀</a></li>
+                                <li><a href="closing.html">闭运算</a></li>
+                                <li><a href="skeletonization.html">骨架化</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

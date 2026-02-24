@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radon变换 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/line_detection/radon.html">Radon变换</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Radon变换算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">Radon变换</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">Radon变换</h1>
+                    <p class="lead">Radon变换是一种积分变换，将图像中的点映射到参数空间中的正弦曲线，常用于检测图像中的直线和其他几何结构。</p>
+
+                    <h2>算法原理</h2>
+                    <p>Radon变换是以奥地利数学家Johann Radon命名的积分变换，定义为沿直线对函数的积分。在图像处理中，Radon变换将图像f(x,y)变换为R(ρ,θ)，其中ρ是直线到原点的距离，θ是直线的法向量角度。</p>
+                    
+                    <p>数学定义：</p>
+                    <p>R(ρ, θ) = ∫∫ f(x, y) δ(ρ - x cos θ - y sin θ) dx dy</p>
+                    
+                    <p>其中δ是狄拉克δ函数。这意味着Radon变换计算的是图像沿特定角度θ的直线上的积分值。</p>
+                    
+                    <p>在离散情况下，Radon变换通过计算图像中沿不同角度的线段的像素值之和来实现。对于每个角度θ，计算所有满足ρ = x cos θ + y sin θ的像素点的累积值。</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>定义角度范围（通常为0°到180°）和距离范围</li>
+                        <li>对于每个角度θ，计算图像中所有可能的ρ值</li>
+                        <li>对每条直线（ρ, θ）计算沿该直线的像素值积分</li>
+                        <li>将结果存储在Radon域中</li>
+                        <li>在Radon域中寻找峰值，对应原图像中的直线</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import ndimage
+from scipy.ndimage import map_coordinates
+
+def radon_transform(image_path, angles=None):
+    """
+    实现Radon变换
+    :param image_path: 输入图像路径
+    :param angles: 角度范围，默认为0到180度
+    :return: 原图和Radon变换结果
+    """
+    if angles is None:
+        angles = np.linspace(0, 180, 180, endpoint=False)
+    
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError("无法读取图像")
+    
+    # 获取图像尺寸
+    height, width = img.shape
+    diagonal = int(np.ceil(np.sqrt(height**2 + width**2)))
+    
+    # 初始化Radon变换结果
+    radon_image = np.zeros((len(angles), diagonal * 2), dtype=np.float64)
+    
+    # 计算图像中心
+    center_y, center_x = height // 2, width // 2
+    
+    # 对每个角度计算Radon变换
+    for i, angle in enumerate(angles):
+        # 将角度转换为弧度
+        theta = np.deg2rad(angle)
+        
+        # 计算旋转后的坐标
+        cos_theta = np.cos(theta)
+        sin_theta = np.sin(theta)
+        
+        # 为当前角度计算所有可能的ρ值
+        for rho_idx in range(-diagonal, diagonal):
+            rho = rho_idx
+            # 计算直线上的点
+            # 直线方程: x*cos(θ) + y*sin(θ) = ρ
+            # 因此 x = (ρ - y*sin(θ)) / cos(θ) 或 y = (ρ - x*cos(θ)) / sin(θ)
+            
+            # 计算沿直线的积分
+            integral = 0
+            count = 0
+            
+            # 遍历图像中的所有点，找到满足直线方程的点
+            for y in range(height):
+                for x in range(width):
+                    # 计算点到直线的距离
+                    dist = abs(x * cos_theta + y * sin_theta - rho)
+                    if dist < 0.5:  # 如果点在直线上
+                        integral += img[y, x]
+                        count += 1
+            
+            radon_image[i, rho_idx + diagonal] = integral if count > 0 else 0
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), radon_image
+
+def discrete_radon_transform(image_path, num_angles=180):
+    """
+    离散Radon变换的实现
+    :param image_path: 输入图像路径
+    :param num_angles: 角度数量
+    :return: 原图和离散Radon变换结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError("无法读取图像")
+    
+    # 确保图像是方形的
+    height, width = img.shape
+    size = max(height, width)
+    square_img = np.zeros((size, size), dtype=img.dtype)
+    start_h, start_w = (size - height) // 2, (size - width) // 2
+    square_img[start_h:start_h+height, start_w:start_w+width] = img
+    
+    # 定义角度
+    angles = np.linspace(0, 180, num_angles, endpoint=False)
+    
+    # 计算Radon变换
+    center = size // 2
+    radius = int(np.ceil(np.sqrt(2) * size / 2))
+    
+    radon_image = np.zeros((num_angles, 2 * radius), dtype=np.float64)
+    
+    for i, angle in enumerate(angles):
+        # 将角度转换为弧度
+        theta = np.deg2rad(angle)
+        
+        # 计算每个ρ值的积分
+        for rho in range(-radius, radius):
+            # 计算直线 x*cos(θ) + y*sin(θ) = ρ 上的点
+            # 使用参数化形式
+            x_vals = []
+            y_vals = []
+            
+            # 计算直线与图像边界的交点
+            if np.sin(theta) != 0:
+                # y = (ρ - x*cos(θ)) / sin(θ)
+                for x in range(size):
+                    y = int((rho - (x - center) * np.cos(theta)) / np.sin(theta) + center)
+                    if 0 <= y < size:
+                        x_vals.append(x)
+                        y_vals.append(y)
+            else:
+                # 垂直线: x = ρ/cos(θ)
+                x = int(rho / np.cos(theta) + center)
+                if 0 <= x < size:
+                    for y in range(size):
+                        x_vals.append(x)
+                        y_vals.append(y)
+            
+            # 计算积分
+            integral = 0
+            for x, y in zip(x_vals, y_vals):
+                if 0 <= x < size and 0 <= y < size:
+                    integral += square_img[y, x]
+            
+            radon_image[i, rho + radius] = integral
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), radon_image
+
+def detect_lines_from_radon(image_path, threshold_ratio=0.8):
+    """
+    从Radon变换结果中检测直线
+    :param image_path: 输入图像路径
+    :param threshold_ratio: 阈值比例
+    :return: 原图和检测到直线的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # 使用scikit-image风格的Radon变换（简化实现）
+    # 这里我们使用简化的Radon变换实现
+    height, width = gray.shape
+    diagonal = int(np.ceil(np.sqrt(height**2 + width**2)))
+    angles = np.linspace(0, 180, 180, endpoint=False)
+    
+    radon_image = np.zeros((len(angles), diagonal * 2))
+    
+    # 简化的Radon变换计算
+    for i, angle in enumerate(angles):
+        theta = np.deg2rad(angle)
+        for rho_idx in range(-diagonal, diagonal):
+            rho = rho_idx
+            # 计算沿直线的积分
+            integral = 0
+            for y in range(height):
+                for x in range(width):
+                    dist = abs(x * np.cos(theta) + y * np.sin(theta) - rho)
+                    if dist < 0.5:
+                        integral += gray[y, x]
+            radon_image[i, rho_idx + diagonal] = integral
+    
+    # 找到Radon域中的峰值
+    threshold = threshold_ratio * np.max(radon_image)
+    peak_locations = np.where(radon_image > threshold)
+    
+    # 在原图上绘制检测到的直线
+    result_img = img.copy()
+    for angle_idx, rho_idx in zip(peak_locations[0], peak_locations[1]):
+        angle = angles[angle_idx]
+        rho = rho_idx - diagonal
+        
+        theta = np.deg2rad(angle)
+        if np.sin(theta) != 0:
+            # 计算直线在图像边界上的交点
+            x1 = 0
+            y1 = int((rho - x1 * np.cos(theta)) / np.sin(theta))
+            x2 = width - 1
+            y2 = int((rho - x2 * np.cos(theta)) / np.sin(theta))
+            
+            if 0 <= y1 < height and 0 <= y2 < height:
+                cv2.line(result_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        elif np.cos(theta) != 0:
+            # 垂直线
+            x = int(rho / np.cos(theta))
+            if 0 <= x < width:
+                cv2.line(result_img, (x, 0), (x, height - 1), (0, 255, 0), 2)
+    
+    return img, result_img
+
+def back_project_radon(image_path):
+    """
+    Radon变换的反变换（重构原图像）
+    :param image_path: 输入图像路径
+    :return: 原图和重构图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError("无法读取图像")
+    
+    # 为了简化，这里只做概念演示
+    # 实际的反Radon变换需要更复杂的实现
+    height, width = img.shape
+    diagonal = int(np.ceil(np.sqrt(height**2 + width**2)))
+    angles = np.linspace(0, 180, 180, endpoint=False)
+    
+    # 计算Radon变换
+    radon_image = np.zeros((len(angles), diagonal * 2))
+    
+    for i, angle in enumerate(angles):
+        theta = np.deg2rad(angle)
+        for rho_idx in range(-diagonal, diagonal):
+            rho = rho_idx
+            integral = 0
+            for y in range(height):
+                for x in range(width):
+                    dist = abs(x * np.cos(theta) + y * np.sin(theta) - rho)
+                    if dist < 0.5:
+                        integral += img[y, x]
+            radon_image[i, rho_idx + diagonal] = integral
+    
+    # 简化的反变换（滤波反投影的简化版本）
+    reconstructed = np.zeros_like(img, dtype=np.float64)
+    
+    for y in range(height):
+        for x in range(width):
+            for i, angle in enumerate(angles):
+                theta = np.deg2rad(angle)
+                rho = int(x * np.cos(theta) + y * np.sin(theta))
+                rho_idx = rho + diagonal
+                if 0 <= rho_idx < radon_image.shape[1]:
+                    reconstructed[y, x] += radon_image[i, rho_idx]
+    
+    # 归一化
+    if np.max(reconstructed) > 0:
+        reconstructed = (reconstructed / np.max(reconstructed)) * 255
+    reconstructed = np.clip(reconstructed, 0, 255).astype(np.uint8)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(reconstructed, cv2.COLOR_GRAY2BGR)
+
+def compare_radon_hough(image_path):
+    """
+    比较Radon变换和霍夫变换
+    :param image_path: 输入图像路径
+    :return: 原图、Radon变换结果和霍夫变换结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # 霍夫变换
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    lines = cv2.HoughLines(edges, 1, np.pi/180, 100)
+    
+    hough_img = img.copy()
+    if lines is not None:
+        for rho, theta in lines[:, 0]:
+            a = np.cos(theta)
+            b = np.sin(theta)
+            x0 = a * rho
+            y0 = b * rho
+            x1 = int(x0 + 1000 * (-b))
+            y1 = int(y0 + 1000 * (a))
+            x2 = int(x0 - 1000 * (-b))
+            y2 = int(y0 - 1000 * (a))
+            cv2.line(hough_img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+    
+    # Radon变换检测直线（概念演示）
+    height, width = gray.shape
+    diagonal = int(np.ceil(np.sqrt(height**2 + width**2)))
+    angles = np.linspace(0, 180, 180, endpoint=False)
+    
+    radon_image = np.zeros((len(angles), diagonal * 2))
+    
+    for i, angle in enumerate(angles):
+        theta = np.deg2rad(angle)
+        for rho_idx in range(-diagonal, diagonal):
+            rho = rho_idx
+            integral = 0
+            for y in range(height):
+                for x in range(width):
+                    dist = abs(x * np.cos(theta) + y * np.sin(theta) - rho)
+                    if dist < 0.5:
+                        integral += gray[y, x]
+            radon_image[i, rho_idx + diagonal] = integral
+    
+    # 在Radon域中找峰值
+    threshold = 0.7 * np.max(radon_image)
+    peak_locations = np.where(radon_image > threshold)
+    
+    radon_img = img.copy()
+    for angle_idx, rho_idx in zip(peak_locations[0], peak_locations[1]):
+        angle = angles[angle_idx]
+        rho = rho_idx - diagonal
+        
+        theta = np.deg2rad(angle)
+        if np.sin(theta) != 0:
+            x1 = 0
+            y1 = int((rho - x1 * np.cos(theta)) / np.sin(theta))
+            x2 = width - 1
+            y2 = int((rho - x2 * np.cos(theta)) / np.sin(theta))
+            
+            if 0 <= y1 < height and 0 <= y2 < height:
+                cv2.line(radon_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        elif np.cos(theta) != 0:
+            x = int(rho / np.cos(theta))
+            if 0 <= x < width:
+                cv2.line(radon_img, (x, 0), (x, height - 1), (0, 255, 0), 2)
+    
+    return img, radon_img, hough_img
+
+def medical_imaging_radon(image_path):
+    """
+    医学成像中的Radon变换应用（CT扫描概念）
+    :param image_path: 输入图像路径
+    :return: 原图和医学成像Radon变换结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError("无法读取图像")
+    
+    # 模拟CT扫描过程
+    height, width = img.shape
+    center_y, center_x = height // 2, width // 2
+    diagonal = int(np.ceil(np.sqrt(height**2 + width**2)))
+    
+    # 定义扫描角度
+    num_angles = 180
+    angles = np.linspace(0, 2*np.pi, num_angles, endpoint=False)
+    
+    # 计算投影数据（模拟CT扫描数据）
+    projections = np.zeros((num_angles, diagonal))
+    
+    for i, angle in enumerate(angles):
+        # 旋转坐标系
+        rotated_img = ndimage.rotate(img, np.rad2deg(angle), reshape=False, order=1, cval=0)
+        
+        # 计算投影（沿y轴积分）
+        projections[i, :] = np.sum(rotated_img, axis=0)
+    
+    # 简化的反投影重构
+    reconstructed = np.zeros_like(img, dtype=np.float64)
+    
+    for i, angle in enumerate(angles):
+        # 将投影数据反向投影
+        backprojected = np.zeros_like(img, dtype=np.float64)
+        
+        for y in range(height):
+            for x in range(width):
+                # 计算点(x,y)在当前角度下的投影位置
+                rel_x = x - center_x
+                rel_y = y - center_y
+                
+                # 旋转坐标
+                rotated_x = rel_x * np.cos(-angle) - rel_y * np.sin(-angle)
+                proj_idx = int(rotated_x + diagonal/2)
+                
+                if 0 <= proj_idx < diagonal:
+                    backprojected[y, x] = projections[i, proj_idx]
+        
+        reconstructed += backprojected
+    
+    # 归一化
+    if np.max(reconstructed) > 0:
+        reconstructed = (reconstructed / np.max(reconstructed)) * 255
+    reconstructed = np.clip(reconstructed, 0, 255).astype(np.uint8)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(reconstructed, cv2.COLOR_GRAY2BGR)
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, radon_result = radon_transform('image.jpg')
+    # disc_img, disc_result = discrete_radon_transform('image.jpg')
+    # detect_img, detect_result = detect_lines_from_radon('image.jpg')
+    # backproj_img, backproj_result = back_project_radon('image.jpg')
+    # comp_img, radon_result, hough_result = compare_radon_hough('image.jpg')
+    # med_img, med_result = medical_imaging_radon('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>数学理论基础坚实</li>
+                        <li>能够检测任意角度的直线</li>
+                        <li>在医学成像中有重要应用（CT扫描）</li>
+                        <li>可以检测其他几何形状（圆形、椭圆等）</li>
+                        <li>对噪声具有一定的鲁棒性</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>计算复杂度高，特别是对于大图像</li>
+                        <li>需要大量的存储空间</li>
+                        <li>对离散化误差敏感</li>
+                        <li>实现相对复杂</li>
+                        <li>对于复杂场景可能产生伪影</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>医学成像（CT扫描）</li>
+                        <li>工业CT检测</li>
+                        <li>地震数据分析</li>
+                        <li>材料科学中的结构分析</li>
+                        <li>图像重建</li>
+                        <li>直线检测</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 积分变换</li>
+                                <li><strong>适用:</strong> 直线检测、图像重建</li>
+                                <li><strong>复杂度:</strong> O(N×M×A)，其中N和M是图像尺寸，A是角度数</li>
+                                <li><strong>参数:</strong> 角度范围、距离范围</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="hough_transform.html">霍夫变换</a></li>
+                                <li><a href="probabilistic_hough.html">概率霍夫变换</a></li>
+                                <li><a href="lsd.html">线段检测器</a></li>
+                                <li><a href="ransac.html">RANSAC算法</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

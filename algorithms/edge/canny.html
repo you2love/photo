@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canny边缘检测 - 图像处理算法详解</title>
+    <title>Canny 边缘检测 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons.css" rel="stylesheet">
-    <!-- 引入Bootstrap CSS -->
     <link href="../../libs/bootstrap.min.css" rel="stylesheet">
-    <!-- 引入Prism.js CSS -->
     <link href="../../libs/prism.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../../basics.html">基础知识</a>
+                        <a class="nav-link" href="../../index.html">首页</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../../algorithms.html">常见算法</a>
@@ -35,22 +35,22 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="../../algorithms/line_detection/hough_transform.html">Hough变换</a></li>
-                            <li><a class="dropdown-item active" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item" href="../../algorithms/line_detection/hough_transform.html">Hough 变换</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/edge/canny.html">Canny 边缘检测</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                        <a class="nav-link" href="../../python-examples.html">Python 示例</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                        <a class="nav-link" href="../../golang-examples.html">Golang 示例</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Canny边缘检测算法详解 -->
+    <!-- Canny 边缘检测算法详解 -->
     <section class="py-5">
         <div class="container">
             <div class="row">
@@ -59,42 +59,267 @@
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
                             <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
-                            <li class="breadcrumb-item active">Canny边缘检测</li>
+                            <li class="breadcrumb-item active">Canny 边缘检测</li>
                         </ol>
                     </nav>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-lg-8">
-                    <h1 class="fw-bold">Canny边缘检测</h1>
-                    <p class="lead">Canny边缘检测是一种多阶段的边缘检测算法，被认为是边缘检测的最优算法之一。</p>
+                    <h1 class="fw-bold">Canny 边缘检测</h1>
+                    <p class="lead">多阶段最优边缘检测算法</p>
                     
+                    <!-- 算法概述信息卡 -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li><i class="material-icons align-middle text-primary">calendar_today</i> <strong>提出年份:</strong> 1986 年</li>
+                                        <li><i class="material-icons align-middle text-primary">person</i> <strong>提出者:</strong> John F. Canny</li>
+                                        <li><i class="material-icons align-middle text-primary">category</i> <strong>适用:</strong> 边缘检测</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li><i class="material-icons align-middle text-primary">schedule</i> <strong>复杂度:</strong> O(M×N)</li>
+                                        <li><i class="material-icons align-middle text-primary">settings</i> <strong>参数:</strong> 低阈值、高阈值、σ</li>
+                                        <li><i class="material-icons align-middle text-primary">memory</i> <strong>空间:</strong> O(M×N)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 算法流程图 -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="material-icons align-middle">flowchart</i> 算法流程</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mermaid">
+flowchart TD
+    A[输入灰度图像] --> B[高斯滤波去噪]
+    B --> C[计算梯度幅值和方向]
+    C --> D[非极大值抑制]
+    D --> E[双阈值检测]
+    E --> F{弱边缘处理}
+    F -->|有强边缘邻接 | G[保留为强边缘]
+    F -->|无强边缘邻接 | H[抑制]
+    G --> I[输出边缘图像]
+    H --> I
+    
+    style A fill:#e3f2fd
+    style I fill:#e8f5e9
+    style E fill:#fff3e0
+    style F fill:#fff3e0
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 算法原理 -->
                     <h2>算法原理</h2>
-                    <p>Canny边缘检测算法由John F. Canny在1986年提出，旨在找到一个最优的边缘检测算法。Canny将边缘检测问题转化为一个数学问题，并提出了三个评价边缘检测算法的标准：</p>
-                    <ol>
-                        <li><strong>低错误率</strong>：尽可能多地标识出图像中的实际边缘，同时尽可能少地标识出不存在的边缘</li>
-                        <li><strong>边缘定位准确</strong>：检测出的边缘点必须尽可能接近真实边缘的中心</li>
-                        <li><strong>单一响应</strong>：对于单一边缘点，算法不应产生多个响应</li>
-                    </ol>
+                    <p>Canny 边缘检测算法由 John F. Canny 在 1986 年提出，旨在找到一个最优的边缘检测算法。Canny 将边缘检测问题转化为一个数学问题，并提出了三个评价边缘检测算法的标准：</p>
                     
-                    <h3>算法步骤</h3>
-                    <ol>
-                        <li><strong>高斯滤波</strong>：使用高斯滤波器平滑图像，减少噪声</li>
-                        <li><strong>计算梯度</strong>：使用Sobel算子计算图像的梯度幅值和方向</li>
-                        <li><strong>非极大值抑制</strong>：细化边缘，保留梯度方向上的局部最大值</li>
-                        <li><strong>双阈值检测</strong>：使用高低两个阈值检测强边缘和弱边缘</li>
-                        <li><strong>边缘连接</strong>：通过滞后阈值处理，连接边缘片段</li>
-                    </ol>
-                    
-                    <h2>Python实现</h2>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="material-icons align-middle">target</i> 最优边缘检测三标准</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <i class="material-icons display-4 text-primary">check_circle</i>
+                                        <h6 class="mt-2">低错误率</h6>
+                                        <p class="small text-muted">不漏检、不误检</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <i class="material-icons display-4 text-primary">my_location</i>
+                                        <h6 class="mt-2">定位准确</h6>
+                                        <p class="small text-muted">边缘点接近真实中心</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <i class="material-icons display-4 text-primary">filter_1</i>
+                                        <h6 class="mt-2">单一响应</h6>
+                                        <p class="small text-muted">单边缘单响应</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 详细步骤序列图 -->
+                    <h3>算法步骤详解</h3>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="mermaid">
+sequenceDiagram
+    participant Input as 输入图像
+    participant Gaussian as 高斯滤波
+    participant Gradient as 梯度计算
+    participant NMS as 非极大值抑制
+    participant Double as 双阈值
+    participant Edge as 边缘连接
+    participant Output as 输出
+
+    Input->>Gaussian: 5×5 高斯核卷积
+    Note over Gaussian: 去除噪声<br/>σ通常取 1.4
+    Gaussian->>Gradient: Sobel 算子
+    Note over Gradient: 计算 Gx, Gy<br/>G=√(Gx²+Gy²)<br/>θ=arctan(Gy/Gx)
+    Gradient->>NMS: 梯度幅值+方向
+    Note over NMS: 保留梯度方向<br/>上的局部最大值
+    NMS->>Double: 细化边缘
+    Note over Double: TL=低阈值<br/>TH=高阈值
+    Double->>Edge: 强/弱边缘分类
+    Edge->>Output: 滞后阈值处理
+    Note over Output: 弱边缘连接<br/>到强边缘则保留
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 步骤详细说明 -->
+                    <div class="accordion mb-4" id="stepsAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#step1">
+                                    <strong>步骤 1: 高斯滤波</strong>
+                                </button>
+                            </h2>
+                            <div id="step1" class="accordion-collapse collapse show" data-bs-parent="#stepsAccordion">
+                                <div class="accordion-body">
+                                    <p>使用高斯滤波器平滑图像，减少噪声影响。高斯核大小通常为 5×5，标准差σ一般取 1.4。</p>
+                                    <div class="mermaid">
+flowchart LR
+    A[原始图像] --> B[高斯核]
+    B --> C[卷积运算]
+    C --> D[平滑图像]
+    
+    subgraph 高斯核公式
+        E["G(x,y) = (1/2πσ²)·e^(-(x²+y²)/2σ²)"]
+    end
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step2">
+                                    <strong>步骤 2: 计算梯度</strong>
+                                </button>
+                            </h2>
+                            <div id="step2" class="accordion-collapse collapse" data-bs-parent="#stepsAccordion">
+                                <div class="accordion-body">
+                                    <p>使用 Sobel 算子计算图像在 x 和 y 方向的梯度，然后计算梯度幅值和方向。</p>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th> Sobel X 核</th>
+                                                <th> Sobel Y 核</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <pre><code>[-1  0  1]
+[-2  0  2]
+[-1  0  1]</code></pre>
+                                                </td>
+                                                <td>
+                                                    <pre><code>[-1 -2 -1]
+[ 0  0  0]
+[ 1  2  1]</code></pre>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p><strong>梯度幅值:</strong> G = √(Gx² + Gy²)</p>
+                                    <p><strong>梯度方向:</strong> θ = arctan(Gy/Gx)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step3">
+                                    <strong>步骤 3: 非极大值抑制</strong>
+                                </button>
+                            </h2>
+                            <div id="step3" class="accordion-collapse collapse" data-bs-parent="#stepsAccordion">
+                                <div class="accordion-body">
+                                    <p>沿梯度方向检查像素点，只保留梯度方向上的局部最大值，细化边缘到单像素宽度。</p>
+                                    <div class="mermaid">
+flowchart TD
+    A[梯度方向量化] --> B{4 个方向}
+    B -->|0° | C[水平比较]
+    B -->|45° | D[对角比较↗</br>↙]
+    B -->|90° | E[垂直比较]
+    B -->|135° | F[对角比较↘</br>↖]
+    C --> G{是否最大值}
+    D --> G
+    E --> G
+    F --> G
+    G -->|是 | H[保留]
+    G -->|否 | I[抑制为 0]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step4">
+                                    <strong>步骤 4: 双阈值检测</strong>
+                                </button>
+                            </h2>
+                            <div id="step4" class="accordion-collapse collapse" data-bs-parent="#stepsAccordion">
+                                <div class="accordion-body">
+                                    <p>使用两个阈值区分强边缘、弱边缘和非边缘：</p>
+                                    <ul>
+                                        <li><strong>强边缘</strong>: 梯度值 > 高阈值 TH，直接接受</li>
+                                        <li><strong>弱边缘</strong>: 低阈值 TL < 梯度值 ≤ TH，需要进一步判断</li>
+                                        <li><strong>非边缘</strong>: 梯度值 ≤ TL，直接抑制</li>
+                                    </ul>
+                                    <div class="alert alert-info">
+                                        <i class="material-icons align-middle">info</i>
+                                        <strong>经验法则:</strong> 高阈值通常是低阈值的 2-3 倍
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step5">
+                                    <strong>步骤 5: 边缘连接（滞后阈值处理）</strong>
+                                </button>
+                            </h2>
+                            <div id="step5" class="accordion-collapse collapse" data-bs-parent="#stepsAccordion">
+                                <div class="accordion-body">
+                                    <p>检查弱边缘像素的 8 邻域，如果存在强边缘像素，则将该弱边缘提升为强边缘。</p>
+                                    <div class="mermaid">
+flowchart LR
+    A[弱边缘像素] --> B[检查 8 邻域]
+    B --> C{有强边缘？}
+    C -->|是 | D[提升为强边缘]
+    C -->|否 | E[抑制为 0]
+    
+    style D fill:#e8f5e9
+    style E fill:#ffebee
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Python 实现 -->
+                    <h2>Python 实现</h2>
                     <pre><code class="language-python">import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
 def canny_edge_detection(image_path, low_threshold=50, high_threshold=150):
     """
-    使用OpenCV实现Canny边缘检测
+    使用 OpenCV 实现 Canny 边缘检测
     :param image_path: 输入图像路径
     :param low_threshold: 低阈值
     :param high_threshold: 高阈值
@@ -103,192 +328,185 @@ def canny_edge_detection(image_path, low_threshold=50, high_threshold=150):
     # 读取图像
     img = cv2.imread(image_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    
-    # 应用Canny边缘检测
-    edges = cv2.Canny(gray, low_threshold, high_threshold)
-    
-    return img, edges
 
-def manual_canny_edge_detection(image_path, low_threshold=50, high_threshold=150, sigma=1.0):
-    """
-    手动实现Canny边缘检测算法
-    :param image_path: 输入图像路径
-    :param low_threshold: 低阈值
-    :param high_threshold: 高阈值
-    :param sigma: 高斯滤波器的标准差
-    :return: 边缘检测结果
-    """
-    from scipy import ndimage
-    import math
-    
-    # 读取图像
-    img = cv2.imread(image_path, 0).astype(np.float64)
-    
-    # 1. 高斯滤波
-    def gaussian_kernel(size, sigma):
-        kernel = np.zeros((size, size))
-        center = size // 2
-        sum_val = 0
-        for i in range(size):
-            for j in range(size):
-                x, y = i - center, j - center
-                kernel[i, j] = np.exp(-(x**2 + y**2) / (2 * sigma**2))
-                sum_val += kernel[i, j]
-        return kernel / sum_val
-    
-    # 应用高斯滤波
-    kernel_size = int(2 * np.ceil(2 * sigma) + 1)
-    gaussian_k = gaussian_kernel(kernel_size, sigma)
-    smoothed = ndimage.convolve(img, gaussian_k)
-    
-    # 2. 计算梯度
-    Kx = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], np.float32)
-    Ky = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], np.float32)
-    
-    Ix = ndimage.filters.convolve(smoothed, Kx)
-    Iy = ndimage.filters.convolve(smoothed, Ky)
-    
-    # 梯度幅值和方向
-    G = np.hypot(Ix, Iy)
-    theta = np.arctan2(Iy, Ix)
-    
-    # 3. 非极大值抑制
-    rows, cols = G.shape
-    Z = np.zeros((rows, cols), dtype=np.int32)
-    angle = theta * 180. / np.pi
-    angle[angle < 0] += 180
-    
-    for i in range(1, rows-1):
-        for j in range(1, cols-1):
-            try:
-                q = 255
-                r = 255
-                
-                # 0度
-                if (0 <= angle[i,j] < 22.5) or (157.5 <= angle[i,j] <= 180):
-                    if (G[i,j] >= G[i,j+1]) and (G[i,j] >= G[i,j-1]):
-                        q = G[i,j]
-                    else:
-                        q = 0
-                        
-                # 45度
-                elif 22.5 <= angle[i,j] < 67.5:
-                    if (G[i,j] >= G[i-1,j+1]) and (G[i,j] >= G[i+1,j-1]):
-                        q = G[i,j]
-                    else:
-                        q = 0
-                        
-                # 90度
-                elif 67.5 <= angle[i,j] < 112.5:
-                    if (G[i,j] >= G[i+1,j]) and (G[i,j] >= G[i-1,j]):
-                        q = G[i,j]
-                    else:
-                        q = 0
-                        
-                # 135度
-                elif 112.5 <= angle[i,j] < 157.5:
-                    if (G[i,j] >= G[i+1,j+1]) and (G[i,j] >= G[i-1,j-1]):
-                        q = G[i,j]
-                    else:
-                        q = 0
-                        
-                Z[i,j] = q
-            except IndexError:
-                pass
-    
-    # 4. 双阈值检测和边缘连接
-    strong = 255
-    weak = 75
-    
-    strong_i, strong_j = np.where(Z >= high_threshold)
-    zeros_i, zeros_j = np.where(Z < low_threshold)
-    weak_i, weak_j = np.where((Z <= high_threshold) & (Z >= low_threshold))
-    
-    # 创建输出图像
-    out = np.zeros((rows, cols), dtype=np.uint8)
-    out[strong_i, strong_j] = strong
-    out[weak_i, weak_j] = weak
-    
-    # 5. 滞后阈值
-    for i in range(1, rows-1):
-        for j in range(1, cols-1):
-            if out[i,j] == weak:
-                # 检查8邻域是否有强边缘
-                if ((out[i+1, j-1] == strong) or (out[i+1, j] == strong) or (out[i+1, j+1] == strong)
-                    or (out[i, j-1] == strong) or (out[i, j+1] == strong)
-                    or (out[i-1, j-1] == strong) or (out[i-1, j] == strong) or (out[i-1, j+1] == strong)):
-                    out[i, j] = strong
-                else:
-                    out[i, j] = 0
-    
-    return out
+    # 应用 Canny 边缘检测
+    edges = cv2.Canny(gray, low_threshold, high_threshold)
+
+    return img, edges
 
 # 使用示例
 if __name__ == "__main__":
-    # 注意：需要提供实际的图像路径
-    # img, edges = canny_edge_detection('image.jpg')
-    # manual_edges = manual_canny_edge_detection('image.jpg')
-    pass</code></pre>
-                    
+    img, edges = canny_edge_detection('image.jpg', 50, 150)
+    
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.title('Original Image')
+    plt.subplot(1, 2, 2)
+    plt.imshow(edges, cmap='gray')
+    plt.title('Canny Edges')
+    plt.show()</code></pre>
+
+                    <!-- 算法优缺点 -->
                     <h2>算法优缺点</h2>
-                    <h3>优点</h3>
-                    <ul>
-                        <li>边缘检测精度高</li>
-                        <li>对噪声具有较好的鲁棒性</li>
-                        <li>边缘连续性好</li>
-                        <li>参数相对较少，易于调节</li>
-                        <li>理论基础扎实</li>
-                    </ul>
-                    
-                    <h3>缺点</h3>
-                    <ul>
-                        <li>计算复杂度较高</li>
-                        <li>对参数敏感，需要仔细调节阈值</li>
-                        <li>可能丢失一些细小的边缘</li>
-                        <li>对纹理复杂的区域可能出现过度分割</li>
-                    </ul>
-                    
-                    <h2>参数调节</h2>
-                    <p>Canny边缘检测有两个重要参数：</p>
-                    <ul>
-                        <li><strong>低阈值</strong>：低于此阈值的边缘被忽略</li>
-                        <li><strong>高阈值</strong>：高于此阈值的边缘被接受</li>
-                    </ul>
-                    <p>通常，高阈值是低阈值的2-3倍。较高的阈值组合会检测到更强的边缘，较低的阈值组合会检测到更多的边缘。</p>
-                    
-                    <h2>应用场景</h2>
-                    <ul>
-                        <li>对象检测和识别</li>
-                        <li>图像分割预处理</li>
-                        <li>医学图像分析</li>
-                        <li>工业检测</li>
-                        <li>计算机视觉预处理</li>
-                        <li>特征提取</li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-4">
-                    <div class="card">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card h-100 border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0"><i class="material-icons align-middle">thumb_up</i> 优点</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="material-icons align-middle text-success">check</i> 边缘检测精度高</li>
+                                        <li><i class="material-icons align-middle text-success">check</i> 对噪声具有较好的鲁棒性</li>
+                                        <li><i class="material-icons align-middle text-success">check</i> 边缘连续性好</li>
+                                        <li><i class="material-icons align-middle text-success">check</i> 参数相对较少，易于调节</li>
+                                        <li><i class="material-icons align-middle text-success">check</i> 理论基础扎实</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 border-warning">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5 class="mb-0"><i class="material-icons align-middle">thumb_down</i> 缺点</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="material-icons align-middle text-warning">close</i> 计算复杂度较高</li>
+                                        <li><i class="material-icons align-middle text-warning">close</i> 对参数敏感，需要仔细调节阈值</li>
+                                        <li><i class="material-icons align-middle text-warning">close</i> 可能丢失一些细小的边缘</li>
+                                        <li><i class="material-icons align-middle text-warning">close</i> 对纹理复杂的区域可能出现过度分割</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 参数调节指南 -->
+                    <h2>参数调节指南</h2>
+                    <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">算法信息</h5>
+                            <p>Canny 边缘检测有两个重要阈值参数：</p>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>参数</th>
+                                            <th>作用</th>
+                                            <th>调节建议</th>
+                                            <th>效果</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>低阈值 TL</strong></td>
+                                            <td>低于此值的边缘被忽略</td>
+                                            <td>设为高阈值的 1/2 到 1/3</td>
+                                            <td>越低，检测到的边缘越多</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>高阈值 TH</strong></td>
+                                            <td>高于此值的边缘被接受</td>
+                                            <td>根据图像梯度分布调整</td>
+                                            <td>越高，检测到的边缘越少但更可靠</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>高斯σ</strong></td>
+                                            <td>控制平滑程度</td>
+                                            <td>通常取 1.0-2.0</td>
+                                            <td>越大，去噪越好但边缘越模糊</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 应用场景 -->
+                    <h2>应用场景</h2>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="material-icons display-4 text-primary">visibility</i>
+                                    <h6 class="mt-2">对象检测</h6>
+                                    <p class="small text-muted">提取物体轮廓用于识别</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="material-icons display-4 text-primary">content_cut</i>
+                                    <h6 class="mt-2">图像分割</h6>
+                                    <p class="small text-muted">作为分割的预处理步骤</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="material-icons display-4 text-primary">local_hospital</i>
+                                    <h6 class="mt-2">医学图像</h6>
+                                    <p class="small text-muted">器官边界提取</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="material-icons display-4 text-primary">factory</i>
+                                    <h6 class="mt-2">工业检测</h6>
+                                    <p class="small text-muted">缺陷检测和尺寸测量</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="material-icons display-4 text-primary">computer</i>
+                                    <h6 class="mt-2">计算机视觉</h6>
+                                    <p class="small text-muted">特征提取预处理</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="material-icons display-4 text-primary">map</i>
+                                    <h6 class="mt-2">特征提取</h6>
+                                    <p class="small text-muted">SLAM 等应用的基础</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card sticky-top" style="top: 20px;">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息卡</h5>
                             <ul class="list-unstyled">
-                                <li><strong>提出年份:</strong> 1986年</li>
-                                <li><strong>提出者:</strong> John F. Canny</li>
-                                <li><strong>适用:</strong> 边缘检测</li>
-                                <li><strong>复杂度:</strong> O(M×N)，其中M和N是图像的行和列</li>
-                                <li><strong>参数:</strong> 低阈值、高阈值、高斯核大小</li>
+                                <li><i class="material-icons align-middle">calendar_today</i> <strong>提出年份:</strong> 1986 年</li>
+                                <li><i class="material-icons align-middle">person</i> <strong>提出者:</strong> John F. Canny</li>
+                                <li><i class="material-icons align-middle">category</i> <strong>适用:</strong> 边缘检测</li>
+                                <li><i class="material-icons align-middle">schedule</i> <strong>时间复杂度:</strong> O(M×N)</li>
+                                <li><i class="material-icons align-middle">memory</i> <strong>空间复杂度:</strong> O(M×N)</li>
+                                <li><i class="material-icons align-middle">settings</i> <strong>参数:</strong> 低阈值、高阈值、σ</li>
                             </ul>
                         </div>
                     </div>
-                    
+
                     <div class="card mt-4">
                         <div class="card-body">
                             <h5 class="card-title">相关算法</h5>
                             <ul class="list-unstyled">
-                                <li><a href="sobel.html">Sobel算子</a></li>
-                                <li><a href="laplacian.html">Laplacian算子</a></li>
-                                <li><a href="prewitt.html">Prewitt算子</a></li>
-                                <li><a href="../filtering/gaussian_filter.html">高斯滤波</a></li>
+                                <li><a href="sobel.html"><i class="material-icons align-middle">chevron_right</i> Sobel 算子</a></li>
+                                <li><a href="laplacian.html"><i class="material-icons align-middle">chevron_right</i> Laplacian 算子</a></li>
+                                <li><a href="prewitt.html"><i class="material-icons align-middle">chevron_right</i> Prewitt 算子</a></li>
+                                <li><a href="../filtering/gaussian_filter.html"><i class="material-icons align-middle">chevron_right</i> 高斯滤波</a></li>
+                                <li><a href="../line_detection/hough_transform.html"><i class="material-icons align-middle">chevron_right</i> Hough 变换</a></li>
                             </ul>
                         </div>
                     </div>
@@ -297,13 +515,10 @@ if __name__ == "__main__":
         </div>
     </section>
 
-    <!-- 引入Bootstrap JS -->
     <script src="../../libs/bootstrap.bundle.min.js"></script>
-    <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
-    <!-- 引入TensorFlow.js -->
     <script src="../../libs/tf.min.js"></script>
-    <!-- 主要JavaScript -->
+    <script src="../../js/diagram.js"></script>
     <script src="../../js/main.js"></script>
 </body>
 </html>

@@ -4,129 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图像处理算法详解 - 计算机图像处理教程</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link href="../libs/roboto-font.css" rel="stylesheet">
-    <link href="../libs/material-icons.css" rel="stylesheet">
-    <!-- 引入Bootstrap CSS -->
-    <link href="../libs/bootstrap.min.css" rel="stylesheet">
-    <!-- 引入Prism.js CSS -->
-    <link href="../libs/prism.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/diagram.css">
+    <link href="libs/roboto-font.css" rel="stylesheet">
+    <link href="libs/material-icons.css" rel="stylesheet">
+    <link href="libs/bootstrap.min.css" rel="stylesheet">
+    <link href="libs/prism.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">
+            <a class="navbar-brand" href="./index.html">
                 <i class="material-icons">photo_library</i>
                 图像处理教程
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../basics.html">基础知识</a>
+                        <a class="nav-link" href="./index.html">主页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../algorithms.html">常见算法</a>
+                        <a class="nav-link" href="./algorithms.html">常见算法</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             算法详解
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item active" href="../algorithms_detail.html">算法详解首页</a></li>
+                            <li><a class="dropdown-item active" href="./algorithms_detail.html">算法详解首页</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
-                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item" href="./algorithms/line_detection/hough_transform.html">Hough 变换</a></li>
+                            <li><a class="dropdown-item" href="./algorithms/edge/canny.html">Canny 边缘检测</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../python-examples.html">Python示例</a>
+                        <a class="nav-link" href="./python-examples.html">Python 示例</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../golang-examples.html">Golang示例</a>
+                        <a class="nav-link" href="./golang-examples.html">Golang 示例</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- 算法索引页面 -->
-    <section class="py-5 bg-light">
+    <!-- 算法详解首页 -->
+    <section class="py-5 bg-gradient">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">图像处理算法详解</h2>
-                <p class="text-muted">从原理到代码实现的全面介绍</p>
+                <h2 class="fw-bold text-white">图像处理算法详解</h2>
+                <p class="text-white-50">从原理到代码实现的全面介绍</p>
+            </div>
+            
+            <div class="mermaid-container bg-white">
+                <div class="mermaid">
+flowchart TD
+    subgraph 几何变换
+        direction TB
+        G1[<a href='./algorithms/geometric/translation.html'>平移变换</a>]
+        G2[<a href='./algorithms/geometric/rotation.html'>旋转变换</a>]
+        G3[<a href='./algorithms/geometric/scaling.html'>缩放变换</a>]
+        G4[<a href='./algorithms/geometric/affine.html'>仿射变换</a>]
+        G5[<a href='./algorithms/geometric/perspective.html'>透视变换</a>]
+    end
+    
+    subgraph 滤波算法
+        direction TB
+        F1[<a href='./algorithms/filtering/mean_filter.html'>均值滤波</a>]
+        F2[<a href='./algorithms/filtering/gaussian_filter.html'>高斯滤波</a>]
+        F3[<a href='./algorithms/filtering/median_filter.html'>中值滤波</a>]
+        F4[<a href='./algorithms/filtering/bilateral_filter.html'>双边滤波</a>]
+        F5[<a href='./algorithms/filtering/wiener_filter.html'>维纳滤波</a>]
+    end
+    
+    subgraph 边缘检测
+        direction TB
+        E1[<a href='./algorithms/edge/sobel.html'>Sobel 算子</a>]
+        E2[<a href='./algorithms/edge/canny.html'>Canny 算子</a>]
+        E3[<a href='./algorithms/edge/laplacian.html'>Laplacian 算子</a>]
+        E4[<a href='./algorithms/edge/prewitt.html'>Prewitt 算子</a>]
+        E5[<a href='./algorithms/edge/marr_hildreth.html'>Marr-Hildreth</a>]
+    end
+    
+    subgraph 直线检测
+        direction TB
+        L1[<a href='./algorithms/line_detection/hough_transform.html'>Hough 变换</a>]
+        L2[<a href='./algorithms/line_detection/probabilistic_hough.html'>概率 Hough</a>]
+        L3[<a href='./algorithms/line_detection/lsd.html'>LSD 线段检测</a>]
+        L4[<a href='./algorithms/line_detection/ransac.html'>RANSAC</a>]
+        L5[<a href='./algorithms/line_detection/radon.html'>Radon 变换</a>]
+    end
+    
+    subgraph 形态学
+        direction TB
+        M1[<a href='./algorithms/morphology/erosion.html'>腐蚀</a>]
+        M2[<a href='./algorithms/morphology/dilation.html'>膨胀</a>]
+        M3[<a href='./algorithms/morphology/opening.html'>开运算</a>]
+        M4[<a href='./algorithms/morphology/closing.html'>闭运算</a>]
+        M5[<a href='./algorithms/morphology/skeletonization.html'>骨架化</a>]
+    end
+    
+    subgraph 二值化
+        direction TB
+        T1[<a href='./algorithms/thresholding/global_threshold.html'>全局阈值</a>]
+        T2[<a href='./algorithms/thresholding/otsu.html'>Otsu 算法</a>]
+        T3[<a href='./algorithms/thresholding/niblack.html'>Niblack</a>]
+        T4[<a href='./algorithms/thresholding/sauvola.html'>Sauvola</a>]
+        T5[<a href='./algorithms/thresholding/local_threshold.html'>局部阈值</a>]
+    end
+    
+    几何变换 --> 滤波算法
+    滤波算法 --> 边缘检测
+    边缘检测 --> 直线检测
+    边缘检测 --> 形态学
+    滤波算法 --> 二值化
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 算法学习路径 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">推荐学习路径</h2>
+                <p class="text-muted">循序渐进掌握图像处理算法</p>
             </div>
             
             <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">算法分类</h4>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h5>几何变换</h5>
-                                    <ul class="list-unstyled">
-                                        <li><a href="geometric/translation.html">平移变换</a></li>
-                                        <li><a href="geometric/rotation.html">旋转变换</a></li>
-                                        <li><a href="geometric/scaling.html">缩放变换</a></li>
-                                        <li><a href="geometric/affine.html">仿射变换</a></li>
-                                        <li><a href="geometric/perspective.html">透视变换</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>滤波算法</h5>
-                                    <ul class="list-unstyled">
-                                        <li><a href="filtering/mean_filter.html">均值滤波</a></li>
-                                        <li><a href="filtering/gaussian_filter.html">高斯滤波</a></li>
-                                        <li><a href="filtering/median_filter.html">中值滤波</a></li>
-                                        <li><a href="filtering/bilateral_filter.html">双边滤波</a></li>
-                                        <li><a href="filtering/wiener_filter.html">维纳滤波</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>边缘检测</h5>
-                                    <ul class="list-unstyled">
-                                        <li><a href="edge/sobel.html">Sobel算子</a></li>
-                                        <li><a href="edge/canny.html">Canny算子</a></li>
-                                        <li><a href="edge/laplacian.html">Laplacian算子</a></li>
-                                        <li><a href="edge/prewitt.html">Prewitt算子</a></li>
-                                        <li><a href="edge/marr_hildreth.html">Marr-Hildreth算子</a></li>
-                                    </ul>
-                                </div>
+                <div class="col-lg-8 mx-auto">
+                    <div class="mermaid">
+flowchart LR
+    subgraph 基础阶段
+        A1[图像处理基础] --> A2[几何变换]
+        A2 --> A3[灰度变换]
+    end
+    
+    subgraph 进阶阶段
+        A3 --> B1[滤波去噪]
+        B1 --> B2[边缘检测]
+        B2 --> B3[形态学操作]
+    end
+    
+    subgraph 高级阶段
+        B3 --> C1[特征提取]
+        C1 --> C2[图像分割]
+        C2 --> C3[目标识别]
+    end
+    
+    style A1 fill:#e3f2fd
+    style A2 fill:#e3f2fd
+    style A3 fill:#e3f2fd
+    style B1 fill:#fff3e0
+    style B2 fill:#fff3e0
+    style B3 fill:#fff3e0
+    style C1 fill:#e8f5e9
+    style C2 fill:#e8f5e9
+    style C3 fill:#e8f5e9
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-primary mb-3">
+                                <i class="material-icons" style="font-size: 48px;">school</i>
                             </div>
-                            <div class="row mt-4">
-                                <div class="col-md-4">
-                                    <h5>直线检测</h5>
-                                    <ul class="list-unstyled">
-                                        <li><a href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
-                                        <li><a href="#">概率霍夫变换</a></li>
-                                        <li><a href="#">线段检测器(LSD)</a></li>
-                                        <li><a href="#">RANSAC算法</a></li>
-                                        <li><a href="#">Radon变换</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>形态学操作</h5>
-                                    <ul class="list-unstyled">
-                                        <li><a href="#">腐蚀</a></li>
-                                        <li><a href="#">膨胀</a></li>
-                                        <li><a href="#">开运算</a></li>
-                                        <li><a href="#">闭运算</a></li>
-                                        <li><a href="#">骨架化</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>二值化算法</h5>
-                                    <ul class="list-unstyled">
-                                        <li><a href="#">全局阈值</a></li>
-                                        <li><a href="#">Otsu算法</a></li>
-                                        <li><a href="#">Niblack算法</a></li>
-                                        <li><a href="#">Sauvola算法</a></li>
-                                        <li><a href="#">局部阈值</a></li>
-                                    </ul>
-                                </div>
+                            <h5 class="card-title">基础阶段</h5>
+                            <p class="card-text text-muted">掌握图像表示、坐标变换和灰度处理等基本概念</p>
+                            <a href="./algorithms/geometric/translation.html" class="btn btn-primary">开始学习</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-warning mb-3">
+                                <i class="material-icons" style="font-size: 48px;">auto_stories</i>
                             </div>
+                            <h5 class="card-title">进阶阶段</h5>
+                            <p class="card-text text-muted">学习滤波、边缘检测和形态学等核心算法</p>
+                            <a href="./algorithms/filtering/mean_filter.html" class="btn btn-warning text-white">开始学习</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-success mb-3">
+                                <i class="material-icons" style="font-size: 48px;">psychology</i>
+                            </div>
+                            <h5 class="card-title">高级阶段</h5>
+                            <p class="card-text text-muted">深入特征提取、分割和识别等高级主题</p>
+                            <a href="./algorithms/edge/canny.html" class="btn btn-success">开始学习</a>
                         </div>
                     </div>
                 </div>
@@ -134,13 +208,189 @@
         </div>
     </section>
 
-    <!-- 引入Bootstrap JS -->
-    <script src="../libs/bootstrap.bundle.min.js"></script>
-    <!-- 引入Prism.js用于代码高亮 -->
-    <script src="../libs/prism.js"></script>
-    <!-- 引入TensorFlow.js -->
-    <script src="../libs/tf.min.js"></script>
-    <!-- 主要JavaScript -->
-    <script src="../js/main.js"></script>
+    <!-- 算法分类卡片 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">算法分类导航</h2>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="material-icons align-middle text-primary">transform</i> 几何变换</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="./algorithms/geometric/translation.html">平移变换</a> - 改变图像位置</li>
+                                <li><a href="./algorithms/geometric/rotation.html">旋转变换</a> - 绕点旋转图像</li>
+                                <li><a href="./algorithms/geometric/scaling.html">缩放变换</a> - 改变图像尺寸</li>
+                                <li><a href="./algorithms/geometric/affine.html">仿射变换</a> - 保持平行线性质</li>
+                                <li><a href="./algorithms/geometric/perspective.html">透视变换</a> - 模拟视角变化</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="material-icons align-middle text-primary">blur_on</i> 滤波算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="./algorithms/filtering/mean_filter.html">均值滤波</a> - 简单平滑</li>
+                                <li><a href="./algorithms/filtering/gaussian_filter.html">高斯滤波</a> - 保边平滑</li>
+                                <li><a href="./algorithms/filtering/median_filter.html">中值滤波</a> - 去椒盐噪声</li>
+                                <li><a href="./algorithms/filtering/bilateral_filter.html">双边滤波</a> - 保边去噪</li>
+                                <li><a href="./algorithms/filtering/wiener_filter.html">维纳滤波</a> - 最优复原</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="material-icons align-middle text-primary">edges</i> 边缘检测</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="./algorithms/edge/sobel.html">Sobel 算子</a> - 梯度检测</li>
+                                <li><a href="./algorithms/edge/canny.html">Canny 算子</a> - 最优边缘</li>
+                                <li><a href="./algorithms/edge/laplacian.html">Laplacian</a> - 二阶微分</li>
+                                <li><a href="./algorithms/edge/prewitt.html">Prewitt 算子</a> - 方向检测</li>
+                                <li><a href="./algorithms/edge/marr_hildreth.html">Marr-Hildreth</a> - LoG 检测</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="material-icons align-middle text-primary">show_chart</i> 直线检测</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="./algorithms/line_detection/hough_transform.html">Hough 变换</a> - 参数空间投票</li>
+                                <li><a href="./algorithms/line_detection/probabilistic_hough.html">概率 Hough</a> - 高效检测</li>
+                                <li><a href="./algorithms/line_detection/lsd.html">LSD</a> - 线段检测器</li>
+                                <li><a href="./algorithms/line_detection/ransac.html">RANSAC</a> - 随机抽样</li>
+                                <li><a href="./algorithms/line_detection/radon.html">Radon 变换</a> - 积分变换</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="material-icons align-middle text-primary">category</i> 形态学操作</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="./algorithms/morphology/erosion.html">腐蚀</a> - 缩小前景</li>
+                                <li><a href="./algorithms/morphology/dilation.html">膨胀</a> - 扩大前景</li>
+                                <li><a href="./algorithms/morphology/opening.html">开运算</a> - 去小物体</li>
+                                <li><a href="./algorithms/morphology/closing.html">闭运算</a> - 填空洞</li>
+                                <li><a href="./algorithms/morphology/skeletonization.html">骨架化</a> - 提取中心线</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="material-icons align-middle text-primary">contrast</i> 二值化算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="./algorithms/thresholding/global_threshold.html">全局阈值</a> - 单一阈值</li>
+                                <li><a href="./algorithms/thresholding/otsu.html">Otsu 算法</a> - 最优阈值</li>
+                                <li><a href="./algorithms/thresholding/niblack.html">Niblack</a> - 局部自适应</li>
+                                <li><a href="./algorithms/thresholding/sauvola.html">Sauvola</a> - 文本二值化</li>
+                                <li><a href="./algorithms/thresholding/local_threshold.html">局部阈值</a> - 动态计算</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 算法复杂度对比 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">算法性能对比</h2>
+                <p class="text-muted">了解各算法的计算复杂度和适用场景</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-comparison table-hover">
+                            <thead>
+                                <tr>
+                                    <th>算法类别</th>
+                                    <th>代表算法</th>
+                                    <th>时间复杂度</th>
+                                    <th>空间复杂度</th>
+                                    <th>实时性</th>
+                                    <th>精度</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>几何变换</strong></td>
+                                    <td>仿射变换</td>
+                                    <td>O(M×N)</td>
+                                    <td>O(M×N)</td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>空域滤波</strong></td>
+                                    <td>高斯滤波</td>
+                                    <td>O(M×N×k²)</td>
+                                    <td>O(k²)</td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>边缘检测</strong></td>
+                                    <td>Canny</td>
+                                    <td>O(M×N)</td>
+                                    <td>O(M×N)</td>
+                                    <td><i class="material-icons text-warning">remove</i></td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hough 变换</strong></td>
+                                    <td>标准 Hough</td>
+                                    <td>O(N×Θ)</td>
+                                    <td>O(Ρ×Θ)</td>
+                                    <td><i class="material-icons text-danger">cancel</i></td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>形态学</strong></td>
+                                    <td>腐蚀/膨胀</td>
+                                    <td>O(M×N×k²)</td>
+                                    <td>O(k²)</td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                    <td><i class="material-icons text-success">check_circle</i></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>图像分割</strong></td>
+                                    <td>K-means</td>
+                                    <td>O(n×K×T)</td>
+                                    <td>O(n)</td>
+                                    <td><i class="material-icons text-warning">remove</i></td>
+                                    <td><i class="material-icons text-warning">remove</i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="diagram-legend mt-3">
+                        <h6><i class="material-icons align-middle" style="font-size: 16px;">info</i> 说明</h6>
+                        <p>M×N 为图像尺寸，k 为卷积核大小，Θ为角度采样数，Ρ为距离量化级数，K 为聚类数，T 为迭代次数</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="./libs/bootstrap.bundle.min.js"></script>
+    <script src="./libs/prism.js"></script>
+    <script src="./libs/tf.min.js"></script>
+    <script src="./js/diagram.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>

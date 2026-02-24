@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>腐蚀 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/morphology/erosion.html">腐蚀</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 腐蚀算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">腐蚀</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">腐蚀</h1>
+                    <p class="lead">腐蚀是数学形态学的基本操作之一，主要用于缩小图像中的前景对象，常用于去除小的噪声点或分离相连的对象。</p>
+
+                    <h2>算法原理</h2>
+                    <p>腐蚀是数学形态学中最基本的操作之一。它使用一个结构元素（也称为核或模板）在图像上滑动，并执行最小值操作。对于二值图像，腐蚀操作的定义如下：</p>
+                    
+                    <p>对于图像A和结构元素B，A被B腐蚀定义为：</p>
+                    <p>A ⊖ B = {z | (B)z ⊆ A}</p>
+                    
+                    <p>直观地说，腐蚀操作检查结构元素B在图像A中的每一个位置，只有当B完全包含在A中时，中心像素才被保留。这会导致前景对象（白色区域）变小。</p>
+                    
+                    <p>对于灰度图像，腐蚀操作定义为：</p>
+                    <p>(f ⊖ b)(x,y) = min{f(x+s, y+t) - b(s,t) | (s,t) ∈ B}</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>选择合适的结构元素（通常为3×3或5×5的矩形、圆形或十字形）</li>
+                        <li>将结构元素在图像上滑动</li>
+                        <li>对于每个位置，找到结构元素覆盖区域内的最小值</li>
+                        <li>将最小值赋给输出图像的对应位置</li>
+                        <li>处理图像边界</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def erosion_builtin(image_path, kernel_size=3, iterations=1):
+    """
+    使用OpenCV内置函数实现腐蚀
+    :param image_path: 输入图像路径
+    :param kernel_size: 结构元素大小
+    :param iterations: 腐蚀次数
+    :return: 原图和腐蚀后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    
+    # 创建结构元素
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
+    
+    # 应用腐蚀
+    eroded = cv2.erode(img, kernel, iterations=iterations)
+    
+    return img, eroded
+
+def manual_erosion_binary(image_path, kernel_size=3):
+    """
+    手动实现二值图像腐蚀
+    :param image_path: 输入图像路径
+    :param kernel_size: 结构元素大小
+    :return: 腐蚀后的二值图像
+    """
+    # 读取图像并转换为二值图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    height, width = binary.shape
+    pad_size = kernel_size // 2
+    
+    # 对图像进行填充
+    padded = np.pad(binary, pad_size, mode='constant', constant_values=255)
+    
+    # 创建输出图像
+    eroded = np.zeros_like(binary)
+    
+    # 应用腐蚀操作
+    for i in range(height):
+        for j in range(width):
+            # 提取当前窗口
+            window = padded[i:i+kernel_size, j:j+kernel_size]
+            
+            # 检查窗口中的最小值
+            if np.min(window) == 255:  # 只有当所有像素都是白色时，输出才是白色
+                eroded[i, j] = 255
+            else:
+                eroded[i, j] = 0
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(eroded, cv2.COLOR_GRAY2BGR)
+
+def manual_erosion_grayscale(image_path, kernel_size=3):
+    """
+    手动实现灰度图像腐蚀
+    :param image_path: 输入图像路径
+    :param kernel_size: 结构元素大小
+    :return: 腐蚀后的灰度图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    height, width = img.shape
+    pad_size = kernel_size // 2
+    
+    # 对图像进行填充（使用最大值填充以避免边界效应）
+    padded = np.pad(img, pad_size, mode='edge')
+    
+    # 创建输出图像
+    eroded = np.zeros_like(img)
+    
+    # 应用腐蚀操作
+    for i in range(height):
+        for j in range(width):
+            # 提取当前窗口
+            window = padded[i:i+kernel_size, j:j+kernel_size]
+            
+            # 计算窗口中的最小值
+            eroded[i, j] = np.min(window)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(eroded, cv2.COLOR_GRAY2BGR)
+
+def erosion_with_different_shapes(image_path):
+    """
+    使用不同形状的结构元素进行腐蚀
+    :param image_path: 输入图像路径
+    :return: 原图和不同形状结构元素的腐蚀结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 创建不同形状的结构元素
+    kernels = {
+        'Rectangle': cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)),
+        'Ellipse': cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)),
+        'Cross': cv2.getStructuringElement(cv2.MORPH_CROSS, (5, 5))
+    }
+    
+    results = {}
+    for name, kernel in kernels.items():
+        eroded = cv2.erode(binary, kernel, iterations=1)
+        results[name] = cv2.cvtColor(eroded, cv2.COLOR_GRAY2BGR)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), results
+
+def noise_removal_erosion(image_path):
+    """
+    使用腐蚀去除噪声
+    :param image_path: 输入图像路径
+    :return: 原图、含噪声图像和去噪声后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 添加椒盐噪声
+    def add_salt_pepper_noise(image, salt_prob=0.01, pepper_prob=0.01):
+        noisy_img = image.copy()
+        total_pixels = image.size
+        
+        # 添加盐噪声（白色点）
+        num_salt = int(salt_prob * total_pixels)
+        coords = [np.random.randint(0, i - 1, num_salt) for i in image.shape]
+        noisy_img[coords] = 255
+        
+        # 添加椒噪声（黑色点）
+        num_pepper = int(pepper_prob * total_pixels)
+        coords = [np.random.randint(0, i - 1, num_pepper) for i in image.shape]
+        noisy_img[coords] = 0
+        
+        return noisy_img
+    
+    # 创建含噪声图像
+    noisy_img = add_salt_pepper_noise(img, 0.02, 0.02)
+    
+    # 应用腐蚀去除噪声（白色噪声点）
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    eroded = cv2.erode(noisy_img, kernel, iterations=1)
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(noisy_img, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(eroded, cv2.COLOR_GRAY2BGR))
+
+def adaptive_erosion(image_path, region_size=15):
+    """
+    自适应腐蚀 - 根据局部特性调整腐蚀强度
+    :param image_path: 输入图像路径
+    :param region_size: 局部区域大小
+    :return: 原图和自适应腐蚀结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 计算局部方差
+    mean_local = cv2.blur(img, (region_size, region_size))
+    squared_img = img.astype(np.float64) ** 2
+    mean_squared_local = cv2.blur(squared_img, (region_size, region_size))
+    variance_local = mean_squared_local - mean_local.astype(np.float64) ** 2
+    
+    # 根据局部方差调整腐蚀核大小
+    height, width = img.shape
+    result = img.copy()
+    
+    for i in range(0, height, 5):  # 采样步长
+        for j in range(0, width, 5):
+            # 获取局部方差
+            local_var = variance_local[min(i, variance_local.shape[0]-1), min(j, variance_local.shape[1]-1)]
+            
+            # 根据方差大小调整核大小
+            if local_var < 1000:  # 平坦区域
+                kernel_size = 3
+            elif local_var < 5000:  # 中等纹理区域
+                kernel_size = 5
+            else:  # 高纹理区域
+                kernel_size = 1
+            
+            if kernel_size > 1:
+                roi = img[max(0, i-kernel_size//2):min(height, i+kernel_size//2+1),
+                         max(0, j-kernel_size//2):min(width, j+kernel_size//2+1)]
+                result[i, j] = np.min(roi)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(result, cv2.COLOR_GRAY2BGR)
+
+def morphological_gradient(image_path):
+    """
+    形态学梯度 - 膨胀结果减去腐蚀结果
+    :param image_path: 输入图像路径
+    :return: 原图和形态学梯度结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 创建结构元素
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    
+    # 腐蚀
+    eroded = cv2.erode(img, kernel)
+    
+    # 膨胀
+    dilated = cv2.dilate(img, kernel)
+    
+    # 形态学梯度
+    gradient = cv2.subtract(dilated, eroded)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(gradient, cv2.COLOR_GRAY2BGR)
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = erosion_builtin('image.jpg', 3, 1)
+    # binary_img, binary_result = manual_erosion_binary('image.jpg', 3)
+    # gray_img, gray_result = manual_erosion_grayscale('image.jpg', 3)
+    # shape_img, shape_results = erosion_with_different_shapes('image.jpg')
+    # noise_orig, noise_img, noise_result = noise_removal_erosion('image.jpg')
+    # adapt_img, adapt_result = adaptive_erosion('image.jpg')
+    # grad_img, grad_result = morphological_gradient('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>有效去除小的噪声点</li>
+                        <li>能够分离相连的对象</li>
+                        <li>操作简单，易于理解</li>
+                        <li>可以与其他形态学操作组合使用</li>
+                        <li>计算效率高</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>会使前景对象整体变小</li>
+                        <li>可能破坏细长的结构</li>
+                        <li>对所有区域采用相同的处理方式</li>
+                        <li>需要选择合适的结构元素</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>去除图像中的小噪声点</li>
+                        <li>分离相连的字符或对象</li>
+                        <li>图像预处理</li>
+                        <li>特征提取</li>
+                        <li>OCR（光学字符识别）预处理</li>
+                        <li>医学图像处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 形态学操作</li>
+                                <li><strong>适用:</strong> 二值图像、灰度图像</li>
+                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>参数:</strong> 结构元素形状、大小、迭代次数</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="dilation.html">膨胀</a></li>
+                                <li><a href="opening.html">开运算</a></li>
+                                <li><a href="closing.html">闭运算</a></li>
+                                <li><a href="skeletonization.html">骨架化</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+/* Mermaid 图表样式 */
+.mermaid-container {
+  background: #fff;
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.mermaid {
+  display: flex;
+  justify-content: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* 流程图节点样式 */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon {
+  stroke-width: 2px;
+  stroke: #3498db;
+}
+
+.mermaid .node .label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* 边的样式 */
+.mermaid .edgePath .path {
+  stroke: #2c3e50;
+  stroke-width: 2px;
+}
+
+.mermaid .arrowheadPath {
+  fill: #2c3e50;
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .mermaid-container {
+    background: #2d2d2d;
+  }
+  
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node ellipse,
+  .mermaid .node polygon {
+    stroke: #5dade2;
+  }
+  
+  .mermaid .edgePath .path {
+    stroke: #aab7b8;
+  }
+  
+  .mermaid .arrowheadPath {
+    fill: #aab7b8;
+  }
+}
+
+/* 交互式图表容器 */
+.interactive-diagram {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.diagram-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.diagram-controls button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.diagram-controls button:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.diagram-controls button.active {
+  background: #27ae60;
+}
+
+/* 表格增强样式 */
+.table-comparison {
+  margin: 2rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-comparison thead {
+  background: linear-gradient(135deg, #3498db, #2ecc71);
+  color: white;
+}
+
+.table-comparison tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table-comparison tbody tr:hover {
+  background: rgba(52, 152, 219, 0.1);
+  transform: scale(1.01);
+}
+
+/* 序列图样式 */
+.sequence-diagram-container {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  .sequence-diagram-container {
+    background: #1e1e1e;
+  }
+}
+
+/* 可折叠图表区域 */
+.collapsible-diagram {
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.collapsible-diagram .diagram-header {
+  background: #f8f9fa;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.collapsible-diagram .diagram-header:hover {
+  background: #e9ecef;
+}
+
+.collapsible-diagram .diagram-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.collapsible-diagram .diagram-body {
+  padding: 1.5rem;
+  background: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .collapsible-diagram {
+    border-color: #444;
+  }
+  
+  .collapsible-diagram .diagram-header {
+    background: #333;
+    color: #e0e0e0;
+  }
+  
+  .collapsible-diagram .diagram-header:hover {
+    background: #444;
+  }
+  
+  .collapsible-diagram .diagram-body {
+    background: #2d2d2d;
+  }
+}
+
+/* 图表说明框 */
+.diagram-legend {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 5px;
+}
+
+.diagram-legend h6 {
+  margin-bottom: 0.5rem;
+  color: #856404;
+}
+
+.diagram-legend p {
+  margin: 0;
+  color: #856404;
+}
+
+@media (prefers-color-scheme: dark) {
+  .diagram-legend {
+    background: #4a3c0f;
+    border-left-color: #ffd54f;
+  }
+  
+  .diagram-legend h6,
+  .diagram-legend p {
+    color: #ffd54f;
+  }
+}

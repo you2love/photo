@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>骨架化 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/morphology/skeletonization.html">骨架化</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 骨架化算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">骨架化</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">骨架化</h1>
+                    <p class="lead">骨架化是数学形态学的重要应用，用于提取对象的中心线或骨架，保留对象的拓扑结构和主要形状特征。</p>
+
+                    <h2>算法原理</h2>
+                    <p>骨架化（Skeletonization）是数学形态学中的一种重要操作，旨在将二值图像中的对象缩减为一条单像素宽的中心线，同时保持对象的拓扑结构和主要形状特征。骨架化可以通过多种方法实现，最常用的是基于形态学操作的迭代方法。</p>
+                    
+                    <p>骨架化的数学定义：</p>
+                    <p>对于集合A，其骨架S(A)定义为：</p>
+                    <p>S(A) = ∪ {B(x, r) | B(x, r) ⊆ A 且 B(x, r+ε) ⊈ A, ∀ε > 0}</p>
+                    
+                    <p>其中B(x, r)是以点x为中心、半径为r的圆盘。</p>
+                    
+                    <p>骨架化的主要方法包括：</p>
+                    <ul>
+                        <li>基于距离变换的方法</li>
+                        <li>基于形态学操作的迭代方法</li>
+                        <li>基于细化算法的方法</li>
+                    </ul>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>将输入图像转换为二值图像</li>
+                        <li>初始化输出骨架图像为空</li>
+                        <li>迭代执行腐蚀操作直到对象完全消失</li>
+                        <li>在每次迭代中，将腐蚀结果添加到骨架图像中</li>
+                        <li>使用开运算或其他方法清理骨架</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import ndimage
+from skimage import morphology
+
+def skeletonization_builtin(image_path):
+    """
+    使用OpenCV内置函数实现骨架化
+    :param image_path: 输入图像路径
+    :return: 原图和骨架化后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 使用OpenCV的形态学操作实现骨架化
+    # 骨架化 = (原图 - 开运算) + (开运算 - 闭运算) + ...
+    # 简单方法：迭代腐蚀和开运算
+    size = np.size(binary)
+    skeleton = np.zeros(binary.shape, dtype=np.uint8)
+    
+    element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
+    done = False
+    
+    while not done:
+        eroded = cv2.erode(binary, element)
+        temp = cv2.morphologyEx(eroded, cv2.MORPH_OPEN, element)
+        skeleton = cv2.bitwise_or(skeleton, cv2.subtract(eroded, temp))
+        binary = eroded.copy()
+        
+        if cv2.countNonZero(binary) == 0:
+            done = True
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(skeleton, cv2.COLOR_GRAY2BGR)
+
+def manual_skeletonization(image_path):
+    """
+    手动实现骨架化（基于迭代腐蚀）
+    :param image_path: 输入图像路径
+    :return: 骨架化后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 确保前景为白色（255），背景为黑色（0）
+    binary = binary // 255
+    
+    # 创建结构元素
+    struct_elem = np.array([[0, 1, 0],
+                           [1, 1, 1],
+                           [0, 1, 0]], dtype=np.uint8)
+    
+    # 初始化骨架
+    skeleton = np.zeros_like(binary)
+    temp = binary.copy()
+    
+    while np.any(temp):
+        # 腐蚀
+        eroded = ndimage.binary_erosion(temp, struct_elem)
+        
+        # 开运算
+        opened = ndimage.binary_opening(eroded, struct_elem)
+        
+        # 骨架部分 = 腐蚀结果 - 开运算结果
+        skeleton_part = eroded - opened
+        
+        # 添加到骨架
+        skeleton = skeleton + skeleton_part
+        
+        # 更新temp
+        temp = eroded
+    
+    # 转换为8位图像
+    skeleton = skeleton.astype(np.uint8) * 255
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(skeleton, cv2.COLOR_GRAY2BGR)
+
+def distance_transform_skeletonization(image_path):
+    """
+    基于距离变换的骨架化
+    :param image_path: 输入图像路径
+    :return: 原图和基于距离变换的骨架化结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 将二值图像转换为布尔类型
+    binary_bool = binary.astype(bool)
+    
+    # 计算距离变换
+    distance = ndimage.distance_transform_edt(binary_bool)
+    
+    # 计算骨架 - 距离变换的局部最大值
+    local_max = ndimage.maximum_filter(distance, size=3) == distance
+    skeleton = local_max & binary_bool
+    
+    # 转换为8位图像
+    skeleton = skeleton.astype(np.uint8) * 255
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(skeleton, cv2.COLOR_GRAY2BGR)
+
+def thinning_skeletonization(image_path):
+    """
+    基于细化算法的骨架化
+    :param image_path: 输入图像路径
+    :return: 原图和细化骨架化结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 将二值图像转换为布尔类型
+    binary_bool = binary.astype(bool)
+    
+    # 使用skimage的细化算法
+    skeleton = morphology.thin(binary_bool)
+    
+    # 转换为8位图像
+    skeleton = skeleton.astype(np.uint8) * 255
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(skeleton, cv2.COLOR_GRAY2BGR)
+
+def iterative_skeletonization(image_path):
+    """
+    迭代骨架化算法
+    :param image_path: 输入图像路径
+    :return: 原图和迭代骨架化结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 确保前景为白色（255），背景为黑色（0）
+    binary = binary // 255
+    
+    # 定义结构元素
+    se = np.array([[1, 1, 1],
+                   [1, 1, 1],
+                   [1, 1, 1]], dtype=np.uint8)
+    
+    # 初始化骨架
+    skeleton = np.zeros_like(binary)
+    temp = binary.copy()
+    
+    # 迭代过程
+    while np.any(temp):
+        # 腐蚀
+        eroded = cv2.erode(temp.astype(np.uint8), se, iterations=1)
+        eroded = eroded.astype(bool)
+        
+        # 开运算
+        opened = cv2.morphologyEx(eroded.astype(np.uint8), cv2.MORPH_OPEN, se)
+        opened = opened.astype(bool)
+        
+        # 骨架部分
+        skeleton_part = eroded & (~opened)
+        
+        # 添加到骨架
+        skeleton = skeleton | skeleton_part
+        
+        # 更新temp
+        temp = eroded
+    
+    # 转换为8位图像
+    skeleton = skeleton.astype(np.uint8) * 255
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(skeleton, cv2.COLOR_GRAY2BGR)
+
+def skeleton_pruning(image_path):
+    """
+    骨架修剪 - 去除骨架中的毛刺
+    :param image_path: 输入图像路径
+    :return: 原图、骨架化结果和修剪后的骨架
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 骨架化
+    skeleton = morphology.skeletonize(binary.astype(bool))
+    
+    # 骨架修剪 - 去除短的分支
+    # 使用形态学操作去除小的分支
+    # 首先细化骨架
+    pruned_skeleton = morphology.remove_small_objects(skeleton, min_size=10, connectivity=2)
+    
+    # 转换为8位图像
+    skeleton_8bit = skeleton.astype(np.uint8) * 255
+    pruned_skeleton_8bit = pruned_skeleton.astype(np.uint8) * 255
+    
+    return (cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(skeleton_8bit, cv2.COLOR_GRAY2BGR), 
+            cv2.cvtColor(pruned_skeleton_8bit, cv2.COLOR_GRAY2BGR))
+
+def skeleton_analysis(image_path):
+    """
+    骨架分析 - 提取骨架的拓扑特征
+    :param image_path: 输入图像路径
+    :return: 原图和骨架分析结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化图像
+    _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # 骨架化
+    skeleton = morphology.skeletonize(binary.astype(bool))
+    
+    # 计算骨架的端点和分叉点
+    # 使用形态学操作来检测端点和分叉点
+    from skimage.morphology import skeletonize, thin
+    from skimage.util import invert
+    
+    # 检测端点
+    endpoint_kernel = np.array([[1, 1, 1],
+                                [1, 0, 1],
+                                [1, 1, 1]], dtype=np.uint8)
+    
+    # 计算骨架的邻域
+    neighborhood = ndimage.binary_erosion(skeleton, endpoint_kernel)
+    endpoints = skeleton ^ neighborhood
+    
+    # 转换为8位图像
+    skeleton_8bit = skeleton.astype(np.uint8) * 255
+    endpoints_8bit = endpoints.astype(np.uint8) * 255
+    
+    # 在骨架上标记端点
+    result = cv2.cvtColor(skeleton_8bit, cv2.COLOR_GRAY2BGR)
+    result[endpoints_8bit > 0] = [0, 0, 255]  # 红色标记端点
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), result
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = skeletonization_builtin('image.jpg')
+    # manual_img, manual_result = manual_skeletonization('image.jpg')
+    # dist_img, dist_result = distance_transform_skeletonization('image.jpg')
+    # thin_img, thin_result = thinning_skeletonization('image.jpg')
+    # iter_img, iter_result = iterative_skeletonization('image.jpg')
+    # prune_orig, prune_skel, prune_result = skeleton_pruning('image.jpg')
+    # analysis_img, analysis_result = skeleton_analysis('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>保留对象的拓扑结构</li>
+                        <li>显著减少数据量</li>
+                        <li>突出对象的主要形状特征</li>
+                        <li>便于形状分析和匹配</li>
+                        <li>有助于提取对象的中心线</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>对噪声敏感</li>
+                        <li>可能产生毛刺或不连续的骨架</li>
+                        <li>计算复杂度较高</li>
+                        <li>需要预处理以获得良好结果</li>
+                        <li>对对象的连通性要求较高</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>字符识别（OCR）</li>
+                        <li>指纹识别</li>
+                        <li>血管分析</li>
+                        <li>形状分析和匹配</li>
+                        <li>模式识别</li>
+                        <li>医学图像处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 形态学操作</li>
+                                <li><strong>适用:</strong> 二值图像</li>
+                                <li><strong>复杂度:</strong> O(n×M×N)，其中n是迭代次数，M和N是图像尺寸</li>
+                                <li><strong>参数:</strong> 结构元素、迭代次数</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="erosion.html">腐蚀</a></li>
+                                <li><a href="dilation.html">膨胀</a></li>
+                                <li><a href="opening.html">开运算</a></li>
+                                <li><a href="closing.html">闭运算</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

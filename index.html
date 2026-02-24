@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>计算机图像处理教程</title>
+    <title>首页 - 计算机图像处理教程</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/diagram.css">
     <link href="libs/roboto-font.css" rel="stylesheet">
     <link href="libs/material-icons.css" rel="stylesheet">
-    <!-- 引入Bootstrap CSS -->
     <link href="libs/bootstrap.min.css" rel="stylesheet">
-    <!-- 引入Prism.js CSS -->
     <link href="libs/prism.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="basics.html">基础知识</a>
+                        <a class="nav-link active" href="index.html">主页</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,41 +32,354 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="algorithms_detail.html">算法详解首页</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
-                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough 变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny 边缘检测</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="python-examples.html">Python示例</a>
+                        <a class="nav-link" href="python-examples.html">Python 示例</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="golang-examples.html">Golang示例</a>
+                        <a class="nav-link" href="golang-examples.html">Golang 示例</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- 主页内容 -->
-    <section class="py-5 bg-gradient text-white">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">计算机图像处理教程</h1>
-                    <p class="lead mb-4">从基础知识到实践应用，掌握图像处理的核心概念与算法</p>
-                    <a class="btn btn-light btn-lg me-2" href="basics.html">基础知识</a>
-                    <a class="btn btn-outline-light btn-lg" href="algorithms.html">常见算法</a>
+    <!-- 图像处理流程总览 -->
+    <section class="py-5 bg-gradient">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-white">图像处理流程总览</h2>
+                <p class="text-white-50">从图像获取到分析应用的完整流程</p>
+            </div>
+            
+            <div class="mermaid-container bg-white">
+                <div class="mermaid">
+flowchart LR
+    A[图像获取] --> B[预处理]
+    B --> C[特征提取]
+    C --> D[图像分析]
+    D --> E[后处理]
+    E --> F[应用输出]
+    
+    subgraph B[预处理阶段]
+        B1[噪声去除]
+        B2[图像增强]
+        B3[几何变换]
+    end
+    
+    subgraph C[特征提取]
+        C1[边缘检测]
+        C2[角点检测]
+        C3[纹理分析]
+    end
+    
+    subgraph D[图像分析]
+        D1[图像分割]
+        D2[目标识别]
+        D3[模式分类]
+    end
+    
+    B --> B1
+    B --> B2
+    B --> B3
+    C --> C1
+    C --> C2
+    C --> C3
+    D --> D1
+    D --> D2
+    D --> D3
                 </div>
-                <div class="col-lg-6 d-none d-lg-block">
-                    <div class="card bg-light text-dark">
+            </div>
+        </div>
+    </section>
+
+    <!-- 基础知识部分 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">图像处理基础</h2>
+                <p class="text-muted">系统学习图像处理的核心概念</p>
+            </div>
+
+            <!-- 图像类型对比表 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">table_chart</i> 图像类型对比</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-comparison table-hover">
+                            <thead>
+                                <tr>
+                                    <th>图像类型</th>
+                                    <th>像素表示</th>
+                                    <th>数据量</th>
+                                    <th>典型应用</th>
+                                    <th>优点</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>二值图像</strong></td>
+                                    <td>0 或 1</td>
+                                    <td>1 bit/像素</td>
+                                    <td>文档扫描、OCR</td>
+                                    <td>数据量极小，处理简单</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>灰度图像</strong></td>
+                                    <td>0-255</td>
+                                    <td>8 bit/像素</td>
+                                    <td>医学影像、工业检测</td>
+                                    <td>保留亮度信息，计算效率高</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RGB 彩色图像</strong></td>
+                                    <td>(R,G,B) 各 0-255</td>
+                                    <td>24 bit/像素</td>
+                                    <td>摄影、显示</td>
+                                    <td>符合人眼感知，色彩丰富</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>多光谱图像</strong></td>
+                                    <td>多波段数据</td>
+                                    <td>可变</td>
+                                    <td>遥感、农业监测</td>
+                                    <td>包含不可见光信息</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>深度图像</strong></td>
+                                    <td>距离值</td>
+                                    <td>16-32 bit/像素</td>
+                                    <td>3D 重建、机器人导航</td>
+                                    <td>包含空间深度信息</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 色彩模型转换流程图 -->
+            <div class="row mb-4">
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="material-icons align-middle">palette</i> 色彩模型转换关系</h4>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title">学习路径</h5>
-                            <ol>
-                                <li>从<a href="basics.html">基础知识</a>开始，了解图像表示和色彩模型</li>
-                                <li>学习<a href="algorithms.html">常见算法</a>，掌握图像处理核心技术</li>
-                                <li>通过<a href="python-examples.html">Python示例</a>实践编程技能</li>
-                                <li>使用<a href="golang-examples.html">Golang示例</a>扩展知识面</li>
-                            </ol>
+                            <div class="mermaid">
+flowchart TD
+    RGB[RGB 模型<br/>红绿蓝三原色] <--> HSV[HSV 模型<br/>色调/饱和度/明度]
+    RGB <--> CMYK[CMYK 模型<br/>印刷四色]
+    RGB <--> Lab[Lab 模型<br/>感知均匀空间]
+    RGB <--> YUV[YUV 模型<br/>视频信号]
+    RGB <--> YCbCr[YCbCr 模型<br/>数字视频]
+    
+    HSV -.->|颜色调整 | App1[图像编辑]
+    CMYK -.->|印刷输出 | App2[印刷行业]
+    Lab -.->|颜色匹配 | App3[色彩管理]
+    YUV -.->|视频压缩 | App4[视频编码]
+    YCbCr -.->|数字传输 | App5[数字电视]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="material-icons align-middle">analytics</i> 图像质量指标关系</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mermaid">
+flowchart LR
+    subgraph 空间域
+        A1[分辨率]
+        A2[动态范围]
+        A3[色彩深度]
+    end
+    
+    subgraph 统计域
+        B1[MSE 均方误差]
+        B2[PSNR 峰值信噪比]
+        B3[SSIM 结构相似性]
+    end
+    
+    subgraph 感知域
+        C1[熵]
+        C2[直方图]
+        C3[矩特征]
+    end
+    
+    A1 --> B1
+    A2 --> B2
+    A3 --> B3
+    B1 --> C1
+    B2 --> C2
+    B3 --> C3
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 采样与量化序列图 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">settings</i> 数字化过程：采样与量化</h4>
+                </div>
+                <div class="card-body">
+                    <div class="sequence-diagram-container">
+                        <div class="mermaid">
+sequenceDiagram
+    participant 连续图像 as 连续图像
+    participant 采样 as 空间采样
+    participant 离散像素 as 离散像素网格
+    participant 量化 as 灰度量化
+    participant 数字图像 as 数字图像
+    
+    连续图像->>采样：按采样频率采集
+    Note over 采样：奈奎斯特采样定理<br/>采样频率>2×最高频率
+    采样->>离散像素：生成像素位置
+    离散像素->>量化：分配灰度值
+    Note over 量化：0-255 灰度级
+    量化->>数字图像：形成数字图像
+    
+    Note right of 连续图像：模拟信号
+    Note right of 离散像素：空间离散
+    Note right of 数字图像：完全数字化
+                        </div>
+                    </div>
+                    <div class="diagram-legend mt-3">
+                        <h6><i class="material-icons align-middle" style="font-size: 16px;">info</i> 说明</h6>
+                        <p>图像数字化包含两个步骤：<strong>空间采样</strong>确定像素位置，<strong>灰度量化</strong>确定像素值。采样不足会导致混叠现象，量化级数过少会产生伪轮廓。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 噪声模型对比表 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">blur_on</i> 常见噪声模型对比</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-comparison table-hover">
+                            <thead>
+                                <tr>
+                                    <th>噪声类型</th>
+                                    <th>概率分布</th>
+                                    <th>产生原因</th>
+                                    <th>视觉特征</th>
+                                    <th>去噪方法</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>高斯噪声</strong></td>
+                                    <td>正态分布</td>
+                                    <td>电子电路热噪声</td>
+                                    <td>均匀分布的细颗粒</td>
+                                    <td>高斯滤波、维纳滤波</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>椒盐噪声</strong></td>
+                                    <td>脉冲分布</td>
+                                    <td>信号传输错误</td>
+                                    <td>随机黑白点</td>
+                                    <td>中值滤波</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>泊松噪声</strong></td>
+                                    <td>泊松分布</td>
+                                    <td>光子计数统计</td>
+                                    <td>与信号强度相关</td>
+                                    <td>方差稳定变换</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>乘性噪声</strong></td>
+                                    <td>与信号相乘</td>
+                                    <td>相干成像系统</td>
+                                    <td>斑点状图案</td>
+                                    <td>同态滤波</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 像素邻域关系图 -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="material-icons align-middle">grid_on</i> 像素邻域关系</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mermaid">
+flowchart TD
+    subgraph 4 邻域
+        direction TB
+        N4_1[ ] --- C4[(中心)]
+        N4_2[ ] --- C4
+        N4_3[ ] --- C4
+        N4_4[ ] --- C4
+    end
+    
+    subgraph 8 邻域
+        direction TB
+        N8_1[ ] --- C8[(中心)]
+        N8_2[ ] --- C8
+        N8_3[ ] --- C8
+        N8_4[ ] --- C8
+        N8_5[对角] --- C8
+        N8_6[对角] --- C8
+        N8_7[对角] --- C8
+        N8_8[对角] --- C8
+    end
+    
+    4 邻域 --> 距离度量
+    8 邻域 --> 距离度量
+    
+    subgraph 距离度量
+        D1[欧氏距离]
+        D2[城市街区距离]
+        D3[棋盘距离]
+    end
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="material-icons align-middle">donut_large</i> 图像统计特征</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mermaid">
+pie title 统计特征应用分布
+    "均值（亮度分析）" : 25
+    "方差（对比度）" : 20
+    "直方图（分布）" : 30
+    "熵（信息量）" : 15
+    "矩特征（形状）" : 10
+                            </div>
+                            <div class="mt-4">
+                                <h6>主要统计特征：</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>均值</strong>：图像的平均亮度水平</li>
+                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>方差</strong>：图像对比度的度量</li>
+                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>直方图</strong>：像素强度分布图</li>
+                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>熵</strong>：图像信息量的度量</li>
+                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>矩</strong>：描述图像形状</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,13 +387,82 @@
         </div>
     </section>
 
-    <!-- 引入Bootstrap JS -->
+    <!-- 文件格式对比 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">图像文件格式</h2>
+                <p class="text-muted">选择适合应用场景的图像格式</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-comparison table-hover">
+                            <thead>
+                                <tr>
+                                    <th>格式</th>
+                                    <th>压缩类型</th>
+                                    <th>透明度</th>
+                                    <th>典型大小</th>
+                                    <th>最佳用途</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>JPEG</strong></td>
+                                    <td>有损</td>
+                                    <td>❌</td>
+                                    <td>小</td>
+                                    <td>照片、网页图片</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>PNG</strong></td>
+                                    <td>无损</td>
+                                    <td>✅</td>
+                                    <td>中</td>
+                                    <td>图形、图标、截图</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>BMP</strong></td>
+                                    <td>无压缩</td>
+                                    <td>❌</td>
+                                    <td>大</td>
+                                    <td>Windows 应用</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TIFF</strong></td>
+                                    <td>可选</td>
+                                    <td>✅</td>
+                                    <td>大</td>
+                                    <td>专业印刷、存档</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>WEBP</strong></td>
+                                    <td>有损/无损</td>
+                                    <td>✅</td>
+                                    <td>很小</td>
+                                    <td>现代网页</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RAW</strong></td>
+                                    <td>无损</td>
+                                    <td>❌</td>
+                                    <td>很大</td>
+                                    <td>专业摄影后期</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <script src="libs/bootstrap.bundle.min.js"></script>
-    <!-- 引入Prism.js用于代码高亮 -->
     <script src="libs/prism.js"></script>
-    <!-- 引入TensorFlow.js -->
     <script src="libs/tf.min.js"></script>
-    <!-- 主要JavaScript -->
+    <script src="js/diagram.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sauvola算法 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/thresholding/sauvola.html">Sauvola算法</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sauvola算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">Sauvola算法</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">Sauvola算法</h1>
+                    <p class="lead">Sauvola算法是一种改进的局部阈值方法，通过考虑局部均值和标准差来确定动态阈值，特别适用于文档图像的二值化。</p>
+
+                    <h2>算法原理</h2>
+                    <p>Sauvola算法是基于Niblack算法的改进版本，由J. Sauvola等人在1999年提出，专门用于文档图像的二值化。该算法考虑了局部对比度，能够更好地处理光照不均匀的文档图像。</p>
+                    
+                    <p>Sauvola算法的阈值计算公式为：</p>
+                    
+                    <p>T(x,y) = m(x,y) × [1 + k × (s(x,y)/R - 1)]</p>
+                    
+                    <p>其中：</p>
+                    <ul>
+                        <li>T(x,y) 是像素(x,y)处的局部阈值</li>
+                        <li>m(x,y) 是以(x,y)为中心的邻域内的平均灰度值</li>
+                        <li>s(x,y) 是以(x,y)为中心的邻域内的标准差</li>
+                        <li>k 是一个参数（通常为0.2到0.5）</li>
+                        <li>R 是动态范围（通常为128）</li>
+                    </ul>
+                    
+                    <p>二值化规则为：</p>
+                    <p>g(x,y) = { 255, if f(x,y) > T(x,y)</p>
+                    <p>         { 0,   if f(x,y) ≤ T(x,y)</p>
+                    
+                    <p>与Niblack算法相比，Sauvola算法的优点是：</p>
+                    <ul>
+                        <li>考虑了局部对比度</li>
+                        <li>对光照变化更加鲁棒</li>
+                        <li>更适合文档图像处理</li>
+                    </ul>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>选择合适的邻域窗口大小（如15×15或21×21）</li>
+                        <li>遍历图像中的每个像素</li>
+                        <li>计算当前像素邻域内的均值和标准差</li>
+                        <li>使用Sauvola公式计算局部阈值</li>
+                        <li>比较像素值与局部阈值</li>
+                        <li>根据比较结果分配二值化值</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sauvola_threshold(image_path, window_size=15, k=0.34, r=128):
+    """
+    实现Sauvola阈值算法
+    :param image_path: 输入图像路径
+    :param window_size: 邻域窗口大小
+    :param k: 阈值参数
+    :param r: 动态范围
+    :return: 原图和Sauvola二值化后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = gray.astype(np.float64)
+    
+    # 获取图像尺寸
+    height, width = gray.shape
+    
+    # 计算邻域半径
+    radius = window_size // 2
+    
+    # 初始化输出图像
+    binary = np.zeros_like(gray)
+    
+    # 避免边界问题，只处理内部像素
+    for i in range(radius, height - radius):
+        for j in range(radius, width - radius):
+            # 提取邻域
+            neighborhood = gray[i-radius:i+radius+1, j-radius:j+radius+1]
+            
+            # 计算邻域的均值和标准差
+            mean_val = np.mean(neighborhood)
+            std_val = np.std(neighborhood)
+            
+            # 计算Sauvola阈值
+            threshold = mean_val * (1 + k * (std_val / r - 1))
+            
+            # 应用阈值
+            if gray[i, j] > threshold:
+                binary[i, j] = 255
+            else:
+                binary[i, j] = 0
+    
+    return img, cv2.cvtColor(binary.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def manual_sauvola_threshold(image_path, window_size=15, k=0.34, r=128):
+    """
+    手动实现Sauvola阈值算法
+    :param image_path: 输入图像路径
+    :param window_size: 邻域窗口大小
+    :param k: 阈值参数
+    :param r: 动态范围
+    :return: 二值化后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    img = img.astype(np.float64)
+    
+    # 获取图像尺寸
+    height, width = img.shape
+    
+    # 计算邻域半径
+    radius = window_size // 2
+    
+    # 初始化输出图像
+    binary = np.zeros_like(img)
+    
+    # 使用向量化操作提高效率
+    # 首先计算均值图和标准差图
+    mean_img = np.zeros_like(img)
+    std_img = np.zeros_like(img)
+    
+    for i in range(radius, height - radius):
+        for j in range(radius, width - radius):
+            neighborhood = img[i-radius:i+radius+1, j-radius:j+radius+1]
+            mean_img[i, j] = np.mean(neighborhood)
+            std_img[i, j] = np.std(neighborhood)
+    
+    # 计算阈值图
+    threshold_img = mean_img * (1 + k * (std_img / r - 1))
+    
+    # 应用阈值
+    binary[img > threshold_img] = 255
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), cv2.cvtColor(binary.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def optimized_sauvola_threshold(image_path, window_size=15, k=0.34, r=128):
+    """
+    优化的Sauvola阈值算法（使用积分图像加速计算）
+    :param image_path: 输入图像路径
+    :param window_size: 邻域窗口大小
+    :param k: 阈值参数
+    :param r: 动态范围
+    :return: 原图和优化的Sauvola二值化结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    img = img.astype(np.float64)
+    
+    height, width = img.shape
+    radius = window_size // 2
+    
+    # 使用积分图像来快速计算局部均值和方差
+    integral_img = np.zeros((height + 1, width + 1))
+    integral_img_sq = np.zeros((height + 1, width + 1))
+    
+    # 构建积分图像
+    for i in range(1, height + 1):
+        for j in range(1, width + 1):
+            integral_img[i, j] = img[i-1, j-1] + integral_img[i-1, j] + integral_img[i, j-1] - integral_img[i-1, j-1]
+            integral_img_sq[i, j] = img[i-1, j-1]**2 + integral_img_sq[i-1, j] + integral_img_sq[i, j-1] - integral_img_sq[i-1, j-1]
+    
+    # 初始化输出图像
+    binary = np.zeros_like(img)
+    
+    # 计算局部均值和标准差
+    for i in range(radius, height - radius):
+        for j in range(radius, width - radius):
+            # 使用积分图像计算局部和
+            x1, y1 = i - radius, j - radius
+            x2, y2 = i + radius + 1, j + radius + 1
+            
+            region_sum = integral_img[x2, y2] - integral_img[x1, y2] - integral_img[x2, y1] + integral_img[x1, y1]
+            region_sum_sq = integral_img_sq[x2, y2] - integral_img_sq[x1, y2] - integral_img_sq[x2, y1] + integral_img_sq[x1, y1]
+            
+            # 计算均值和方差
+            region_area = window_size * window_size
+            mean_val = region_sum / region_area
+            variance = (region_sum_sq / region_area) - (mean_val ** 2)
+            std_val = np.sqrt(max(variance, 0))  # 确保非负
+            
+            # 计算Sauvola阈值
+            threshold = mean_val * (1 + k * (std_val / r - 1))
+            
+            # 应用阈值
+            if img[i, j] > threshold:
+                binary[i, j] = 255
+            else:
+                binary[i, j] = 0
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), cv2.cvtColor(binary.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+def compare_sauvola_parameters(image_path):
+    """
+    比较不同参数的Sauvola算法效果
+    :param image_path: 输入图像路径
+    :return: 原图和不同参数的二值化结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    img = img.astype(np.float64)
+    
+    # 不同参数组合
+    params = [
+        {'window_size': 15, 'k': 0.2, 'r': 128},
+        {'window_size': 15, 'k': 0.5, 'r': 128},
+        {'window_size': 21, 'k': 0.34, 'r': 128},
+        {'window_size': 21, 'k': 0.34, 'r': 255}
+    ]
+    
+    results = {}
+    
+    for i, param in enumerate(params):
+        window_size = param['window_size']
+        k = param['k']
+        r = param['r']
+        
+        height, width = img.shape
+        radius = window_size // 2
+        binary = np.zeros_like(img)
+        
+        for x in range(radius, height - radius):
+            for y in range(radius, width - radius):
+                neighborhood = img[x-radius:x+radius+1, y-radius:y+radius+1]
+                mean_val = np.mean(neighborhood)
+                std_val = np.std(neighborhood)
+                threshold = mean_val * (1 + k * (std_val / r - 1))
+                
+                if img[x, y] > threshold:
+                    binary[x, y] = 255
+                else:
+                    binary[x, y] = 0
+        
+        results[f'Window:{window_size}, k:{k}, r:{r}'] = cv2.cvtColor(binary.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+    
+    return cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_GRAY2BGR), results
+
+def sauvola_vs_other_methods(image_path):
+    """
+    比较Sauvola算法与其他阈值方法
+    :param image_path: 输入图像路径
+    :return: 原图和不同方法的二值化结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # Sauvola算法
+    sauvola_img, sauvola_result = manual_sauvola_threshold(image_path, 15, 0.34, 128)
+    
+    # 全局阈值
+    _, global_result = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    
+    # Otsu阈值
+    _, otsu_result = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    
+    # Niblack算法
+    niblack_img, niblack_result = manual_niblack_threshold_from_array(img, 15, -0.2)
+    
+    # 自适应阈值
+    adaptive_mean = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+    adaptive_gaussian = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    
+    results = {
+        'Sauvola': sauvola_result,
+        'Global (127)': cv2.cvtColor(global_result, cv2.COLOR_GRAY2BGR),
+        'Otsu': cv2.cvtColor(otsu_result, cv2.COLOR_GRAY2BGR),
+        'Niblack': niblack_result,
+        'Adaptive Mean': cv2.cvtColor(adaptive_mean, cv2.COLOR_GRAY2BGR),
+        'Adaptive Gaussian': cv2.cvtColor(adaptive_gaussian, cv2.COLOR_GRAY2BGR)
+    }
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), results
+
+def sauvola_document_processing(image_path):
+    """
+    Sauvola算法在文档处理中的应用
+    :param image_path: 输入图像路径
+    :return: 原图和文档处理结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 应用Sauvola算法进行文档二值化
+    _, binary = optimized_sauvola_threshold(image_path, 15, 0.34, 128)
+    
+    # 可选：后处理步骤
+    # 使用形态学操作去除噪声
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+    cleaned = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), binary, cv2.cvtColor(cleaned, cv2.COLOR_GRAY2BGR)
+
+def manual_niblack_threshold_from_array(img_array, window_size=15, k=-0.2):
+    """
+    从数组输入实现Niblack阈值算法
+    :param img_array: 输入图像数组
+    :param window_size: 邻域窗口大小
+    :param k: 阈值参数
+    :return: 二值化后的图像
+    """
+    img = img_array.astype(np.float64)
+    height, width = img.shape
+    radius = window_size // 2
+    
+    # 初始化输出图像
+    binary = np.zeros_like(img)
+    
+    for i in range(radius, height - radius):
+        for j in range(radius, width - radius):
+            neighborhood = img[i-radius:i+radius+1, j-radius:j+radius+1]
+            mean_val = np.mean(neighborhood)
+            std_val = np.std(neighborhood)
+            threshold = mean_val + k * std_val
+            
+            if img[i, j] > threshold:
+                binary[i, j] = 255
+            else:
+                binary[i, j] = 0
+    
+    return cv2.cvtColor(binary.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result = sauvola_threshold('image.jpg', 15, 0.34, 128)
+    # manual_img, manual_result = manual_sauvola_threshold('image.jpg', 15, 0.34, 128)
+    # opt_img, opt_result = optimized_sauvola_threshold('image.jpg', 15, 0.34, 128)
+    # comp_img, comp_results = compare_sauvola_parameters('image.jpg')
+    # vs_img, vs_results = sauvola_vs_other_methods('image.jpg')
+    # doc_img, doc_result, doc_cleaned = sauvola_document_processing('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>特别适用于文档图像二值化</li>
+                        <li>考虑了局部对比度</li>
+                        <li>对光照变化鲁棒</li>
+                        <li>能够处理阴影和光照不均</li>
+                        <li>自适应性强</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>计算复杂度较高</li>
+                        <li>参数选择需要经验</li>
+                        <li>对噪声敏感</li>
+                        <li>在纹理复杂区域可能失效</li>
+                        <li>窗口大小选择影响效果</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>文档图像二值化</li>
+                        <li>手写文字识别</li>
+                        <li>古籍数字化</li>
+                        <li>扫描文档处理</li>
+                        <li>OCR（光学字符识别）预处理</li>
+                        <li>文档分析</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 图像二值化</li>
+                                <li><strong>适用:</strong> 灰度图像</li>
+                                <li><strong>复杂度:</strong> O(M×N×w²)，其中M和N是图像尺寸，w是窗口大小</li>
+                                <li><strong>参数:</strong> 窗口大小、k值、R值</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="global_threshold.html">全局阈值</a></li>
+                                <li><a href="otsu.html">Otsu算法</a></li>
+                                <li><a href="niblack.html">Niblack算法</a></li>
+                                <li><a href="local_threshold.html">局部阈值</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>

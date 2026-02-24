@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图像处理常见算法 - 计算机图像处理教程</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/diagram.css">
     <link href="libs/roboto-font.css" rel="stylesheet">
     <link href="libs/material-icons.css" rel="stylesheet">
-    <!-- 引入Bootstrap CSS -->
     <link href="libs/bootstrap.min.css" rel="stylesheet">
-    <!-- 引入Prism.js CSS -->
     <link href="libs/prism.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -23,10 +23,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="basics.html">基础知识</a>
+                        <a class="nav-link" href="index.html">主页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="algorithms.html">常见算法</a>
+                        <a class="nav-link active" href="algorithms.html">常见算法</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -35,283 +35,560 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="algorithms_detail.html">算法详解首页</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough变换</a></li>
-                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough 变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny 边缘检测</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="python-examples.html">Python示例</a>
+                        <a class="nav-link" href="python-examples.html">Python 示例</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="golang-examples.html">Golang示例</a>
+                        <a class="nav-link" href="golang-examples.html">Golang 示例</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- 常见算法部分 -->
+    <!-- 算法分类总览 -->
+    <section class="py-5 bg-gradient">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-white">图像处理算法分类体系</h2>
+                <p class="text-white-50">全面掌握图像处理的核心算法</p>
+            </div>
+            
+            <div class="mermaid-container bg-white">
+                <div class="mermaid">
+flowchart TD
+    subgraph 输入
+        IMG[输入图像]
+    end
+    
+    subgraph 预处理
+        direction TB
+        GEO[几何变换]
+        FIL[滤波去噪]
+        ENH[图像增强]
+    end
+    
+    subgraph 特征提取
+        direction TB
+        EDGE[边缘检测]
+        LINE[直线检测]
+        MORPH[形态学]
+        FEAT[特征描述]
+    end
+    
+    subgraph 高级处理
+        direction TB
+        SEG[图像分割]
+        REC[图像复原]
+        REG[图像配准]
+        COMP[图像压缩]
+    end
+    
+    subgraph 输出
+        RESULT[分析结果]
+    end
+    
+    IMG --> 预处理
+    预处理 --> 特征提取
+    特征提取 --> 高级处理
+    高级处理 --> 输出
+    
+    GEO --> 平移旋转缩放
+    FIL --> 均值高斯中值
+    ENH --> 直方图锐化
+    
+    EDGE --> Canny/Sobel
+    LINE --> Hough 变换
+    MORPH --> 腐蚀膨胀
+    FEAT --> SIFT/HOG
+    
+    SEG --> 阈值/区域
+    REC --> 去模糊去噪
+    REG --> 特征配准
+    COMP --> JPEG 压缩
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 算法详解部分 -->
     <section class="py-5">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">图像处理常见算法</h2>
+                <h2 class="fw-bold">算法分类详解</h2>
+                <p class="text-muted">点击卡片查看算法详情和对比</p>
             </div>
-            
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">几何变换</h5>
-                            <ul>
-                                <li><strong>平移</strong>：改变图像位置，使用变换矩阵</li>
-                                <li><strong>旋转</strong>：绕某点旋转图像，保持角度不变</li>
-                                <li><strong>缩放</strong>：改变图像尺寸，可能需要插值</li>
-                                <li><strong>仿射变换</strong>：保持直线和平行线性质</li>
-                                <li><strong>透视变换</strong>：模拟视角变化，保持直线性质</li>
-                                <li><strong>插值方法</strong>：最近邻、双线性、双三次插值</li>
-                                <li><strong>弹性变形</strong>：非刚性几何变换</li>
-                                <li><strong>图像配准</strong>：对齐多幅图像</li>
-                            </ul>
+
+            <!-- 几何变换 -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#geoContent">
+                    <h4 class="mb-0"><i class="material-icons align-middle">transform</i> 几何变换</h4>
+                    <i class="material-icons toggle-icon">expand_more</i>
+                </div>
+                <div id="geoContent" class="collapse show">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mermaid">
+flowchart LR
+    subgraph 几何变换
+        A[输入图像] --> B[变换矩阵]
+        B --> C[坐标映射]
+        C --> D[灰度插值]
+        D --> E[输出图像]
+    end
+    
+    subgraph 插值方法
+        D --> D1[最近邻]
+        D --> D2[双线性]
+        D --> D3[双三次]
+    end
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <h5>常见变换类型</h5>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>变换类型</th>
+                                            <th>自由度</th>
+                                            <th>保持性质</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>平移</strong></td>
+                                            <td>2 (tx, ty)</td>
+                                            <td>形状、大小、方向</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>旋转</strong></td>
+                                            <td>1 (角度)</td>
+                                            <td>形状、大小</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>缩放</strong></td>
+                                            <td>2 (sx, sy)</td>
+                                            <td>形状（均匀缩放）</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>仿射变换</strong></td>
+                                            <td>6</td>
+                                            <td>平行线</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>透视变换</strong></td>
+                                            <td>8</td>
+                                            <td>直线</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">滤波算法</h5>
-                            <ul>
-                                <li><strong>均值滤波</strong>：平滑图像，去除噪声，但会模糊边缘</li>
-                                <li><strong>高斯滤波</strong>：保留边缘的平滑处理，模拟光学模糊</li>
-                                <li><strong>中值滤波</strong>：去除椒盐噪声，保护边缘</li>
-                                <li><strong>双边滤波</strong>：保边去噪，考虑空间和强度距离</li>
-                                <li><strong>维纳滤波</strong>：最小均方误差准则的最优滤波</li>
-                                <li><strong>导向滤波</strong>：边缘保护平滑，计算效率高</li>
-                                <li><strong>非局部均值滤波</strong>：利用图像自相似性去噪</li>
-                                <li><strong>各向异性扩散</strong>：Perona-Malik方程</li>
-                            </ul>
+            </div>
+
+            <!-- 滤波算法 -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#filterContent">
+                    <h4 class="mb-0"><i class="material-icons align-middle">blur_on</i> 滤波算法</h4>
+                    <i class="material-icons toggle-icon">expand_more</i>
+                </div>
+                <div id="filterContent" class="collapse show">
+                    <div class="card-body">
+                        <div class="mermaid mb-4">
+flowchart TD
+    subgraph 空域滤波
+        A[输入图像] --> B{滤波类型}
+        B -->|平滑 | C[低通滤波]
+        B -->|锐化 | D[高通滤波]
+        C --> C1[均值滤波]
+        C --> C2[高斯滤波]
+        C --> C3[中值滤波]
+        C --> C4[双边滤波]
+        D --> D1[Laplacian]
+        D --> D2[非锐化掩蔽]
+    end
+    
+    subgraph 频域滤波
+        A --> E[傅里叶变换]
+        E --> F[频域滤波]
+        F --> G[逆傅里叶变换]
+    end
+                        </div>
+                        
+                        <h5>滤波器对比</h5>
+                        <div class="table-responsive">
+                            <table class="table table-comparison table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>滤波器</th>
+                                        <th>原理</th>
+                                        <th>优点</th>
+                                        <th>缺点</th>
+                                        <th>适用场景</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>均值滤波</strong></td>
+                                        <td>邻域平均</td>
+                                        <td>简单快速</td>
+                                        <td>边缘模糊</td>
+                                        <td>轻度噪声</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>高斯滤波</strong></td>
+                                        <td>加权平均</td>
+                                        <td>保边效果好</td>
+                                        <td>参数敏感</td>
+                                        <td>高斯噪声</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>中值滤波</strong></td>
+                                        <td>排序取中值</td>
+                                        <td>保护边缘</td>
+                                        <td>计算量大</td>
+                                        <td>椒盐噪声</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>双边滤波</strong></td>
+                                        <td>空间 + 灰度加权</td>
+                                        <td>保边去噪</td>
+                                        <td>速度慢</td>
+                                        <td>精细图像</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">边缘检测</h5>
-                            <ul>
-                                <li><strong>Sobel算子</strong>：检测梯度变化，对噪声敏感</li>
-                                <li><strong>Canny算子</strong>：多阶段边缘检测，最优边缘检测器</li>
-                                <li><strong>Prewitt算子</strong>：类似Sobel，对水平和垂直边缘敏感</li>
-                                <li><strong>Laplacian算子</strong>：二阶导数检测，对噪声敏感</li>
-                                <li><strong>Marr-Hildreth</strong>：先高斯平滑再Laplacian检测</li>
-                                <li><strong>Roberts算子</strong>：对角方向边缘检测，计算简单</li>
-                                <li><strong>LoG算子</strong>：高斯拉普拉斯算子</li>
-                                <li><strong>Difference of Gaussians</strong>：高斯差分近似LoG</li>
-                            </ul>
+            </div>
+
+            <!-- 边缘检测 -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#edgeContent">
+                    <h4 class="mb-0"><i class="material-icons align-middle">edges</i> 边缘检测算法</h4>
+                    <i class="material-icons toggle-icon">expand_more</i>
+                </div>
+                <div id="edgeContent" class="collapse show">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="mermaid">
+flowchart LR
+    subgraph 一阶微分算子
+        A[Sobel] --> D[梯度计算]
+        B[Prewitt] --> D
+        C[Roberts] --> D
+    end
+    
+    subgraph 二阶微分算子
+        E[Laplacian] --> F[零交叉检测]
+        G[LoG] --> F
+    end
+    
+    subgraph 最优检测
+        H[高斯平滑] --> I[Canny]
+        I --> J[非极大值抑制]
+        J --> K[双阈值]
+        K --> L[边缘连接]
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <h5>算法选择指南</h5>
+                                <div class="list-group">
+                                    <div class="list-group-item">
+                                        <strong>Sobel</strong>
+                                        <p class="mb-0 text-muted small">快速检测，适合实时应用</p>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <strong>Canny</strong>
+                                        <p class="mb-0 text-muted small">最优边缘检测，精度高</p>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <strong>Laplacian</strong>
+                                        <p class="mb-0 text-muted small">对噪声敏感，需预处理</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- 直线检测 -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#lineContent">
+                    <h4 class="mb-0"><i class="material-icons align-middle">show_chart</i> 直线检测算法</h4>
+                    <i class="material-icons toggle-icon">expand_more</i>
+                </div>
+                <div id="lineContent" class="collapse show">
+                    <div class="card-body">
+                        <div class="mermaid mb-4">
+sequenceDiagram
+    participant Input as 输入图像
+    participant Edge as 边缘检测
+    participant Hough as Hough 空间
+    participant Accum as 累加器
+    participant Output as 输出直线
+    
+    Input->>Edge: Canny 边缘检测
+    Edge->>Hough: 边缘点映射
+    Note over Hough: ρ = x·cosθ + y·sinθ
+    Hough->>Accum: 投票累加
+    Accum->>Accum: 寻找局部最大值
+    Accum->>Output: 反变换得直线
+                </div>
                 
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">直线检测</h5>
-                            <ul>
-                                <li><strong>Hough变换</strong>：检测直线、圆等几何形状</li>
-                                <li><strong>Probabilistic Hough</strong>：概率霍夫变换，计算效率更高</li>
-                                <li><strong>Line Segment Detector</strong>：线段检测器，无需参数调节</li>
-                                <li><strong>RANSAC算法</strong>：随机抽样一致性，用于拟合直线</li>
-                                <li><strong>Radon变换</strong>：积分变换，用于检测直线</li>
-                                <li><strong>梯度方向直方图</strong>：基于边缘方向的直线检测</li>
-                                <li><strong>Split-and-Merge</strong>：分割合并算法检测线段</li>
-                                <li><strong>最小二乘拟合</strong>：数学方法拟合直线</li>
-                            </ul>
+                <h5>Hough 变换 variants</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6>标准 Hough 变换</h6>
+                                <p class="small text-muted">遍历所有角度，计算精确但速度慢</p>
+                                <code>cv2.HoughLines()</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6>概率 Hough 变换</h6>
+                                <p class="small text-muted">随机采样点，速度快，输出线段</p>
+                                <code>cv2.HoughLinesP()</code>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">形态学操作</h5>
-                            <ul>
-                                <li><strong>腐蚀</strong>：缩小前景对象，消除小突起</li>
-                                <li><strong>膨胀</strong>：扩大前景对象，填补小孔洞</li>
-                                <li><strong>开运算</strong>：先腐蚀后膨胀，去除小对象</li>
-                                <li><strong>闭运算</strong>：先膨胀后腐蚀，填补孔洞</li>
-                                <li><strong>击中-击不中变换</strong>：检测特定形状模式</li>
-                                <li><strong>骨架化</strong>：提取对象的中心线</li>
-                                <li><strong>顶帽变换</strong>：原图像与开运算结果之差</li>
-                                <li><strong>底帽变换</strong>：闭运算结果与原图像之差</li>
-                            </ul>
+            </div>
+            </div>
+
+            <!-- 形态学操作 -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#morphContent">
+                    <h4 class="mb-0"><i class="material-icons align-middle">category</i> 形态学操作</h4>
+                    <i class="material-icons toggle-icon">expand_more</i>
+                </div>
+                <div id="morphContent" class="collapse show">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mermaid">
+flowchart TD
+    subgraph 基本操作
+        A[输入图像] --> B{结构元素}
+        B --> C[腐蚀]
+        B --> D[膨胀]
+    end
+    
+    subgraph 组合操作
+        C --> E[开运算<br/>先腐后膨]
+        D --> F[闭运算<br/>先膨后腐]
+        E --> G[去除小物体]
+        F --> H[填充孔洞]
+    end
+    
+    subgraph 衍生操作
+        G --> I[骨架化]
+        H --> J[顶帽/底帽]
+    end
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <h5>操作效果对比</h5>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>操作</th>
+                                            <th>效果</th>
+                                            <th>应用</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>腐蚀</strong></td>
+                                            <td>缩小前景</td>
+                                            <td>分离物体、去噪</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>膨胀</strong></td>
+                                            <td>扩大前景</td>
+                                            <td>填补空洞、连接</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>开运算</strong></td>
+                                            <td>平滑轮廓</td>
+                                            <td>去除小突起</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>闭运算</strong></td>
+                                            <td>填充孔洞</td>
+                                            <td>连接断裂</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">频域处理</h5>
-                            <ul>
-                                <li><strong>傅里叶变换</strong>：时域到频域转换，分析频率成分</li>
-                                <li><strong>离散余弦变换(DCT)</strong>：JPEG压缩基础</li>
-                                <li><strong>小波变换</strong>：多尺度分析，局部化好</li>
-                                <li><strong>频域滤波</strong>：低通、高通、带通滤波</li>
-                                <li><strong>快速傅里叶变换(FFT)</strong>：高效计算算法</li>
-                                <li><strong>短时傅里叶变换</strong>：时频分析</li>
-                                <li><strong>小波包变换</strong>：小波变换的推广</li>
-                                <li><strong>脊波变换</strong>：处理线状奇异性的方法</li>
-                            </ul>
+            </div>
+
+            <!-- 图像分割 -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#segContent">
+                    <h4 class="mb-0"><i class="material-icons align-middle">pie_chart</i> 图像分割算法</h4>
+                    <i class="material-icons toggle-icon">expand_more</i>
+                </div>
+                <div id="segContent" class="collapse show">
+                    <div class="card-body">
+                        <div class="mermaid mb-4">
+flowchart LR
+    subgraph 传统方法
+        A[阈值分割] --> A1[全局/自适应]
+        B[区域生长] --> B1[种子点选择]
+        C[边缘分割] --> C1[边缘连接]
+    end
+    
+    subgraph 现代方法
+        D[图割] --> D1[能量最小化]
+        E[分水岭] --> E1[梯度图]
+        F[深度学习] --> F1[FCN/U-Net]
+    end
+    
+    subgraph 聚类方法
+        G[K-means] --> G1[迭代优化]
+        H[Mean Shift] --> H1[密度峰值]
+    end
+                                </div>
+                                
+                        <h5>分割算法对比</h5>
+                        <div class="table-responsive">
+                            <table class="table table-comparison table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>算法</th>
+                                        <th>原理</th>
+                                        <th>优点</th>
+                                        <th>缺点</th>
+                                        <th>复杂度</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Otsu</strong></td>
+                                        <td>最大类间方差</td>
+                                        <td>自动阈值</td>
+                                        <td>双峰假设</td>
+                                        <td>O(L)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>K-means</strong></td>
+                                        <td>聚类迭代</td>
+                                        <td>简单高效</td>
+                                        <td>需指定 K</td>
+                                        <td>O(nK)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>分水岭</strong></td>
+                                        <td>拓扑理论</td>
+                                        <td>分割完整</td>
+                                        <td>过分割</td>
+                                        <td>O(nlogn)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>图割</strong></td>
+                                        <td>图论优化</td>
+                                        <td>全局最优</td>
+                                        <td>计算量大</td>
+                                        <td>O(n³)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>U-Net</strong></td>
+                                        <td>深度学习</td>
+                                        <td>精度最高</td>
+                                        <td>需训练数据</td>
+                                        <td>推理快</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">特征提取</h5>
-                            <ul>
-                                <li><strong>HOG特征</strong>：方向梯度直方图，行人检测</li>
-                                <li><strong>SIFT特征</strong>：尺度不变特征变换</li>
-                                <li><strong>SURF特征</strong>：加速稳健特征，速度更快</li>
-                                <li><strong>ORB特征</strong>：Oriented FAST and Rotated BRIEF</li>
-                                <li><strong>纹理分析</strong>：灰度共生矩阵(GLCM)等方法</li>
-                                <li><strong>矩特征</strong>：Hu矩等不变矩</li>
-                                <li><strong>局部二值模式(LBP)</strong>：纹理描述算子</li>
-                                <li><strong>Gabor滤波器</strong>：纹理和边缘检测</li>
-                            </ul>
-                        </div>
-                    </div>
+            </div>
+
+            <!-- 特征提取 -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#featContent">
+                    <h4 class="mb-0"><i class="material-icons align-middle">feature_detection</i> 特征提取算法</h4>
+                    <i class="material-icons toggle-icon">expand_more</i>
                 </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">图像增强</h5>
-                            <ul>
-                                <li><strong>直方图均衡化</strong>：改善图像对比度</li>
-                                <li><strong>直方图规定化</strong>：匹配特定直方图</li>
-                                <li><strong>锐化</strong>：增强边缘和细节</li>
-                                <li><strong>同态滤波</strong>：同时调整亮度和对比度</li>
-                                <li><strong>伽马校正</strong>：调整图像亮度</li>
-                                <li><strong>逆滤波</strong>：去除已知退化</li>
-                                <li><strong>维纳滤波</strong>：最优复原滤波器</li>
-                                <li><strong>约束最小二乘滤波</strong>：平滑约束的复原</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">二值化算法</h5>
-                            <ul>
-                                <li><strong>全局阈值</strong>：使用单一阈值分割整幅图像</li>
-                                <li><strong>Otsu算法</strong>：自动计算最优阈值，最大化类间方差</li>
-                                <li><strong>迭代阈值</strong>：通过迭代优化找到最佳阈值</li>
-                                <li><strong>局部阈值</strong>：根据像素邻域动态计算阈值</li>
-                                <li><strong>Sauvola算法</strong>：适用于光照不均的文本图像</li>
-                                <li><strong>Niblack算法</strong>：基于局部均值和标准差的自适应阈值</li>
-                                <li><strong>三角算法</strong>：基于直方图峰值的阈值选择</li>
-                                <li><strong>双峰算法</strong>：寻找直方图中两个峰值的中点</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">图像分割</h5>
-                            <ul>
-                                <li><strong>阈值分割</strong>：基于像素强度分类</li>
-                                <li><strong>区域生长</strong>：基于相似性合并像素</li>
-                                <li><strong>分裂合并</strong>：递归分割策略</li>
-                                <li><strong>边缘分割</strong>：基于边缘检测结果</li>
-                                <li><strong>主动轮廓模型</strong>：Snake、C-V模型</li>
-                                <li><strong>分水岭算法</strong>：基于拓扑理论</li>
-                                <li><strong>图割算法</strong>：基于图论的分割方法</li>
-                                <li><strong>K-means聚类</strong>：无监督分割方法</li>
-                                <li><strong>Mean Shift分割</strong>：基于密度的聚类方法</li>
-                                <li><strong>GrabCut算法</strong>：交互式前景提取</li>
-                                <li><strong>随机游走分割</strong>：基于图论的概率分割</li>
-                                <li><strong>图谱分割</strong>：基于特征向量的分割</li>
-                                <li><strong>超像素分割</strong>：SLIC、Felzenszwalb等算法</li>
-                                <li><strong>深度学习分割</strong>：FCN、U-Net、Mask R-CNN</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">图像复原</h5>
-                            <ul>
-                                <li><strong>运动模糊复原</strong>：去除相机或物体运动造成的模糊</li>
-                                <li><strong>离焦模糊复原</strong>：去除镜头焦点不准造成的模糊</li>
-                                <li><strong>去雾算法</strong>：恢复大气散射影响的图像</li>
-                                <li><strong>去噪算法</strong>：去除各种类型的噪声</li>
-                                <li><strong>超分辨率重建</strong>：提高图像分辨率</li>
-                                <li><strong>图像修复</strong>：填补图像缺失区域</li>
-                                <li><strong>盲去卷积</strong>：不知道点扩散函数的复原</li>
-                                <li><strong>稀疏表示</strong>：基于稀疏先验的复原方法</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">图像配准</h5>
-                            <ul>
-                                <li><strong>基于特征的配准</strong>：利用关键点进行配准</li>
-                                <li><strong>基于强度的配准</strong>：直接比较像素强度</li>
-                                <li><strong>刚性配准</strong>：只允许平移和旋转</li>
-                                <li><strong>仿射配准</strong>：允许缩放和剪切</li>
-                                <li><strong>非刚性配准</strong>：允许弹性变形</li>
-                                <li><strong>互信息配准</strong>：基于信息论的相似性度量</li>
-                                <li><strong>相位相关</strong>：基于频域的配准方法</li>
-                                <li><strong>光流法</strong>：估计像素运动场</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">图像压缩</h5>
-                            <ul>
-                                <li><strong>无损压缩</strong>：完全恢复原始图像</li>
-                                <li><strong>有损压缩</strong>：牺牲质量换取高压缩比</li>
-                                <li><strong>预测编码</strong>：利用空间冗余</li>
-                                <li><strong>变换编码</strong>：DCT、小波变换等</li>
-                                <li><strong>矢量量化</strong>：将图像块映射到码本</li>
-                                <li><strong>JPEG标准</strong>：基于DCT的压缩</li>
-                                <li><strong>JPEG2000标准</strong>：基于小波的压缩</li>
-                                <li><strong>帧间预测</strong>：视频压缩中的时间冗余利用</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">模式识别与分类</h5>
-                            <ul>
-                                <li><strong>模板匹配</strong>：寻找图像中的特定模式</li>
-                                <li><strong>支持向量机(SVM)</strong>：有效的分类算法</li>
-                                <li><strong>K近邻算法</strong>：基于相似性的分类</li>
-                                <li><strong>贝叶斯分类器</strong>：基于概率的分类</li>
-                                <li><strong>决策树</strong>：树形结构的分类器</li>
-                                <li><strong>主成分分析(PCA)</strong>：降维和特征提取</li>
-                                <li><strong>线性判别分析(LDA)</strong>：有监督的降维方法</li>
-                                <li><strong>聚类算法</strong>：K-means、层次聚类等</li>
-                            </ul>
+                <div id="featContent" class="collapse show">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h5>局部特征描述子对比</h5>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>描述子</th>
+                                            <th>不变性</th>
+                                            <th>维度</th>
+                                            <th>速度</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>SIFT</strong></td>
+                                            <td>尺度、旋转、光照</td>
+                                            <td>128</td>
+                                            <td>慢</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>SURF</strong></td>
+                                            <td>尺度、旋转、光照</td>
+                                            <td>64/128</td>
+                                            <td>中</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>ORB</strong></td>
+                                            <td>旋转、尺度</td>
+                                            <td>32</td>
+                                            <td>快</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>HOG</strong></td>
+                                            <td>几何、光照</td>
+                                            <td>可变</td>
+                                            <td>中</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mermaid">
+flowchart TD
+    subgraph 特征提取流程
+        A[输入图像] --> B[特征点检测]
+        B --> C[关键点定位]
+        C --> D[方向分配]
+        D --> E[描述子计算]
+        E --> F[特征匹配]
+    end
+    
+    subgraph 应用
+        F --> G[目标识别]
+        F --> H[图像拼接]
+        F --> I[3D 重建]
+    end
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -319,13 +596,10 @@
         </div>
     </section>
 
-    <!-- 引入Bootstrap JS -->
     <script src="libs/bootstrap.bundle.min.js"></script>
-    <!-- 引入Prism.js用于代码高亮 -->
     <script src="libs/prism.js"></script>
-    <!-- 引入TensorFlow.js -->
     <script src="libs/tf.min.js"></script>
-    <!-- 主要JavaScript -->
+    <script src="js/diagram.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

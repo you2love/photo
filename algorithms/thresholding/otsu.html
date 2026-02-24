@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otsu算法 - 图像处理算法详解</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="../../libs/roboto-font.css" rel="stylesheet">
+    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <!-- 引入Bootstrap CSS -->
+    <link href="../../libs/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入Prism.js CSS -->
+    <link href="../../libs/prism.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="material-icons">photo_library</i>
+                图像处理教程
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            算法详解
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
+                            <li><a class="dropdown-item active" href="../../algorithms/thresholding/otsu.html">Otsu算法</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Otsu算法详解 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html">首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">Otsu算法</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold">Otsu算法</h1>
+                    <p class="lead">Otsu算法是一种自动阈值选择方法，通过最大化类间方差来确定最优阈值，适用于双峰直方图的图像二值化。</p>
+
+                    <h2>算法原理</h2>
+                    <p>Otsu算法由日本学者Nobuyuki Otsu在1979年提出，是一种自动确定阈值的方法。该算法基于图像的灰度直方图，通过最大化前景和背景之间的类间方差来确定最优阈值。</p>
+                    
+                    <p>算法的核心思想是找到一个阈值T，使得前景和背景之间的类间方差最大，或者等价地，使得前景和背景的类内方差最小。</p>
+                    
+                    <p>设图像的灰度级为[0, L-1]，第i个灰度级的概率为p_i，则：</p>
+                    
+                    <p>ω₀(T) = Σᵢ₌₀ᵀ⁻¹ pᵢ (背景像素比例)</p>
+                    <p>ω₁(T) = Σᵢ₌ᵀᴸ⁻¹ pᵢ (前景像素比例)</p>
+                    
+                    <p>μ₀(T) = (Σᵢ₌₀ᵀ⁻¹ i × pᵢ) / ω₀(T) (背景平均灰度)</p>
+                    <p>μ₁(T) = (Σᵢ₌ᵀᴸ⁻¹ i × pᵢ) / ω₁(T) (前景平均灰度)</p>
+                    
+                    <p>类间方差 σ²ᵦ(T) = ω₀(T) × ω₁(T) × [μ₀(T) - μ₁(T)]²</p>
+                    
+                    <p>最优阈值T*是使σ²ᵦ(T)最大的T值。</p>
+
+                    <h3>算法步骤</h3>
+                    <ol>
+                        <li>计算图像的灰度直方图</li>
+                        <li>归一化直方图得到概率分布</li>
+                        <li>遍历所有可能的阈值</li>
+                        <li>对每个阈值计算类间方差</li>
+                        <li>选择使类间方差最大的阈值</li>
+                        <li>应用最优阈值进行二值化</li>
+                    </ol>
+
+                    <h2>Python实现</h2>
+                    <pre><code class="language-python">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def otsu_threshold_builtin(image_path):
+    """
+    使用OpenCV内置函数实现Otsu阈值
+    :param image_path: 输入图像路径
+    :return: 原图和Otsu二值化后的图像
+    """
+    # 读取图像
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # 应用Otsu阈值
+    _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    
+    # 获取计算出的阈值
+    threshold_value = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[0]
+    
+    return img, cv2.cvtColor(binary, cv2.COLOR_GRAY2BGR), threshold_value
+
+def manual_otsu_threshold(image_path):
+    """
+    手动实现Otsu阈值算法
+    :param image_path: 输入图像路径
+    :return: 二值化后的图像和计算出的阈值
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 计算直方图
+    hist, _ = np.histogram(img.flatten(), 256, [0, 256])
+    
+    # 归一化直方图
+    hist_norm = hist.astype(float) / hist.sum()
+    
+    # 初始化变量
+    max_variance = 0
+    optimal_threshold = 0
+    
+    # 遰度级总数
+    total_levels = len(hist_norm)
+    
+    # 计算图像的总体平均灰度
+    total_mean = sum(i * hist_norm[i] for i in range(total_levels))
+    
+    # 初始化背景概率和平均灰度
+    omega_0 = 0  # 背景像素比例
+    mu_0 = 0     # 背景平均灰度
+    
+    # 遰度级遍历
+    for t in range(total_levels):
+        # 更新背景概率
+        omega_0 += hist_norm[t]
+        
+        # 更新背景平均灰度
+        if omega_0 > 0:
+            mu_0 += t * hist_norm[t]
+            mu_0_t = mu_0 / omega_0 if omega_0 > 0 else 0
+        else:
+            mu_0_t = 0
+        
+        # 计算前景概率和平均灰度
+        omega_1 = 1.0 - omega_0
+        if omega_1 > 0:
+            mu_1_t = (total_mean - omega_0 * mu_0_t) / omega_1
+        else:
+            mu_1_t = 0
+        
+        # 计算类间方差
+        between_class_variance = omega_0 * omega_1 * (mu_0_t - mu_1_t) ** 2
+        
+        # 更新最优阈值
+        if between_class_variance > max_variance:
+            max_variance = between_class_variance
+            optimal_threshold = t
+    
+    # 应用计算出的阈值进行二值化
+    binary = np.zeros_like(img)
+    binary[img > optimal_threshold] = 255
+    binary[img <= optimal_threshold] = 0
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(binary, cv2.COLOR_GRAY2BGR), optimal_threshold
+
+def otsu_with_histogram(image_path):
+    """
+    显示Otsu算法的直方图和阈值选择过程
+    :param image_path: 输入图像路径
+    :return: 原图、二值化结果和相关信息
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 计算直方图
+    hist, bins = np.histogram(img.flatten(), 256, [0, 256])
+    
+    # 归一化直方图
+    hist_norm = hist.astype(float) / hist.sum()
+    
+    # 计算Otsu阈值
+    total_mean = sum(i * hist_norm[i] for i in range(256))
+    omega_0 = 0
+    mu_0 = 0
+    max_variance = 0
+    optimal_threshold = 0
+    
+    variances = []  # 存储每个阈值的类间方差
+    
+    for t in range(256):
+        omega_0 += hist_norm[t]
+        if omega_0 > 0:
+            mu_0 += t * hist_norm[t]
+            mu_0_t = mu_0 / omega_0 if omega_0 > 0 else 0
+        else:
+            mu_0_t = 0
+        
+        omega_1 = 1.0 - omega_0
+        if omega_1 > 0:
+            mu_1_t = (total_mean - omega_0 * mu_0_t) / omega_1
+        else:
+            mu_1_t = 0
+        
+        between_class_variance = omega_0 * omega_1 * (mu_0_t - mu_1_t) ** 2
+        variances.append(between_class_variance)
+        
+        if between_class_variance > max_variance:
+            max_variance = between_class_variance
+            optimal_threshold = t
+    
+    # 应用阈值
+    binary = np.zeros_like(img)
+    binary[img > optimal_threshold] = 255
+    binary[img <= optimal_threshold] = 0
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(binary, cv2.COLOR_GRAY2BGR), optimal_threshold, variances
+
+def multi_level_otsu(image_path, levels=3):
+    """
+    多级Otsu阈值（将图像分为多个等级）
+    :param image_path: 输入图像路径
+    :param levels: 分割等级数
+    :return: 原图和多级分割结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 使用OpenCV的多级Otsu阈值
+    if levels == 2:
+        _, result = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    elif levels == 3:
+        _, result = cv2.threshold(img, 0, 255, cv2.THRESH_TRIANGLE)
+    else:
+        # 对于更多等级，我们可以使用分层方法
+        # 这里简化处理，使用均匀分割
+        step = 255 // levels
+        result = (img // step) * step
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), cv2.cvtColor(result, cv2.COLOR_GRAY2BGR)
+
+def compare_thresholding_methods(image_path):
+    """
+    比较不同阈值方法的效果
+    :param image_path: 输入图像路径
+    :return: 原图和不同方法的二值化结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 不同的阈值方法
+    methods = {
+        'Global (127)': cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)[1],
+        'Otsu': cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1],
+        'Adaptive Mean': cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2),
+        'Adaptive Gaussian': cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2),
+        'Triangle': cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_TRIANGLE)[1]
+    }
+    
+    results = {}
+    for name, result in methods.items():
+        results[name] = cv2.cvtColor(result, cv2.COLOR_GRAY2BGR)
+    
+    return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR), results
+
+def otsu_performance_analysis(image_path):
+    """
+    Otsu算法性能分析
+    :param image_path: 输入图像路径
+    :return: 分析结果
+    """
+    # 读取图像
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 计算直方图
+    hist, _ = np.histogram(img.flatten(), 256, [0, 256])
+    hist_norm = hist.astype(float) / hist.sum()
+    
+    # 计算Otsu阈值
+    total_mean = sum(i * hist_norm[i] for i in range(256))
+    omega_0 = 0
+    mu_0 = 0
+    max_variance = 0
+    optimal_threshold = 0
+    
+    for t in range(256):
+        omega_0 += hist_norm[t]
+        if omega_0 > 0:
+            mu_0 += t * hist_norm[t]
+            mu_0_t = mu_0 / omega_0 if omega_0 > 0 else 0
+        else:
+            mu_0_t = 0
+        
+        omega_1 = 1.0 - omega_0
+        if omega_1 > 0:
+            mu_1_t = (total_mean - omega_0 * mu_0_t) / omega_1
+        else:
+            mu_1_t = 0
+        
+        between_class_variance = omega_0 * omega_1 * (mu_0_t - mu_1_t) ** 2
+        
+        if between_class_variance > max_variance:
+            max_variance = between_class_variance
+            optimal_threshold = t
+    
+    # 计算分割质量指标
+    foreground_pixels = np.sum(img > optimal_threshold)
+    background_pixels = np.sum(img <= optimal_threshold)
+    total_pixels = img.size
+    
+    foreground_ratio = foreground_pixels / total_pixels
+    background_ratio = background_pixels / total_pixels
+    
+    # 应用阈值
+    binary = np.zeros_like(img)
+    binary[img > optimal_threshold] = 255
+    binary[img <= optimal_threshold] = 0
+    
+    return {
+        'optimal_threshold': optimal_threshold,
+        'max_between_class_variance': max_variance,
+        'foreground_ratio': foreground_ratio,
+        'background_ratio': background_ratio,
+        'original_image': cv2.cvtColor(img, cv2.COLOR_GRAY2BGR),
+        'binary_image': cv2.cvtColor(binary, cv2.COLOR_GRAY2BGR)
+    }
+
+# 使用示例
+if __name__ == "__main__":
+    # 注意：需要提供实际的图像路径
+    # img, result, threshold = otsu_threshold_builtin('image.jpg')
+    # manual_img, manual_result, manual_threshold = manual_otsu_threshold('image.jpg')
+    # hist_img, hist_result, hist_threshold, variances = otsu_with_histogram('image.jpg')
+    # multi_img, multi_result = multi_level_otsu('image.jpg', 3)
+    # comp_img, comp_results = compare_thresholding_methods('image.jpg')
+    # analysis_result = otsu_performance_analysis('image.jpg')
+    pass</code></pre>
+
+                    <h2>算法优缺点</h2>
+                    <h3>优点</h3>
+                    <ul>
+                        <li>自动确定最优阈值</li>
+                        <li>基于统计学原理，理论基础扎实</li>
+                        <li>适用于双峰直方图的图像</li>
+                        <li>无需人工干预</li>
+                        <li>效果稳定可靠</li>
+                    </ul>
+
+                    <h3>缺点</h3>
+                    <ul>
+                        <li>对于单峰或多峰直方图效果不佳</li>
+                        <li>对噪声敏感</li>
+                        <li>假设图像为双类问题</li>
+                        <li>计算复杂度相对较高</li>
+                        <li>对光照不均匀的图像效果有限</li>
+                    </ul>
+
+                    <h2>应用场景</h2>
+                    <ul>
+                        <li>文档图像二值化</li>
+                        <li>医学图像分割</li>
+                        <li>工业检测</li>
+                        <li>图像预处理</li>
+                        <li>对象分割</li>
+                        <li>模式识别预处理</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">算法信息</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>类型:</strong> 图像二值化</li>
+                                <li><strong>适用:</strong> 灰度图像</li>
+                                <li><strong>复杂度:</strong> O(M×N + L)，其中M和N是图像尺寸，L是灰度级数</li>
+                                <li><strong>参数:</strong> 无（自动计算）</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">相关算法</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="global_threshold.html">全局阈值</a></li>
+                                <li><a href="niblack.html">Niblack算法</a></li>
+                                <li><a href="sauvola.html">Sauvola算法</a></li>
+                                <li><a href="local_threshold.html">局部阈值</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 引入Bootstrap JS -->
+    <script src="../../libs/bootstrap.bundle.min.js"></script>
+    <!-- 引入Prism.js用于代码高亮 -->
+    <script src="../../libs/prism.js"></script>
+    <!-- 引入TensorFlow.js -->
+    <script src="../../libs/tf.min.js"></script>
+    <!-- 主要JavaScript -->
+    <script src="../../js/main.js"></script>
+</body>
+</html>
