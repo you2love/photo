@@ -19,6 +19,7 @@
             <a class="navbar-brand" href="index.html">
                 <i class="material-icons">photo_library</i>
                 图像处理教程
+                <span class="badge bg-warning text-dark ms-2">2026 更新</span>
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
@@ -52,34 +53,34 @@
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="fw-bold text-white">图像处理流程总览</h2>
-                <p class="text-white-50">从图像获取到分析应用的完整流程</p>
+                <p class="text-white-50">从传统方法到 AI 驱动的完整流程 <span class="badge bg-warning text-dark">2026</span></p>
             </div>
-            
+
             <div class="mermaid-container bg-white">
                 <div class="mermaid">
 flowchart LR
-    A[图像获取] --> B[预处理]
-    B --> C[特征提取]
-    C --> D[图像分析]
+    A[图像获取] --> B[AI 预处理]
+    B --> C[深度特征提取]
+    C --> D[智能分析]
     D --> E[后处理]
     E --> F[应用输出]
     
-    subgraph B[预处理阶段]
-        B1[噪声去除]
-        B2[图像增强]
-        B3[几何变换]
+    subgraph B[AI 预处理阶段]
+        B1[AI 去噪]
+        B2[超分辨率]
+        B3[神经增强]
     end
     
-    subgraph C[特征提取]
-        C1[边缘检测]
-        C2[角点检测]
-        C3[纹理分析]
+    subgraph C[深度特征提取]
+        C1[CNN 特征]
+        C2[Transformer 特征]
+        C3[多模态特征]
     end
     
-    subgraph D[图像分析]
-        D1[图像分割]
-        D2[目标识别]
-        D3[模式分类]
+    subgraph D[智能分析]
+        D1[分割 SAM]
+        D2[检测 YOLOv10]
+        D3[生成扩散模型]
     end
     
     B --> B1
@@ -100,14 +101,43 @@ flowchart LR
     <section class="py-5" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">图像处理基础</h2>
-                <p class="text-muted">系统学习图像处理的核心概念</p>
+                <h2 class="fw-bold">图像处理基础 <span class="badge bg-warning text-dark">2026 更新</span></h2>
+                <p class="text-muted">从传统方法到 AI 驱动的图像处理技术</p>
+            </div>
+
+            <!-- 2026 年新技术 -->
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="material-icons align-middle">auto_awesome</i> 2026 年新技术趋势</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-primary">psychology</i> 深度学习模型</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>Vision Transformer (ViT)</strong> - 替代 CNN 的主流架构</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>SAM (Segment Anything)</strong> - 通用图像分割模型</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>扩散模型</strong> - 图像生成和修复</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>NeRF/Gaussian Splatting</strong> - 3D 场景重建</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-primary">cloud</i> 边缘计算与云处理</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>端侧 AI</strong> - 手机/嵌入式设备实时处理</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>云边协同</strong> - 分布式图像处理</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>联邦学习</strong> - 隐私保护的模型训练</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>实时处理</strong> - 4K/8K 视频流处理</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 图像类型对比表 -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h4 class="mb-0"><i class="material-icons align-middle">table_chart</i> 图像类型对比</h4>
+                    <h4 class="mb-0"><i class="material-icons align-middle">table_chart</i> 图像类型对比 <span class="badge bg-info text-dark">2026</span></h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -156,6 +186,20 @@ flowchart LR
                                     <td><span class="badge bg-danger">16-32 bit/像素</span></td>
                                     <td>3D 重建、机器人导航</td>
                                     <td>包含空间深度信息</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>神经辐射场 (NeRF)</strong> <span class="badge bg-primary">新</span></td>
+                                    <td>隐式表示</td>
+                                    <td><span class="badge bg-primary">紧凑</span></td>
+                                    <td>VR/AR、3D 内容</td>
+                                    <td>高质量新视角合成</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>高斯泼溅 (3DGS)</strong> <span class="badge bg-primary">新</span></td>
+                                    <td>3D 高斯分布</td>
+                                    <td><span class="badge bg-success">中等</span></td>
+                                    <td>实时 3D 渲染</td>
+                                    <td>实时渲染、易编辑</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -419,14 +463,11 @@ pie title 统计特征应用分布
     <section class="py-5" style="background: linear-gradient(180deg, #e9ecef 0%, #dee2e6 100%);">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">图像文件格式</h2>
-                <p class="text-muted">选择适合应用场景的图像格式</p>
+                <h2 class="fw-bold">图像文件格式 <span class="badge bg-warning text-dark">2026</span></h2>
+                <p class="text-muted">传统格式与新一代编码标准</p>
             </div>
 
             <div class="card">
-                <div class="card-header">
-                    <h4 class="mb-0"><i class="material-icons align-middle">folder</i> 常见图像格式对比</h4>
-                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-comparison table-hover">
@@ -455,25 +496,32 @@ pie title 统计特征应用分布
                                     <td>图形、图标、截图</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>BMP</strong></td>
-                                    <td><span class="badge bg-secondary">无压缩</span></td>
-                                    <td><i class="material-icons text-danger" style="font-size: 18px;">close</i></td>
-                                    <td><span class="badge bg-danger">大</span></td>
-                                    <td>Windows 应用</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>TIFF</strong></td>
-                                    <td><span class="badge bg-info">可选</span></td>
-                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
-                                    <td><span class="badge bg-danger">大</span></td>
-                                    <td>专业印刷、存档</td>
-                                </tr>
-                                <tr>
                                     <td><strong>WEBP</strong></td>
                                     <td><span class="badge bg-primary">高压缩</span></td>
                                     <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
                                     <td><span class="badge bg-success">很小</span></td>
                                     <td>现代网页</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>AVIF</strong> <span class="badge bg-primary">新</span></td>
+                                    <td><span class="badge bg-primary">AI 增强</span></td>
+                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
+                                    <td><span class="badge bg-success">极小</span></td>
+                                    <td>下一代网页格式</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>JPEG XL</strong> <span class="badge bg-primary">新</span></td>
+                                    <td><span class="badge bg-info">可逆</span></td>
+                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
+                                    <td><span class="badge bg-success">小</span></td>
+                                    <td>专业摄影、存档</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>HEIC/HEIF</strong></td>
+                                    <td><span class="badge bg-primary">高效</span></td>
+                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
+                                    <td><span class="badge bg-success">很小</span></td>
+                                    <td>移动设备</td>
                                 </tr>
                                 <tr>
                                     <td><strong>RAW</strong></td>
@@ -482,8 +530,150 @@ pie title 统计特征应用分布
                                     <td><span class="badge bg-danger">很大</span></td>
                                     <td>专业摄影后期</td>
                                 </tr>
+                                <tr>
+                                    <td><strong>OpenEXR</strong></td>
+                                    <td><span class="badge bg-info">HDR</span></td>
+                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
+                                    <td><span class="badge bg-danger">大</span></td>
+                                    <td>电影、VFX</td>
+                                </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2026 年深度学习框架 -->
+    <section class="py-5" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">深度学习框架 <span class="badge bg-warning text-dark">2026</span></h2>
+                <p class="text-muted">主流图像处理 AI 框架和模型</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="material-icons align-middle">psychology</i> 核心框架</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <strong class="text-primary">PyTorch 2.x</strong>
+                                    <p class="text-muted mb-0 small">动态图、易调试，研究首选</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong class="text-primary">TensorFlow 3.x</strong>
+                                    <p class="text-muted mb-0 small">生产部署、TPU 支持</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong class="text-primary">JAX</strong>
+                                    <p class="text-muted mb-0 small">高性能计算、函数式编程</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong class="text-primary">ONNX Runtime</strong>
+                                    <p class="text-muted mb-0 small">跨平台推理引擎</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100 border-success">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="material-icons align-middle">model_training</i> 预训练模型</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <strong class="text-success">SAM (Segment Anything)</strong>
+                                    <p class="text-muted mb-0 small">Meta 通用分割模型</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong class="text-success">YOLOv10/v11</strong>
+                                    <p class="text-muted mb-0 small">实时目标检测</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong class="text-success">Stable Diffusion XL</strong>
+                                    <p class="text-muted mb-0 small">图像生成和编辑</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong class="text-success">DINOv2</strong>
+                                    <p class="text-muted mb-0 small">自监督视觉 Transformer</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2026 年行业应用 -->
+    <section class="py-5 bg-gradient">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-white">2026 年行业应用</h2>
+                <p class="text-white-50">图像处理技术在各行各业的应用</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="material-icons display-4 text-primary mb-3">local_hospital</i>
+                            <h5 class="card-title">医疗健康</h5>
+                            <p class="card-text">AI 辅助诊断、病理分析、手术导航、药物研发</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="material-icons display-4 text-success mb-3">directions_car</i>
+                            <h5 class="card-title">自动驾驶</h5>
+                            <p class="card-text">环境感知、路径规划、行为预测、高精地图</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="material-icons display-4 text-warning mb-3">shopping_cart</i>
+                            <h5 class="card-title">零售电商</h5>
+                            <p class="card-text">商品识别、虚拟试穿、智能货架、无人商店</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="material-icons display-4 text-info mb-3">factory</i>
+                            <h5 class="card-title">工业检测</h5>
+                            <p class="card-text">缺陷检测、质量控制、预测性维护、机器人引导</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="material-icons display-4 text-danger mb-3">security</i>
+                            <h5 class="card-title">安防监控</h5>
+                            <p class="card-text">人脸识别、行为分析、异常检测、智能追踪</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="material-icons display-4 text-primary mb-3">satellite</i>
+                            <h5 class="card-title">遥感测绘</h5>
+                            <p class="card-text">土地利用、灾害监测、城市规划、农业估产</p>
+                        </div>
                     </div>
                 </div>
             </div>
