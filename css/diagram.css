@@ -95,23 +95,133 @@
 /* 表格增强样式 */
 .table-comparison {
   margin: 2rem 0;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .table-comparison thead {
-  background: linear-gradient(135deg, #3498db, #2ecc71);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+}
+
+.table-comparison thead th {
+  border: none;
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table-comparison thead th .material-icons {
+  margin-right: 4px;
+  vertical-align: text-bottom;
 }
 
 .table-comparison tbody tr {
   transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .table-comparison tbody tr:hover {
-  background: rgba(52, 152, 219, 0.1);
-  transform: scale(1.01);
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  transform: scale(1.005);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.table-comparison tbody td {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+  border: none;
+  color: #333;
+}
+
+.table-comparison tbody td strong {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+/* 表格中的 code 样式 */
+.table-comparison tbody td code {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9em;
+  color: #e83e8c;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 表格中的 badge 样式 */
+.table-comparison tbody td .badge {
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+/* 斑马纹效果 */
+.table-comparison tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-comparison tbody tr:nth-of-type(even) {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 第一列强调 */
+.table-comparison tbody td:first-child {
+  border-left: 3px solid #667eea;
+  font-weight: 500;
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .table-comparison {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .table-comparison thead {
+    background: linear-gradient(135deg, #5a67d8 0%, #805ad5 100%);
+  }
+
+  .table-comparison tbody tr {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .table-comparison tbody td {
+    color: #e2e8f0;
+  }
+
+  .table-comparison tbody td strong {
+    color: #90cdf4;
+  }
+
+  .table-comparison tbody td code {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    color: #f687b3;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .table-comparison tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .table-comparison tbody tr:nth-of-type(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+
+  .table-comparison tbody tr:hover {
+    background: linear-gradient(90deg, rgba(90, 103, 216, 0.15) 0%, rgba(128, 90, 213, 0.15) 100%);
+  }
+
+  .table-comparison tbody td:first-child {
+    border-left-color: #90cdf4;
+  }
 }
 
 /* 序列图样式 */

@@ -114,46 +114,46 @@ flowchart LR
                         <table class="table table-comparison table-hover">
                             <thead>
                                 <tr>
-                                    <th>图像类型</th>
-                                    <th>像素表示</th>
-                                    <th>数据量</th>
-                                    <th>典型应用</th>
-                                    <th>优点</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">image</i> 图像类型</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">pixel</i> 像素表示</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">storage</i> 数据量</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">apps</i> 典型应用</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">thumb_up</i> 优点</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td><strong>二值图像</strong></td>
-                                    <td>0 或 1</td>
-                                    <td>1 bit/像素</td>
+                                    <td><code>0 或 1</code></td>
+                                    <td><span class="badge bg-success">1 bit/像素</span></td>
                                     <td>文档扫描、OCR</td>
                                     <td>数据量极小，处理简单</td>
                                 </tr>
                                 <tr>
                                     <td><strong>灰度图像</strong></td>
-                                    <td>0-255</td>
-                                    <td>8 bit/像素</td>
+                                    <td><code>0-255</code></td>
+                                    <td><span class="badge bg-info">8 bit/像素</span></td>
                                     <td>医学影像、工业检测</td>
                                     <td>保留亮度信息，计算效率高</td>
                                 </tr>
                                 <tr>
                                     <td><strong>RGB 彩色图像</strong></td>
-                                    <td>(R,G,B) 各 0-255</td>
-                                    <td>24 bit/像素</td>
+                                    <td><code>(R,G,B)</code></td>
+                                    <td><span class="badge bg-warning text-dark">24 bit/像素</span></td>
                                     <td>摄影、显示</td>
                                     <td>符合人眼感知，色彩丰富</td>
                                 </tr>
                                 <tr>
                                     <td><strong>多光谱图像</strong></td>
                                     <td>多波段数据</td>
-                                    <td>可变</td>
+                                    <td><span class="badge bg-secondary">可变</span></td>
                                     <td>遥感、农业监测</td>
                                     <td>包含不可见光信息</td>
                                 </tr>
                                 <tr>
                                     <td><strong>深度图像</strong></td>
                                     <td>距离值</td>
-                                    <td>16-32 bit/像素</td>
+                                    <td><span class="badge bg-danger">16-32 bit/像素</span></td>
                                     <td>3D 重建、机器人导航</td>
                                     <td>包含空间深度信息</td>
                                 </tr>
@@ -266,11 +266,11 @@ sequenceDiagram
                         <table class="table table-comparison table-hover">
                             <thead>
                                 <tr>
-                                    <th>噪声类型</th>
-                                    <th>概率分布</th>
-                                    <th>产生原因</th>
-                                    <th>视觉特征</th>
-                                    <th>去噪方法</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">noise_aware</i> 噪声类型</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">insights</i> 概率分布</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">build</i> 产生原因</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">visibility</i> 视觉特征</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">cleaning_services</i> 去噪方法</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -390,61 +390,64 @@ pie title 统计特征应用分布
                 <h2 class="fw-bold">图像文件格式</h2>
                 <p class="text-muted">选择适合应用场景的图像格式</p>
             </div>
-            
+
             <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">folder</i> 常见图像格式对比</h4>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-comparison table-hover">
                             <thead>
                                 <tr>
-                                    <th>格式</th>
-                                    <th>压缩类型</th>
-                                    <th>透明度</th>
-                                    <th>典型大小</th>
-                                    <th>最佳用途</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">description</i> 格式</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">compress</i> 压缩类型</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">transparency</i> 透明度</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">pie_chart</i> 典型大小</th>
+                                    <th><i class="material-icons align-middle" style="font-size: 16px;">target</i> 最佳用途</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td><strong>JPEG</strong></td>
-                                    <td>有损</td>
-                                    <td>❌</td>
-                                    <td>小</td>
+                                    <td><span class="badge bg-warning text-dark">有损压缩</span></td>
+                                    <td><i class="material-icons text-danger" style="font-size: 18px;">close</i></td>
+                                    <td><span class="badge bg-success">小</span></td>
                                     <td>照片、网页图片</td>
                                 </tr>
                                 <tr>
                                     <td><strong>PNG</strong></td>
-                                    <td>无损</td>
-                                    <td>✅</td>
-                                    <td>中</td>
+                                    <td><span class="badge bg-success">无损压缩</span></td>
+                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
+                                    <td><span class="badge bg-info">中等</span></td>
                                     <td>图形、图标、截图</td>
                                 </tr>
                                 <tr>
                                     <td><strong>BMP</strong></td>
-                                    <td>无压缩</td>
-                                    <td>❌</td>
-                                    <td>大</td>
+                                    <td><span class="badge bg-secondary">无压缩</span></td>
+                                    <td><i class="material-icons text-danger" style="font-size: 18px;">close</i></td>
+                                    <td><span class="badge bg-danger">大</span></td>
                                     <td>Windows 应用</td>
                                 </tr>
                                 <tr>
                                     <td><strong>TIFF</strong></td>
-                                    <td>可选</td>
-                                    <td>✅</td>
-                                    <td>大</td>
+                                    <td><span class="badge bg-info">可选</span></td>
+                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
+                                    <td><span class="badge bg-danger">大</span></td>
                                     <td>专业印刷、存档</td>
                                 </tr>
                                 <tr>
                                     <td><strong>WEBP</strong></td>
-                                    <td>有损/无损</td>
-                                    <td>✅</td>
-                                    <td>很小</td>
+                                    <td><span class="badge bg-primary">高压缩</span></td>
+                                    <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
+                                    <td><span class="badge bg-success">很小</span></td>
                                     <td>现代网页</td>
                                 </tr>
                                 <tr>
                                     <td><strong>RAW</strong></td>
-                                    <td>无损</td>
-                                    <td>❌</td>
-                                    <td>很大</td>
+                                    <td><span class="badge bg-success">无损</span></td>
+                                    <td><i class="material-icons text-danger" style="font-size: 18px;">close</i></td>
+                                    <td><span class="badge bg-danger">很大</span></td>
                                     <td>专业摄影后期</td>
                                 </tr>
                             </tbody>
