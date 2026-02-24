@@ -164,65 +164,60 @@ flowchart LR
             </div>
 
             <!-- 色彩模型转换流程图 -->
-            <div class="row mb-4">
-                <div class="col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="material-icons align-middle">palette</i> 色彩模型转换关系</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="mermaid">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">palette</i> 色彩模型转换关系</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mermaid">
 flowchart TD
     RGB[RGB 模型<br/>红绿蓝三原色] <--> HSV[HSV 模型<br/>色调/饱和度/明度]
     RGB <--> CMYK[CMYK 模型<br/>印刷四色]
     RGB <--> Lab[Lab 模型<br/>感知均匀空间]
     RGB <--> YUV[YUV 模型<br/>视频信号]
     RGB <--> YCbCr[YCbCr 模型<br/>数字视频]
-    
+
     HSV -.->|颜色调整 | App1[图像编辑]
     CMYK -.->|印刷输出 | App2[印刷行业]
     Lab -.->|颜色匹配 | App3[色彩管理]
     YUV -.->|视频压缩 | App4[视频编码]
     YCbCr -.->|数字传输 | App5[数字电视]
-                            </div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="material-icons align-middle">analytics</i> 图像质量指标关系</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="mermaid">
+            <!-- 图像质量指标关系 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">analytics</i> 图像质量指标关系</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mermaid">
 flowchart LR
     subgraph 空间域
         A1[分辨率]
         A2[动态范围]
         A3[色彩深度]
     end
-    
+
     subgraph 统计域
         B1[MSE 均方误差]
         B2[PSNR 峰值信噪比]
         B3[SSIM 结构相似性]
     end
-    
+
     subgraph 感知域
         C1[熵]
         C2[直方图]
         C3[矩特征]
     end
-    
+
     A1 --> B1
     A2 --> B2
     A3 --> B3
     B1 --> C1
     B2 --> C2
     B3 --> C3
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -314,14 +309,12 @@ sequenceDiagram
             </div>
 
             <!-- 像素邻域关系图 -->
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="material-icons align-middle">grid_on</i> 像素邻域关系</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="mermaid">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">grid_on</i> 像素邻域关系</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mermaid">
 flowchart TD
     subgraph 邻域类型
         direction TB
@@ -357,36 +350,33 @@ flowchart TD
 
     C4 --> D1
     C8 --> D2
-                            </div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="material-icons align-middle">donut_large</i> 图像统计特征</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="mermaid">
+            <!-- 图像统计特征 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="material-icons align-middle">donut_large</i> 图像统计特征</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mermaid">
 pie title 统计特征应用分布
     "均值（亮度分析）" : 25
     "方差（对比度）" : 20
     "直方图（分布）" : 30
     "熵（信息量）" : 15
     "矩特征（形状）" : 10
-                            </div>
-                            <div class="mt-4">
-                                <h6>主要统计特征：</h6>
-                                <ul class="list-unstyled">
-                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>均值</strong>：图像的平均亮度水平</li>
-                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>方差</strong>：图像对比度的度量</li>
-                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>直方图</strong>：像素强度分布图</li>
-                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>熵</strong>：图像信息量的度量</li>
-                                    <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>矩</strong>：描述图像形状</li>
-                                </ul>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h6>主要统计特征：</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>均值</strong>：图像的平均亮度水平</li>
+                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>方差</strong>：图像对比度的度量</li>
+                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>直方图</strong>：像素强度分布图</li>
+                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>熵</strong>：图像信息量的度量</li>
+                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>矩</strong>：描述图像形状</li>
+                        </ul>
                     </div>
                 </div>
             </div>
