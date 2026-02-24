@@ -360,23 +360,55 @@ flowchart TD
                     <h4 class="mb-0"><i class="material-icons align-middle">donut_large</i> 图像统计特征</h4>
                 </div>
                 <div class="card-body">
-                    <div class="mermaid">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="mermaid">
 pie title 统计特征应用分布
-    "均值（亮度分析）" : 25
-    "方差（对比度）" : 20
-    "直方图（分布）" : 30
-    "熵（信息量）" : 15
-    "矩特征（形状）" : 10
-                    </div>
-                    <div class="mt-4">
-                        <h6>主要统计特征：</h6>
-                        <ul class="list-unstyled">
-                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>均值</strong>：图像的平均亮度水平</li>
-                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>方差</strong>：图像对比度的度量</li>
-                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>直方图</strong>：像素强度分布图</li>
-                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>熵</strong>：图像信息量的度量</li>
-                            <li><i class="material-icons align-middle" style="font-size: 16px; color: #3498db;">check_circle</i> <strong>矩</strong>：描述图像形状</li>
-                        </ul>
+    "直方图" : 30
+    "均值" : 25
+    "方差" : 20
+    "熵" : 15
+    "矩特征" : 10
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <h6 class="mb-3">统计特征说明</h6>
+                            <div class="legend-item" style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="display: inline-block; width: 20px; height: 20px; background: #667eea; border-radius: 4px; margin-right: 10px;"></span>
+                                <div>
+                                    <strong>直方图 (30%)</strong>
+                                    <p class="mb-0 text-muted small">像素强度分布图，用于分析图像亮度分布</p>
+                                </div>
+                            </div>
+                            <div class="legend-item" style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="display: inline-block; width: 20px; height: 20px; background: #764ba2; border-radius: 4px; margin-right: 10px;"></span>
+                                <div>
+                                    <strong>均值 (25%)</strong>
+                                    <p class="mb-0 text-muted small">图像的平均亮度水平</p>
+                                </div>
+                            </div>
+                            <div class="legend-item" style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="display: inline-block; width: 20px; height: 20px; background: #f093fb; border-radius: 4px; margin-right: 10px;"></span>
+                                <div>
+                                    <strong>方差 (20%)</strong>
+                                    <p class="mb-0 text-muted small">图像对比度的度量</p>
+                                </div>
+                            </div>
+                            <div class="legend-item" style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="display: inline-block; width: 20px; height: 20px; background: #f5576c; border-radius: 4px; margin-right: 10px;"></span>
+                                <div>
+                                    <strong>熵 (15%)</strong>
+                                    <p class="mb-0 text-muted small">图像信息量的度量</p>
+                                </div>
+                            </div>
+                            <div class="legend-item" style="display: flex; align-items: center;">
+                                <span style="display: inline-block; width: 20px; height: 20px; background: #4facfe; border-radius: 4px; margin-right: 10px;"></span>
+                                <div>
+                                    <strong>矩特征 (10%)</strong>
+                                    <p class="mb-0 text-muted small">描述图像形状的统计量</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

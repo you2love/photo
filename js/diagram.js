@@ -71,7 +71,13 @@ document.addEventListener('DOMContentLoaded', function() {
         pie: {
           useMaxWidth: true,
           textPosition: 0.75,
-          useWidth: 800
+          useWidth: 800,
+          strokeColor: '#fff',
+          sectionColor0: '#667eea',
+          sectionColor1: '#764ba2',
+          sectionColor2: '#f093fb',
+          sectionColor3: '#f5576c',
+          sectionColor4: '#4facfe'
         }
       });
       console.log('Mermaid 初始化成功');
