@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mermaid 测试</title>
+    <script src="libs/mermaid.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .test { border: 1px solid #ccc; margin: 20px 0; padding: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Mermaid 图表测试</h1>
+    
+    <div class="test">
+        <h2>测试 1: 序列图</h2>
+        <div class="mermaid">
+sequenceDiagram
+    participant A as 连续图像
+    participant B as 采样
+    A->>B: 采样
+    Note over B: 奈奎斯特定理
+        </div>
+    </div>
+    
+    <div class="test">
+        <h2>测试 2: 流程图</h2>
+        <div class="mermaid">
+flowchart LR
+    A[开始] --> B[处理]
+    B --> C[结束]
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>

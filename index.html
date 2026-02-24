@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/diagram.css">
     <link href="libs/roboto-font.css" rel="stylesheet">
-    <link href="libs/material-icons.css" rel="stylesheet">
+    <link href="libs/material-icons-complete.css" rel="stylesheet">
     <link href="libs/bootstrap.min.css" rel="stylesheet">
     <link href="libs/prism.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="libs/mermaid.min.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -236,22 +236,22 @@ flowchart LR
                     <div class="sequence-diagram-container">
                         <div class="mermaid">
 sequenceDiagram
-    participant 连续图像 as 连续图像
-    participant 采样 as 空间采样
-    participant 离散像素 as 离散像素网格
-    participant 量化 as 灰度量化
-    participant 数字图像 as 数字图像
-    
-    连续图像->>采样：按采样频率采集
-    Note over 采样：奈奎斯特采样定理<br/>采样频率>2×最高频率
-    采样->>离散像素：生成像素位置
-    离散像素->>量化：分配灰度值
-    Note over 量化：0-255 灰度级
-    量化->>数字图像：形成数字图像
-    
-    Note right of 连续图像：模拟信号
-    Note right of 离散像素：空间离散
-    Note right of 数字图像：完全数字化
+    participant A as 连续图像
+    participant B as 空间采样
+    participant C as 离散像素网格
+    participant D as 灰度量化
+    participant E as 数字图像
+
+    A->>B: 按采样频率采集
+    Note over B: 奈奎斯特采样定理<br/>采样频率&gt;2×最高频率
+    B->>C: 生成像素位置
+    C->>D: 分配灰度值
+    Note over D: 0-255 灰度级
+    D->>E: 形成数字图像
+
+    Note right of A: 模拟信号
+    Note right of C: 空间离散
+    Note right of E: 完全数字化
                         </div>
                     </div>
                     <div class="diagram-legend mt-3">
@@ -323,34 +323,40 @@ sequenceDiagram
                         <div class="card-body">
                             <div class="mermaid">
 flowchart TD
+    subgraph 邻域类型
+        direction TB
+        C4[(4 邻域<br/>中心)]
+        C8[(8 邻域<br/>中心)]
+    end
+
     subgraph 4 邻域
         direction TB
-        N4_1[ ] --- C4[(中心)]
-        N4_2[ ] --- C4
-        N4_3[ ] --- C4
-        N4_4[ ] --- C4
+        N4_1[上] --- C4
+        N4_2[下] --- C4
+        N4_3[左] --- C4
+        N4_4[右] --- C4
     end
-    
+
     subgraph 8 邻域
         direction TB
-        N8_1[ ] --- C8[(中心)]
-        N8_2[ ] --- C8
-        N8_3[ ] --- C8
-        N8_4[ ] --- C8
-        N8_5[对角] --- C8
-        N8_6[对角] --- C8
-        N8_7[对角] --- C8
-        N8_8[对角] --- C8
+        N8_1[上] --- C8
+        N8_2[下] --- C8
+        N8_3[左] --- C8
+        N8_4[右] --- C8
+        N8_5[左上] --- C8
+        N8_6[右上] --- C8
+        N8_7[左下] --- C8
+        N8_8[右下] --- C8
     end
-    
-    4 邻域 --> 距离度量
-    8 邻域 --> 距离度量
-    
+
     subgraph 距离度量
         D1[欧氏距离]
         D2[城市街区距离]
         D3[棋盘距离]
     end
+
+    C4 --> D1
+    C8 --> D2
                             </div>
                         </div>
                     </div>

@@ -2,27 +2,34 @@
 document.addEventListener('DOMContentLoaded', function() {
   // 初始化 Mermaid
   if (typeof mermaid !== 'undefined') {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'default',
-      fontFamily: 'Roboto',
-      flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true,
-        curve: 'basis'
-      },
-      sequence: {
-        useMaxWidth: true,
-        boxMargin: 10,
-        boxTextMargin: 5,
-        noteMargin: 10,
-        messageMargin: 35,
-        messageAlign: 'center'
-      },
-      class: {
-        useMaxWidth: true
-      }
-    });
+    try {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+          curve: 'basis'
+        },
+        sequence: {
+          useMaxWidth: true,
+          boxMargin: 10,
+          boxTextMargin: 5,
+          noteMargin: 10,
+          messageMargin: 35,
+          messageAlign: 'center'
+        },
+        class: {
+          useMaxWidth: true
+        }
+      });
+      console.log('Mermaid 初始化成功');
+    } catch (e) {
+      console.error('Mermaid 初始化失败:', e);
+    }
+  } else {
+    console.error('Mermaid 未加载');
   }
 
   // 可折叠图表功能
