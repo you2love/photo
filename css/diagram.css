@@ -9,6 +9,50 @@
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+/* 强制 Mermaid 使用浅色背景 */
+.mermaid-container .mermaid svg,
+.mermaid .mermaid svg {
+  background: transparent !important;
+  fill: #333 !important;
+}
+
+.mermaid-container .mermaid .labelText,
+.mermaid-container .mermaid .labelText tspan,
+.mermaid .mermaid .labelText,
+.mermaid .mermaid .labelText tspan {
+  fill: #333 !important;
+}
+
+.mermaid-container .mermaid .node rect,
+.mermaid-container .mermaid .node circle,
+.mermaid-container .mermaid .node ellipse,
+.mermaid-container .mermaid .node polygon {
+  fill: #fff !important;
+  stroke: #667eea !important;
+}
+
+.mermaid-container .mermaid .edgeLabel {
+  background-color: #fff !important;
+  color: #333 !important;
+}
+
+.mermaid-container .mermaid .edgePath .path {
+  stroke: #667eea !important;
+}
+
+.mermaid-container .mermaid .arrowheadPath {
+  fill: #667eea !important;
+}
+
+.mermaid-container .mermaid .cluster rect {
+  fill: #f8f9fa !important;
+  stroke: #dee2e6 !important;
+}
+
+.mermaid-container .mermaid .cluster text {
+  fill: #333 !important;
+}
+
 .mermaid {
   display: flex;
   justify-content: center;
@@ -39,25 +83,26 @@
   fill: #2c3e50;
 }
 
-/* 暗色模式支持 */
+/* 暗色模式支持 - 保持浅色背景 */
 @media (prefers-color-scheme: dark) {
   .mermaid-container {
-    background: #2d2d2d;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   }
-  
+
   .mermaid .node rect,
   .mermaid .node circle,
   .mermaid .node ellipse,
   .mermaid .node polygon {
-    stroke: #5dade2;
+    stroke: #667eea;
+    fill: #fff !important;
   }
-  
+
   .mermaid .edgePath .path {
-    stroke: #aab7b8;
+    stroke: #667eea;
   }
-  
+
   .mermaid .arrowheadPath {
-    fill: #aab7b8;
+    fill: #667eea;
   }
 }
 
@@ -179,49 +224,49 @@
   font-weight: 500;
 }
 
-/* 暗色模式支持 */
+/* 暗色模式支持 - 保持浅色背景 */
 @media (prefers-color-scheme: dark) {
   .table-comparison {
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .table-comparison thead {
-    background: linear-gradient(135deg, #5a67d8 0%, #805ad5 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
 
   .table-comparison tbody tr {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+    border-bottom-color: rgba(0, 0, 0, 0.05);
   }
 
   .table-comparison tbody td {
-    color: #e2e8f0;
+    color: #333;
   }
 
   .table-comparison tbody td strong {
-    color: #90cdf4;
+    color: #667eea;
   }
 
   .table-comparison tbody td code {
-    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-    color: #f687b3;
-    border-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    color: #e83e8c;
+    border-color: rgba(0, 0, 0, 0.08);
   }
 
   .table-comparison tbody tr:nth-of-type(odd) {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(0, 0, 0, 0.02);
   }
 
   .table-comparison tbody tr:nth-of-type(even) {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(255, 255, 255, 0.5);
   }
 
   .table-comparison tbody tr:hover {
-    background: linear-gradient(90deg, rgba(90, 103, 216, 0.15) 0%, rgba(128, 90, 213, 0.15) 100%);
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
   }
 
   .table-comparison tbody td:first-child {
-    border-left-color: #90cdf4;
+    border-left-color: #667eea;
   }
 }
 
@@ -284,7 +329,33 @@
 
 @media (prefers-color-scheme: dark) {
   .sequence-diagram-container {
-    background: #1e1e1e;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+  
+  /* 暗色模式下仍然保持浅色图表 */
+  .mermaid-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .mermaid-container .mermaid .node rect,
+  .mermaid-container .mermaid .node circle,
+  .mermaid-container .mermaid .node ellipse,
+  .mermaid-container .mermaid .node polygon {
+    fill: #fff !important;
+  }
+  
+  .mermaid-container .mermaid .edgeLabel {
+    background-color: #fff !important;
+    color: #333 !important;
+  }
+  
+  .mermaid-container .mermaid .cluster rect {
+    fill: #f8f9fa !important;
+  }
+  
+  .mermaid-container .mermaid .cluster text {
+    fill: #333 !important;
   }
 }
 
@@ -320,22 +391,22 @@
   background: #fff;
 }
 
+/* 暗色模式下保持浅色背景 */
 @media (prefers-color-scheme: dark) {
   .collapsible-diagram {
-    border-color: #444;
+    border-color: rgba(0, 0, 0, 0.1);
   }
-  
+
   .collapsible-diagram .diagram-header {
-    background: #333;
-    color: #e0e0e0;
+    background: #f8f9fa;
   }
-  
+
   .collapsible-diagram .diagram-header:hover {
-    background: #444;
+    background: #e9ecef;
   }
-  
+
   .collapsible-diagram .diagram-body {
-    background: #2d2d2d;
+    background: #fff;
   }
 }
 
@@ -360,13 +431,13 @@
 
 @media (prefers-color-scheme: dark) {
   .diagram-legend {
-    background: #4a3c0f;
-    border-left-color: #ffd54f;
+    background: #fff3cd;
+    border-left-color: #ffc107;
   }
 
   .diagram-legend h6,
   .diagram-legend p {
-    color: #ffd54f;
+    color: #856404;
   }
 }
 
@@ -413,14 +484,14 @@ section.py-5:not(.bg-gradient):not(.bg-light) {
   background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
-/* 暗色模式下的卡片 */
+/* 暗色模式下的卡片 - 保持浅色背景 */
 @media (prefers-color-scheme: dark) {
   .card {
-    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-color: rgba(0, 0, 0, 0.08);
   }
   
   .card-body {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.95);
   }
 }

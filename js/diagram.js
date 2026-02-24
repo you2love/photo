@@ -7,28 +7,53 @@ document.addEventListener('DOMContentLoaded', function() {
         startOnLoad: true,
         theme: 'base',
         themeVariables: {
+          // 主色调 - 浅色背景
           primaryColor: '#e3f2fd',
           primaryTextColor: '#333',
           primaryBorderColor: '#667eea',
+          
+          // 线条颜色
           lineColor: '#667eea',
+          
+          // 次要颜色 - 浅色
           secondaryColor: '#f3e5f5',
           tertiaryColor: '#fff',
+          
+          // 注释框 - 黄色
           noteBkgColor: '#fff3cd',
           noteTextColor: '#856404',
           noteBorderColor: '#ffc107',
+          
+          // 参与者 - 紫色
           actorBkg: '#667eea',
           actorBorder: '#764ba2',
           actorTextColor: '#fff',
           actorLineColor: '#667eea',
+          
+          // 标签框
           labelBoxBkgColor: '#e3f2fd',
           labelBoxBorderColor: '#667eea',
-          labelTextColor: '#333'
+          labelTextColor: '#333',
+          
+          // 序列图专用
+          messageTextColor: '#333',
+          messageArrowColor: '#667eea',
+          
+          // 激活框
+          activationBkgColor: '#e3f2fd',
+          activationBorderColor: '#667eea',
+          
+          // 序列号
+          sequenceNumberColor: '#333'
         },
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         flowchart: {
           useMaxWidth: true,
           htmlLabels: true,
-          curve: 'basis'
+          curve: 'basis',
+          nodeSpacing: 50,
+          rankSpacing: 50,
+          padding: 15
         },
         sequence: {
           useMaxWidth: true,
@@ -37,10 +62,16 @@ document.addEventListener('DOMContentLoaded', function() {
           noteMargin: 10,
           messageMargin: 35,
           messageAlign: 'center',
-          mirrorActors: false
+          mirrorActors: false,
+          bottomMarginAdj: 1
         },
         class: {
           useMaxWidth: true
+        },
+        pie: {
+          useMaxWidth: true,
+          textPosition: 0.75,
+          useWidth: 800
         }
       });
       console.log('Mermaid 初始化成功');
