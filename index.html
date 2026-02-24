@@ -19,7 +19,6 @@
             <a class="navbar-brand" href="index.html">
                 <i class="material-icons">photo_library</i>
                 图像处理教程
-                <span class="badge bg-warning text-dark ms-2">2026 更新</span>
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
@@ -53,45 +52,54 @@
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="fw-bold text-white">图像处理流程总览</h2>
-                <p class="text-white-50">从传统方法到 AI 驱动的完整流程 <span class="badge bg-warning text-dark">2026</span></p>
+                <p class="text-white-50">从传统方法到 AI 驱动的完整流程</p>
             </div>
 
             <div class="mermaid-container bg-white">
                 <div class="mermaid">
 flowchart LR
-    A[图像获取] --> B[AI 预处理]
-    B --> C[深度特征提取]
-    C --> D[智能分析]
+    A[图像获取] --> B[预处理]
+    B --> C[特征提取]
+    C --> D[图像分析]
     D --> E[后处理]
     E --> F[应用输出]
     
-    subgraph B[AI 预处理阶段]
-        B1[AI 去噪]
-        B2[超分辨率]
-        B3[神经增强]
+    subgraph B[预处理阶段]
+        direction TB
+        B1[几何变换]
+        B2[滤波去噪]
+        B3[图像增强]
+        B4[AI 超分]
     end
     
-    subgraph C[深度特征提取]
-        C1[CNN 特征]
-        C2[Transformer 特征]
-        C3[多模态特征]
+    subgraph C[特征提取]
+        direction TB
+        C1[边缘检测]
+        C2[角点检测]
+        C3[纹理分析]
+        C4[深度特征]
     end
     
-    subgraph D[智能分析]
-        D1[分割 SAM]
-        D2[检测 YOLOv10]
-        D3[生成扩散模型]
+    subgraph D[图像分析]
+        direction TB
+        D1[阈值分割]
+        D2[形态学处理]
+        D3[传统分类]
+        D4[AI 分割检测]
     end
     
     B --> B1
     B --> B2
     B --> B3
+    B --> B4
     C --> C1
     C --> C2
     C --> C3
+    C --> C4
     D --> D1
     D --> D2
     D --> D3
+    D --> D4
                 </div>
             </div>
         </div>
@@ -101,14 +109,14 @@ flowchart LR
     <section class="py-5" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">图像处理基础 <span class="badge bg-warning text-dark">2026 更新</span></h2>
+                <h2 class="fw-bold">图像处理基础</h2>
                 <p class="text-muted">从传统方法到 AI 驱动的图像处理技术</p>
             </div>
 
-            <!-- 2026 年新技术 -->
+            <!-- 新技术趋势 -->
             <div class="card mb-4 border-primary">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="material-icons align-middle">auto_awesome</i> 2026 年新技术趋势</h4>
+                    <h4 class="mb-0"><i class="material-icons align-middle">auto_awesome</i> 新技术趋势</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -134,10 +142,79 @@ flowchart LR
                 </div>
             </div>
 
+            <!-- 传统图像处理方法 -->
+            <div class="card mb-4 border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="material-icons align-middle">history_edu</i> 传统图像处理方法</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-success">crop_rotate</i> 几何变换</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>平移/旋转/缩放</strong> - 基本空间变换</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>仿射变换</strong> - 保持平行线性质的变换</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>透视变换</strong> - 模拟视角变化</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>插值方法</strong> - 最近邻、双线性、双三次</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-success">blur_on</i> 滤波与去噪</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>均值/高斯滤波</strong> - 线性平滑滤波</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>中值滤波</strong> - 非线性去椒盐噪声</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>双边滤波</strong> - 保边去噪</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>维纳滤波</strong> - 最优复原滤波</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-success">edges</i> 边缘检测</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>Sobel/Prewitt</strong> - 一阶微分算子</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>Laplacian/LoG</strong> - 二阶微分算子</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>Canny</strong> - 最优边缘检测算法</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>Hough 变换</strong> - 直线和形状检测</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-success">category</i> 形态学操作</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>腐蚀/膨胀</strong> - 基本形态学操作</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>开/闭运算</strong> - 去噪和填充</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>形态学梯度</strong> - 边缘提取</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>骨架化</strong> - 提取对象中心线</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-success">pie_chart</i> 图像分割</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>阈值分割</strong> - Otsu、自适应阈值</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>区域生长</strong> - 基于相似性合并</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>分水岭算法</strong> - 基于拓扑理论</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>K-means 聚类</strong> - 无监督分割</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="material-icons align-middle text-success">tune</i> 频域处理</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>傅里叶变换</strong> - 时域到频域转换</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>离散余弦变换</strong> - JPEG 压缩基础</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>小波变换</strong> - 多尺度分析</li>
+                                <li><i class="material-icons align-middle text-success">check_circle</i> <strong>频域滤波</strong> - 低通/高通/带通</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 图像类型对比表 -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h4 class="mb-0"><i class="material-icons align-middle">table_chart</i> 图像类型对比 <span class="badge bg-info text-dark">2026</span></h4>
+                    <h4 class="mb-0"><i class="material-icons align-middle">table_chart</i> 图像类型对比</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -188,14 +265,14 @@ flowchart LR
                                     <td>包含空间深度信息</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>神经辐射场 (NeRF)</strong> <span class="badge bg-primary">新</span></td>
+                                    <td><strong>神经辐射场 (NeRF)</strong></td>
                                     <td>隐式表示</td>
                                     <td><span class="badge bg-primary">紧凑</span></td>
                                     <td>VR/AR、3D 内容</td>
                                     <td>高质量新视角合成</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>高斯泼溅 (3DGS)</strong> <span class="badge bg-primary">新</span></td>
+                                    <td><strong>高斯泼溅 (3DGS)</strong></td>
                                     <td>3D 高斯分布</td>
                                     <td><span class="badge bg-success">中等</span></td>
                                     <td>实时 3D 渲染</td>
@@ -463,7 +540,7 @@ pie title 统计特征应用分布
     <section class="py-5" style="background: linear-gradient(180deg, #e9ecef 0%, #dee2e6 100%);">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">图像文件格式 <span class="badge bg-warning text-dark">2026</span></h2>
+                <h2 class="fw-bold">图像文件格式</h2>
                 <p class="text-muted">传统格式与新一代编码标准</p>
             </div>
 
@@ -503,14 +580,14 @@ pie title 统计特征应用分布
                                     <td>现代网页</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>AVIF</strong> <span class="badge bg-primary">新</span></td>
+                                    <td><strong>AVIF</strong></td>
                                     <td><span class="badge bg-primary">AI 增强</span></td>
                                     <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
                                     <td><span class="badge bg-success">极小</span></td>
                                     <td>下一代网页格式</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>JPEG XL</strong> <span class="badge bg-primary">新</span></td>
+                                    <td><strong>JPEG XL</strong></td>
                                     <td><span class="badge bg-info">可逆</span></td>
                                     <td><i class="material-icons text-success" style="font-size: 18px;">check</i></td>
                                     <td><span class="badge bg-success">小</span></td>
@@ -545,11 +622,11 @@ pie title 统计特征应用分布
         </div>
     </section>
 
-    <!-- 2026 年深度学习框架 -->
+    <!-- 深度学习框架 -->
     <section class="py-5" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">深度学习框架 <span class="badge bg-warning text-dark">2026</span></h2>
+                <h2 class="fw-bold">深度学习框架</h2>
                 <p class="text-muted">主流图像处理 AI 框架和模型</p>
             </div>
             
@@ -613,11 +690,11 @@ pie title 统计特征应用分布
         </div>
     </section>
 
-    <!-- 2026 年行业应用 -->
+    <!-- 行业应用 -->
     <section class="py-5 bg-gradient">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="fw-bold text-white">2026 年行业应用</h2>
+                <h2 class="fw-bold text-white">行业应用</h2>
                 <p class="text-white-50">图像处理技术在各行各业的应用</p>
             </div>
             
