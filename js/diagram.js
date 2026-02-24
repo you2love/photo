@@ -5,7 +5,25 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       mermaid.initialize({
         startOnLoad: true,
-        theme: 'default',
+        theme: 'base',
+        themeVariables: {
+          primaryColor: '#e3f2fd',
+          primaryTextColor: '#333',
+          primaryBorderColor: '#667eea',
+          lineColor: '#667eea',
+          secondaryColor: '#f3e5f5',
+          tertiaryColor: '#fff',
+          noteBkgColor: '#fff3cd',
+          noteTextColor: '#856404',
+          noteBorderColor: '#ffc107',
+          actorBkg: '#667eea',
+          actorBorder: '#764ba2',
+          actorTextColor: '#fff',
+          actorLineColor: '#667eea',
+          labelBoxBkgColor: '#e3f2fd',
+          labelBoxBorderColor: '#667eea',
+          labelTextColor: '#333'
+        },
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         flowchart: {
           useMaxWidth: true,
@@ -18,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
           boxTextMargin: 5,
           noteMargin: 10,
           messageMargin: 35,
-          messageAlign: 'center'
+          messageAlign: 'center',
+          mirrorActors: false
         },
         class: {
           useMaxWidth: true
