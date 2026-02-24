@@ -16,34 +16,66 @@
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="../../index.html">
+            <a class="navbar-brand" href="index.html">
                 <i class="material-icons">photo_library</i>
                 图像处理教程
             </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../../index.html">首页</a>
+                        <a class="nav-link" href="index.html"><i class="material-icons align-middle" style="font-size: 16px;">home</i> 主页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../algorithms.html">常见算法</a>
+                        <a class="nav-link" href="algorithms.html"><i class="material-icons align-middle" style="font-size: 16px;">menu_book</i> 常见算法</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="algorithmsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            算法详解
+                            <i class="material-icons align-middle" style="font-size: 16px;">psychology</i> 算法详解
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="../../algorithms_detail.html">算法详解首页</a></li>
+                            <li><a class="dropdown-item" href="algorithms_detail.html"><i class="material-icons align-middle" style="font-size: 14px;">article</i> 算法详解首页</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="../../algorithms/edge/canny.html">Canny边缘检测</a></li>
-                            <li><a class="dropdown-item active" href="../../algorithms/morphology/dilation.html">膨胀</a></li>
+                            <li><h6 class="dropdown-header">几何变换</h6></li>
+                            <li><a class="dropdown-item" href="algorithms/geometric/translation.html">平移变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/geometric/rotation.html">旋转变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/geometric/scaling.html">缩放变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/geometric/affine.html">仿射变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/geometric/perspective.html">透视变换</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">滤波算法</h6></li>
+                            <li><a class="dropdown-item" href="algorithms/filtering/mean_filter.html">均值滤波</a></li>
+                            <li><a class="dropdown-item" href="algorithms/filtering/gaussian_filter.html">高斯滤波</a></li>
+                            <li><a class="dropdown-item" href="algorithms/filtering/median_filter.html">中值滤波</a></li>
+                            <li><a class="dropdown-item" href="algorithms/filtering/bilateral_filter.html">双边滤波</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">边缘检测</h6></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/sobel.html">Sobel 算子</a></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/canny.html">Canny 边缘检测</a></li>
+                            <li><a class="dropdown-item" href="algorithms/edge/laplacian.html">Laplacian 算子</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">直线检测</h6></li>
+                            <li><a class="dropdown-item" href="algorithms/line_detection/hough_transform.html">Hough 变换</a></li>
+                            <li><a class="dropdown-item" href="algorithms/line_detection/probabilistic_hough.html">概率 Hough</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">形态学操作</h6></li>
+                            <li><a class="dropdown-item" href="algorithms/morphology/erosion.html">腐蚀</a></li>
+                            <li><a class="dropdown-item" href="algorithms/morphology/dilation.html">膨胀</a></li>
+                            <li><a class="dropdown-item" href="algorithms/morphology/opening.html">开运算</a></li>
+                            <li><a class="dropdown-item" href="algorithms/morphology/closing.html">闭运算</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">二值化算法</h6></li>
+                            <li><a class="dropdown-item" href="algorithms/thresholding/otsu.html">Otsu 算法</a></li>
+                            <li><a class="dropdown-item" href="algorithms/thresholding/sauvola.html">Sauvola 算法</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../python-examples.html">Python示例</a>
+                        <a class="nav-link" href="python-examples.html"><i class="material-icons align-middle" style="font-size: 16px;">code</i> Python 示例</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../golang-examples.html">Golang示例</a>
+                        <a class="nav-link" href="golang-examples.html"><i class="material-icons align-middle" style="font-size: 16px;">code</i> Golang 示例</a>
                     </li>
                 </ul>
             </div>
