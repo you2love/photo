@@ -369,43 +369,16 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-flowchart TD
-    A[输入图像] --> B[滑动窗口遍历]
-    B --> C[收集窗口内像素值]
-    C --> D[排序像素值]
-    D --> E[取中值]
-    E --> F[替换中心像素]
-    F --> G{遍历完成？}
-    G -->|否 | B
-    G -->|是 | H[输出滤波图像]
-    
-    style A fill:#e3f2fd
-    style H fill:#c8e6c9
-    style D fill:#fff3e0
-```
-
+<div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[排序像素]
+    B --> C[取中值]
+    C --> D[替换像素]
+    D --> E[输出去噪图像]
+</div>
                         </div>
 
-                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
-                        <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-sequenceDiagram
-    participant Input as 输入图像
-    participant Window as 滑动窗口
-    participant Sort as 排序
-    participant Median as 中值选择
-    participant Output as 输出
-    
-    Input->>Window: 逐像素滑动
-    Window->>Sort: 收集像素值
-    Sort->>Sort: 升序排列
-    Sort->>Median: 取中间值
-    Median->>Output: 替换原像素
-    Output->>Output: 生成滤波图像
-```
+                        
 
                         </div>
                     </div>
@@ -445,7 +418,7 @@ sequenceDiagram
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 非线性滤波</li>
                                 <li><strong>适用:</strong> 去除脉冲噪声</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²×log(k²))，其中k是滤波器大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2×log(k2))，其中k是滤波器大小</li>
                                 <li><strong>参数:</strong> 滤波器大小</li>
                             </ul>
                         </div>
@@ -472,6 +445,23 @@ sequenceDiagram
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

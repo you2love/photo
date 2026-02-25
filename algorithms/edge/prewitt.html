@@ -136,8 +136,8 @@
                     <p>[+1  +1  +1]</p>
                     
                     <p>边缘强度和方向的计算公式为：</p>
-                    <p>Gradient Magnitude: G = |Gx| + |Gy| （或 G = √(Gx² + Gy²)）</p>
-                    <p>Edge Direction: θ = arctan(Gy / Gx)</p>
+                    <p>Gradient Magnitude: G = |Gx| + |Gy| （或 G = sqrt(Gx2 + Gy2)）</p>
+                    <p>Edge Direction: theta = arctan(Gy / Gx)</p>
 
                     <h3>算法步骤</h3>
                     <ol>
@@ -387,22 +387,29 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[输入] --> B[Prewitt X]
+    A --> C[Prewitt Y]
+    B --> D[Gx]
+    C --> E[Gy]
+    D --> F[合并]
+    E --> F
+    F --> G[输出]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[输入图像] --> B[灰度转换]
-    B --> C[应用 Prewitt X 核]
-    B --> D[应用 Prewitt Y 核]
-    C --> E[Gx 梯度]
-    D --> F[Gy 梯度]
-    E --> G[合并梯度]
-    F --> G
-    G --> H[阈值处理]
-    H --> I[输出边缘]
-    
-    style A fill:#e3f2fd
-    style I fill:#c8e6c9
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入图像] --> B[Prewitt X 卷积]
+    A --> C[Prewitt Y 卷积]
+    B --> D[Gx 梯度]
+    C --> E[Gy 梯度]
+    D --> F[合并梯度]
+    E --> F
+    F --> G[输出边缘图]</div>
 
                         </div>
 
@@ -469,7 +476,7 @@ flowchart TD
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 边缘检测</li>
                                 <li><strong>适用:</strong> 梯度计算和边缘检测</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2)，其中M和N是图像尺寸，k是核大小</li>
                                 <li><strong>参数:</strong> 核大小</li>
                             </ul>
                         </div>
@@ -496,6 +503,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

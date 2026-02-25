@@ -122,20 +122,20 @@
                     <p class="lead">Radon变换是一种积分变换，将图像中的点映射到参数空间中的正弦曲线，常用于检测图像中的直线和其他几何结构。</p>
 
                     <h2>算法原理</h2>
-                    <p>Radon变换是以奥地利数学家Johann Radon命名的积分变换，定义为沿直线对函数的积分。在图像处理中，Radon变换将图像f(x,y)变换为R(ρ,θ)，其中ρ是直线到原点的距离，θ是直线的法向量角度。</p>
+                    <p>Radon变换是以奥地利数学家Johann Radon命名的积分变换，定义为沿直线对函数的积分。在图像处理中，Radon变换将图像f(x,y)变换为R(ρ,theta)，其中ρ是直线到原点的距离，theta是直线的法向量角度。</p>
                     
                     <p>数学定义：</p>
-                    <p>R(ρ, θ) = ∫∫ f(x, y) δ(ρ - x cos θ - y sin θ) dx dy</p>
+                    <p>R(ρ, theta) = ∫∫ f(x, y) δ(ρ - x cos theta - y sin theta) dx dy</p>
                     
-                    <p>其中δ是狄拉克δ函数。这意味着Radon变换计算的是图像沿特定角度θ的直线上的积分值。</p>
+                    <p>其中δ是狄拉克δ函数。这意味着Radon变换计算的是图像沿特定角度theta的直线上的积分值。</p>
                     
-                    <p>在离散情况下，Radon变换通过计算图像中沿不同角度的线段的像素值之和来实现。对于每个角度θ，计算所有满足ρ = x cos θ + y sin θ的像素点的累积值。</p>
+                    <p>在离散情况下，Radon变换通过计算图像中沿不同角度的线段的像素值之和来实现。对于每个角度theta，计算所有满足ρ = x cos theta + y sin theta的像素点的累积值。</p>
 
                     <h3>算法步骤</h3>
                     <ol>
                         <li>定义角度范围（通常为0°到180°）和距离范围</li>
-                        <li>对于每个角度θ，计算图像中所有可能的ρ值</li>
-                        <li>对每条直线（ρ, θ）计算沿该直线的像素值积分</li>
+                        <li>对于每个角度theta，计算图像中所有可能的ρ值</li>
+                        <li>对每条直线（ρ, theta）计算沿该直线的像素值积分</li>
                         <li>将结果存储在Radon域中</li>
                         <li>在Radon域中寻找峰值，对应原图像中的直线</li>
                     </ol>
@@ -189,8 +189,8 @@ def radon_transform(image_path, angles=None):
         for rho_idx in range(-diagonal, diagonal):
             rho = rho_idx
             # 计算直线上的点
-            # 直线方程: x*cos(θ) + y*sin(θ) = ρ
-            # 因此 x = (ρ - y*sin(θ)) / cos(θ) 或 y = (ρ - x*cos(θ)) / sin(θ)
+            # 直线方程: x*cos(theta) + y*sin(theta) = ρ
+            # 因此 x = (ρ - y*sin(theta)) / cos(theta) 或 y = (ρ - x*cos(theta)) / sin(theta)
             
             # 计算沿直线的积分
             integral = 0
@@ -243,21 +243,21 @@ def discrete_radon_transform(image_path, num_angles=180):
         
         # 计算每个ρ值的积分
         for rho in range(-radius, radius):
-            # 计算直线 x*cos(θ) + y*sin(θ) = ρ 上的点
+            # 计算直线 x*cos(theta) + y*sin(theta) = ρ 上的点
             # 使用参数化形式
             x_vals = []
             y_vals = []
             
             # 计算直线与图像边界的交点
             if np.sin(theta) != 0:
-                # y = (ρ - x*cos(θ)) / sin(θ)
+                # y = (ρ - x*cos(theta)) / sin(theta)
                 for x in range(size):
                     y = int((rho - (x - center) * np.cos(theta)) / np.sin(theta) + center)
                     if 0 <= y < size:
                         x_vals.append(x)
                         y_vals.append(y)
             else:
-                # 垂直线: x = ρ/cos(θ)
+                # 垂直线: x = ρ/cos(theta)
                 x = int(rho / np.cos(theta) + center)
                 if 0 <= x < size:
                     for y in range(size):

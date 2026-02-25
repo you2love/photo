@@ -424,25 +424,24 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[边缘] --> B[采样]
+    B --> C[Hough]
+    C --> D[线段]
+    D --> E[输出]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[输入边缘图] --> B[随机采样边缘点]
-    B --> C[应用 Hough 变换]
-    C --> D[检测直线段]
-    D --> E{满足长度阈值？}
-    E -->|是 | F[保留线段]
-    E -->|否 | G[丢弃]
-    F --> H{满足间隙阈值？}
-    G --> I{继续采样？}
-    H -->|是 | F
-    H -->|否 | I
-    I -->|是 | B
-    I -->|否 | J[输出线段集合]
-    
-    style A fill:#e3f2fd
-    style J fill:#c8e6c9
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入边缘图] --> B[随机采样]
+    B --> C[Hough 变换]
+    C --> D[检测线段]
+    D --> E[长度过滤]
+    E --> F[输出线段]</div>
 
                         </div>
 
@@ -526,6 +525,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

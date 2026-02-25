@@ -266,24 +266,22 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[输入] --> B[缩放因子]
+    B --> C[插值]
+    C --> D[输出]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[原始图像] --> B[确定缩放因子<br/>sx, sy]
-    B --> C[计算新尺寸]
-    C --> D[选择插值方法]
-    D --> E{插值类型}
-    E -->|最近邻 | F[直接映射]
-    E -->|双线性 | G[4 邻域插值]
-    E -->|双三次 | H[16 邻域插值]
-    F --> I[输出缩放图像]
-    G --> I
-    H --> I
-    
-    style A fill:#e3f2fd
-    style I fill:#c8e6c9
-    style D fill:#fff3e0
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入图像] --> B[确定缩放因子]
+    B --> C[选择插值方法]
+    C --> D[应用缩放]
+    D --> E[输出缩放图像]</div>
 
                         </div>
 
@@ -366,6 +364,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

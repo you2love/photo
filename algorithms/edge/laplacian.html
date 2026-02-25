@@ -125,7 +125,7 @@
                     <h2>算法原理</h2>
                     <p>Laplacian算子是一个二阶微分算子，用于检测图像中的边缘。它通过对图像进行二阶微分来突出图像中的快速变化区域（如边缘）。Laplacian算子的数学表达式为：</p>
                     
-                    <p>∇²f = ∂²f/∂x² + ∂²f/∂y²</p>
+                    <p>∇2f = ∂2f/∂x2 + ∂2f/∂y2</p>
                     
                     <p>在离散图像中，Laplacian算子通常用以下3×3核表示：</p>
                     
@@ -375,20 +375,24 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[输入] --> B[灰度]
+    B --> C[Laplacian 核]
+    C --> D[二阶导数]
+    D --> E[输出边缘]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[输入图像] --> B[转换为灰度图]
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入图像] --> B[灰度转换]
     B --> C[应用 Laplacian 核]
     C --> D[计算二阶导数]
-    D --> E{过零点检测}
-    E --> F[标记边缘点]
-    F --> G[输出边缘图]
-    
-    style A fill:#e3f2fd
-    style G fill:#c8e6c9
-    style C fill:#fff3e0
-```
+    D --> E[过零点检测]
+    E --> F[输出边缘图]</div>
 
                         </div>
 
@@ -455,7 +459,7 @@ flowchart TD
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 边缘检测</li>
                                 <li><strong>适用:</strong> 二阶导数边缘检测</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2)，其中M和N是图像尺寸，k是核大小</li>
                                 <li><strong>参数:</strong> 核大小</li>
                             </ul>
                         </div>
@@ -482,6 +486,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

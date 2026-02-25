@@ -11,6 +11,23 @@
     <link href="../../libs/bootstrap.min.css" rel="stylesheet">
     <link href="../../libs/prism.css" rel="stylesheet">
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
 </head>
 <body>
     <!-- 导航栏 -->
@@ -149,23 +166,13 @@
                             <h4 class="mb-0"><i class="material-icons align-middle">flowchart</i> 算法流程</h4>
                         </div>
                         <div class="card-body">
-                            <div class="mermaid">
-flowchart TD
-    A[输入灰度图像] --> B[高斯滤波去噪]
-    B --> C[计算梯度幅值和方向]
+                            <div class="mermaid">flowchart LR
+    A[输入图像] --> B[高斯滤波]
+    B --> C[计算梯度]
     C --> D[非极大值抑制]
     D --> E[双阈值检测]
-    E --> F{弱边缘处理}
-    F -->|有强边缘邻接 | G[保留为强边缘]
-    F -->|无强边缘邻接 | H[抑制]
-    G --> I[输出边缘图像]
-    H --> I
-    
-    style A fill:#e3f2fd
-    style I fill:#e8f5e9
-    style E fill:#fff3e0
-    style F fill:#fff3e0
-                            </div>
+    E --> F[边缘连接]
+    F --> G[输出边缘图]</div>
                         </div>
                     </div>
 
@@ -217,16 +224,16 @@ sequenceDiagram
     participant Output as 输出
 
     Input->>Gaussian: 5×5 高斯核卷积
-    Note over Gaussian: 去除噪声<br/>σ通常取 1.4
+    Note over Gaussian: 去除噪声#96;σ通常取 1.4
     Gaussian->>Gradient: Sobel 算子
-    Note over Gradient: 计算 Gx, Gy<br/>G=√(Gx²+Gy²)<br/>θ=arctan(Gy/Gx)
+    Note over Gradient: 计算 Gx, Gy#96;G=sqrt(Gx2+Gy2)#96;theta=arctan(Gy/Gx)
     Gradient->>NMS: 梯度幅值+方向
-    Note over NMS: 保留梯度方向<br/>上的局部最大值
+    Note over NMS: 保留梯度方向#96;上的局部最大值
     NMS->>Double: 细化边缘
-    Note over Double: TL=低阈值<br/>TH=高阈值
+    Note over Double: TL=低阈值#96;TH=高阈值
     Double->>Edge: 强/弱边缘分类
     Edge->>Output: 滞后阈值处理
-    Note over Output: 弱边缘连接<br/>到强边缘则保留
+    Note over Output: 弱边缘连接#96;到强边缘则保留
                             </div>
                         </div>
                     </div>
@@ -249,7 +256,7 @@ flowchart LR
     C --> D[平滑图像]
     
     subgraph 高斯核公式
-        E["G(x,y) = (1/2πσ²)·e^(-(x²+y²)/2σ²)"]
+        E["G(x,y) = (1/2πσ2)·e^(-(x2+y2)/2σ2)"]
     end
                                     </div>
                                 </div>
@@ -286,8 +293,8 @@ flowchart LR
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <p><strong>梯度幅值:</strong> G = √(Gx² + Gy²)</p>
-                                    <p><strong>梯度方向:</strong> θ = arctan(Gy/Gx)</p>
+                                    <p><strong>梯度幅值:</strong> G = sqrt(Gx2 + Gy2)</p>
+                                    <p><strong>梯度方向:</strong> theta = arctan(Gy/Gx)</p>
                                 </div>
                             </div>
                         </div>
@@ -370,50 +377,18 @@ flowchart LR
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-flowchart TD
-    A[输入图像] --> B[高斯滤波去噪]
-    B --> C[计算梯度幅值和方向]
+<div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[高斯滤波]
+    B --> C[计算梯度]
     C --> D[非极大值抑制]
-    D --> E[双阈值检测]
-    E --> F{梯度强度 > 高阈值？}
-    F -->|是 | G[标记为强边缘]
-    F -->|否 | H{梯度强度 > 低阈值？}
-    H -->|是 | I[标记为弱边缘]
-    H -->|否 | J[抑制]
-    G --> K[边缘连接]
-    I --> K
-    K --> L[输出最终边缘图]
-    
-    style A fill:#e3f2fd
-    style L fill:#c8e6c9
-    style D fill:#fff3e0
-    style E fill:#fff3e0
-```
-
+    D --> E[双阈值]
+    E --> F[边缘连接]
+    F --> G[输出边缘图]
+</div>
                         </div>
 
-                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
-                        <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-sequenceDiagram
-    participant Input as 输入图像
-    participant Gaussian as 高斯滤波
-    participant Gradient as 梯度计算
-    participant NMS as 非极大值抑制
-    participant Threshold as 双阈值
-    participant Output as 输出
-    
-    Input->>Gaussian: 原始像素
-    Gaussian->>Gradient: 平滑后图像
-    Gradient->>NMS: 梯度幅值/方向
-    NMS->>Threshold: 细化后梯度
-    Threshold->>Threshold: 应用高低阈值
-    Threshold->>Output: 连接边缘
-    Output->>Output: 最终二值边缘图
-```
+                        
 
                         </div>
 

@@ -135,7 +135,7 @@
                     </ul>
                     
                     <p>在实际应用中，通常使用近似形式：</p>
-                    <p>H(u,v) = [1/H(u,v)] × [|H(u,v)|² / (|H(u,v)|² + K)]</p>
+                    <p>H(u,v) = [1/H(u,v)] × [|H(u,v)|2 / (|H(u,v)|2 + K)]</p>
                     
                     <p>其中K是信噪比参数。</p>
 
@@ -393,24 +393,23 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[含噪] --> B[统计]
+    B --> C[权重]
+    C --> D[维纳]
+    D --> E[输出]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[含噪图像] --> B[估计局部统计量]
-    B --> C[计算局部均值μ]
-    B --> D[计算局部方差σ²]
-    C --> E[估计噪声方差 v²]
-    D --> E
-    E --> F[计算自适应权重]
-    F --> G[应用维纳公式]
-    G --> H[输出复原图像]
-    
-    formula["维纳滤波公式：<br/>f(x,y) = μ + (σ²-v²)/σ² × (g(x,y)-μ)"]
-    
-    style A fill:#ffebee
-    style H fill:#c8e6c9
-    style G fill:#fff3e0
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[含噪图像] --> B[估计局部统计]
+    B --> C[计算自适应权重]
+    C --> D[应用维纳公式]
+    D --> E[输出复原图像]</div>
 
                         </div>
                     </div>
@@ -477,6 +476,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

@@ -135,9 +135,9 @@
                     <p>μ₀(T) = (Σᵢ₌₀ᵀ⁻¹ i × pᵢ) / ω₀(T) (背景平均灰度)</p>
                     <p>μ₁(T) = (Σᵢ₌ᵀᴸ⁻¹ i × pᵢ) / ω₁(T) (前景平均灰度)</p>
                     
-                    <p>类间方差 σ²ᵦ(T) = ω₀(T) × ω₁(T) × [μ₀(T) - μ₁(T)]²</p>
+                    <p>类间方差 σ2ᵦ(T) = ω₀(T) × ω₁(T) × [μ₀(T) - μ₁(T)]2</p>
                     
-                    <p>最优阈值T*是使σ²ᵦ(T)最大的T值。</p>
+                    <p>最优阈值T*是使σ2ᵦ(T)最大的T值。</p>
 
                     <h3>算法步骤</h3>
                     <ol>
@@ -419,50 +419,17 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-flowchart TD
-    A[输入灰度图像] --> B[计算直方图]
-    B --> C[初始化类间方差]
-    C --> D[遍历所有可能阈值 t]
-    D --> E[分割前景/背景]
-    E --> F[计算类间方差]
-    F --> G{方差最大？}
-    G -->|是 | H[记录最优阈值]
-    G -->|否 | I{t<255?}
-    H --> I
-    I -->|是 | D
-    I -->|否 | J[应用最优阈值]
-    J --> K[输出二值图像]
-    
-    style A fill:#e3f2fd
-    style K fill:#c8e6c9
-    style F fill:#fff3e0
-```
-
+<div class="mermaid">
+flowchart LR
+    A[灰度图] --> B[直方图]
+    B --> C[遍历阈值]
+    C --> D[类间方差]
+    D --> E[最优阈值]
+    E --> F[二值图]
+</div>
                         </div>
 
-                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
-                        <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-sequenceDiagram
-    participant Image as 输入图像
-    participant Histogram as 直方图
-    participant Threshold as 阈值遍历
-    participant Variance as 方差计算
-    participant Result as 二值结果
-    
-    Image->>Histogram: 统计灰度分布
-    Histogram->>Threshold: 遍历 t=0 to 255
-    loop 每个阈值 t
-        Threshold->>Variance: 分割前景背景
-        Variance->>Variance: 计算类间方差
-        Variance->>Threshold: 更新最大方差
-    end
-    Threshold->>Result: 应用最优阈值
-    Result->>Result: 输出二值图像
-```
+                        
 
                         </div>
                     </div>
@@ -531,6 +498,23 @@ sequenceDiagram
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

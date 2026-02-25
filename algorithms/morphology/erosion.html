@@ -382,23 +382,27 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[二值图] --> B[结构元素]
+    B --> C{全为 1?}
+    C -->|是 | D[保持 1]
+    C -->|否 | E[置 0]
+    D --> F[输出]
+    E --> F
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[输入二值图像] --> B[选择结构元素]
-    B --> C[滑动结构元素]
-    C --> D{结构元素内<br/>所有像素为 1？}
-    D -->|是 | E[中心像素保持 1]
-    D -->|否 | F[中心像素置 0]
-    E --> G[输出像素]
-    F --> G
-    G --> H{遍历完成？}
-    H -->|否 | C
-    H -->|是 | I[输出腐蚀图像]
-    
-    style A fill:#e3f2fd
-    style I fill:#c8e6c9
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入二值图] --> B[结构元素滑动]
+    B --> C{全为 1？}
+    C -->|是 | D[保持 1]
+    C -->|否 | E[置为 0]
+    D --> F[输出腐蚀图]
+    E --> F</div>
 
                         </div>
                     </div>
@@ -439,7 +443,7 @@ flowchart TD
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 形态学操作</li>
                                 <li><strong>适用:</strong> 二值图像、灰度图像</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2)，其中M和N是图像尺寸，k是核大小</li>
                                 <li><strong>参数:</strong> 结构元素形状、大小、迭代次数</li>
                             </ul>
                         </div>
@@ -466,6 +470,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

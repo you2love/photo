@@ -136,8 +136,8 @@
                     <p>[+1  +2  +1]</p>
                     
                     <p>边缘强度和方向的计算公式为：</p>
-                    <p>Gradient Magnitude: G = √(Gx² + Gy²)</p>
-                    <p>Edge Direction: θ = arctan(Gy / Gx)</p>
+                    <p>Gradient Magnitude: G = sqrt(Gx2 + Gy2)</p>
+                    <p>Edge Direction: theta = arctan(Gy / Gx)</p>
 
                     <h3>算法步骤</h3>
                     <ol>
@@ -367,49 +367,20 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-flowchart TD
-    A[输入彩色图像] --> B[转换为灰度图]
-    B --> C[应用 Sobel X 核]
-    B --> D[应用 Sobel Y 核]
-    C --> E[Gx 梯度图]
-    D --> F[Gy 梯度图]
-    E --> G[计算梯度幅值<br/>G = √(Gx² + Gy²)]
+<div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[灰度转换]
+    B --> C[Sobel X 卷积]
+    B --> D[Sobel Y 卷积]
+    C --> E[Gx 梯度]
+    D --> F[Gy 梯度]
+    E --> G[计算幅值]
     F --> G
-    G --> H[计算梯度方向<br/>θ = arctan(Gy/Gx)]
-    H --> I[阈值处理]
-    I --> J[输出边缘图]
-    
-    style A fill:#e3f2fd
-    style J fill:#c8e6c9
-    style G fill:#fff3e0
-```
-
+    G --> H[输出边缘图]
+</div>
                         </div>
 
-                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
-                        <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-sequenceDiagram
-    participant User as 用户
-    participant System as 系统
-    participant Image as 图像数据
-    participant SobelX as Sobel X 核
-    participant SobelY as Sobel Y 核
-    participant Result as 结果
-    
-    User->>System: 输入图像
-    System->>Image: 读取并转灰度
-    Image->>SobelX: 卷积计算 Gx
-    Image->>SobelY: 卷积计算 Gy
-    SobelX->>Result: 水平梯度
-    SobelY->>Result: 垂直梯度
-    Result->>Result: 计算幅值和方向
-    Result->>System: 应用阈值
-    System->>User: 输出边缘图
-```
+                        
 
                         </div>
 
@@ -465,7 +436,7 @@ sequenceDiagram
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 边缘检测</li>
                                 <li><strong>适用:</strong> 梯度计算和边缘检测</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2)，其中M和N是图像尺寸，k是核大小</li>
                                 <li><strong>参数:</strong> 核大小</li>
                             </ul>
                         </div>
@@ -492,6 +463,23 @@ sequenceDiagram
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

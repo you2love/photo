@@ -338,24 +338,24 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[输入] --> B[空间权重]
+    B --> C[灰度权重]
+    C --> D[组合]
+    D --> E[输出]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[输入图像] --> B[对每个像素]
-    B --> C[计算空间距离权重]
-    B --> D[计算灰度差异权重]
-    C --> E[组合权重]
-    D --> E
-    E --> F[加权平均]
-    F --> G[输出像素]
-    G --> H{处理完成？}
-    H -->|否 | B
-    H -->|是 | I[输出保边平滑图像]
-    
-    style A fill:#e3f2fd
-    style I fill:#c8e6c9
-    style E fill:#fff3e0
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入图像] --> B[计算空间权重]
+    B --> C[计算灰度权重]
+    C --> D[组合权重]
+    D --> E[加权平均]
+    E --> F[输出保边平滑图像]</div>
 
                         </div>
 
@@ -411,7 +411,7 @@ flowchart TD
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 非线性滤波</li>
                                 <li><strong>适用:</strong> 边缘保持平滑</li>
-                                <li><strong>复杂度:</strong> O(M×N×d²)，其中M和N是图像尺寸，d是滤波器大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×d2)，其中M和N是图像尺寸，d是滤波器大小</li>
                                 <li><strong>参数:</strong> 邻域直径、颜色空间标准差、坐标空间标准差</li>
                             </ul>
                         </div>
@@ -438,6 +438,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

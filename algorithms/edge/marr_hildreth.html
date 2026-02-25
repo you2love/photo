@@ -133,7 +133,7 @@
                     <p>该算法的核心思想是在不同尺度下检测边缘，通过寻找拉普拉斯算子的零交叉点来确定边缘位置。</p>
                     
                     <p>LoG（Laplacian of Gaussian）函数的数学表达式为：</p>
-                    <p>LoG(x, y) = [x² + y² - 2σ²] / [σ⁴] × e^[-(x² + y²)/(2σ²)]</p>
+                    <p>LoG(x, y) = [x2 + y2 - 2σ2] / [σ⁴] × e^[-(x2 + y2)/(2σ2)]</p>
 
                     <h3>算法步骤</h3>
                     <ol>
@@ -372,42 +372,16 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-flowchart TD
-    A[输入图像] --> B[高斯平滑]
-    B --> C[应用 LoG 滤波器]
-    C --> D[计算二阶导数]
-    D --> E[检测过零点]
-    E --> F[标记边缘]
-    F --> G[输出边缘图]
-    
-    style A fill:#e3f2fd
-    style G fill:#c8e6c9
-    style C fill:#fff3e0
-```
-
+<div class="mermaid">
+flowchart LR
+    A[输入] --> B[高斯]
+    B --> C[LoG]
+    C --> D[过零点]
+    D --> E[输出]
+</div>
                         </div>
 
-                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
-                        <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-sequenceDiagram
-    participant Input as 输入图像
-    participant Gaussian as 高斯函数
-    participant LoG as LoG 滤波器
-    participant ZeroCross as 过零点检测
-    participant Edge as 边缘图
-    
-    Input->>Gaussian: 原始图像
-    Gaussian->>LoG: 平滑后图像
-    LoG->>LoG: 卷积运算
-    LoG->>ZeroCross: 二阶导数图
-    ZeroCross->>ZeroCross: 查找过零点
-    ZeroCross->>Edge: 标记边缘位置
-    Edge->>Edge: 输出二值边缘
-```
+                        
 
                         </div>
                     </div>
@@ -448,7 +422,7 @@ sequenceDiagram
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 边缘检测</li>
                                 <li><strong>适用:</strong> 多尺度边缘检测</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是核大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2)，其中M和N是图像尺寸，k是核大小</li>
                                 <li><strong>参数:</strong> 高斯核标准差σ、核大小</li>
                             </ul>
                         </div>
@@ -475,6 +449,23 @@ sequenceDiagram
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

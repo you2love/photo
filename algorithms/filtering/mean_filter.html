@@ -301,20 +301,26 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[滑动窗口]
+    B --> C[计算平均值]
+    C --> D[替换像素]
+    D --> E[输出平滑图像]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[输入图像] --> B[选择滤波核大小]
-    B --> C[滑动窗口遍历图像]
-    C --> D[计算窗口内像素平均值]
-    D --> E[替换中心像素]
-    E --> F{是否遍历完成？}
-    F -->|否 | C
-    F -->|是 | G[输出平滑图像]
-    
-    style A fill:#e3f2fd
-    style G fill:#c8e6c9
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入图像] --> B[选择窗口]
+    B --> C[计算平均值]
+    C --> D[替换中心像素]
+    D --> E[滑动窗口]
+    E --> F{完成？}
+    F -->|否 | B
+    F -->|是 | G[输出平滑图像]</div>
 
                         </div>
 
@@ -370,7 +376,7 @@ flowchart TD
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 线性滤波</li>
                                 <li><strong>适用:</strong> 去除高斯噪声</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²)，其中M和N是图像尺寸，k是滤波器大小</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2)，其中M和N是图像尺寸，k是滤波器大小</li>
                                 <li><strong>参数:</strong> 滤波器大小</li>
                             </ul>
                         </div>
@@ -397,6 +403,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

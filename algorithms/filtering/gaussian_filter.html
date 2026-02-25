@@ -126,7 +126,7 @@
                     <p>高斯滤波基于高斯函数（正态分布）构建滤波器核，对图像进行卷积操作。与均值滤波不同，高斯滤波给距离中心点较近的像素分配更高的权重，从而在平滑图像的同时更好地保持边缘信息。</p>
                     
                     <p>二维高斯函数定义为：</p>
-                    <p>G(x, y) = (1 / (2πσ²)) × e^(-(x²+y²)/(2σ²))</p>
+                    <p>G(x, y) = (1 / (2πσ2)) × e^(-(x2+y2)/(2σ2))</p>
                     
                     <p>其中σ是标准差，控制高斯函数的宽度。离散化的高斯核可以通过采样这个函数并归一化得到。</p>
 
@@ -321,23 +321,21 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[高斯核]
+    B --> C[加权卷积]
+    C --> D[输出平滑图像]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
     A[输入图像] --> B[生成高斯核]
-    B --> C[计算高斯权重]
-    C --> D[加权平均卷积]
-    D --> E[输出平滑图像]
-    
-    subgraph 高斯核生成
-    B --> B1[确定σ值]
-    B1 --> B2[计算权重矩阵]
-    end
-    
-    style A fill:#e3f2fd
-    style E fill:#c8e6c9
-    style B fill:#fff3e0
-```
+    B --> C[加权卷积]
+    C --> D[输出平滑图像]</div>
 
                         </div>
 
@@ -393,7 +391,7 @@ flowchart TD
                             <ul class="list-unstyled">
                                 <li><strong>类型:</strong> 线性滤波</li>
                                 <li><strong>适用:</strong> 去除高斯噪声</li>
-                                <li><strong>复杂度:</strong> O(M×N×k²) 或 O(M×N×k)（可分离）</li>
+                                <li><strong>复杂度:</strong> O(M×N×k2) 或 O(M×N×k)（可分离）</li>
                                 <li><strong>参数:</strong> 滤波器大小、标准差σ</li>
                             </ul>
                         </div>
@@ -420,6 +418,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

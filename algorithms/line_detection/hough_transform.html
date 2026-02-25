@@ -11,6 +11,23 @@
     <link href="../../libs/bootstrap.min.css" rel="stylesheet">
     <link href="../../libs/prism.css" rel="stylesheet">
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
 </head>
 <body>
     <!-- 导航栏 -->
@@ -149,44 +166,13 @@
                             <h4 class="mb-0"><i class="material-icons align-middle">lightbulb</i> 核心原理：点 - 线对偶性</h4>
                         </div>
                         <div class="card-body">
-                            <div class="mermaid">
-flowchart LR
-    subgraph 图像空间
-        A[点 x,y]
-    end
-    
-    subgraph 参数空间
-        B[正弦曲线 ρ=x·cosθ+y·sinθ]
-    end
-    
-    subgraph 图像空间
-        C[共线的多点]
-    end
-    
-    subgraph 参数空间
-        D[相交的正弦曲线]
-    end
-    
-    subgraph 参数空间
-        E[交点 ρ₀,θ₀]
-    end
-    
-    subgraph 图像空间
-        F[直线 ρ₀=x·cosθ₀+y·sinθ₀]
-    end
-    
-    A --> B
-    C --> D
-    D --> E
-    E --> F
-    
-    style A fill:#e3f2fd
-    style C fill:#e3f2fd
-    style F fill:#e8f5e9
-    style B fill:#fff3e0
-    style D fill:#fff3e0
-    style E fill:#ffe082
-                            </div>
+                            <div class="mermaid">flowchart LR
+    A[输入边缘图] --> B[初始化累加器]
+    B --> C[遍历边缘点]
+    C --> D[投票累加]
+    D --> E[查找峰值]
+    E --> F[提取直线参数]
+    F --> G[绘制直线]</div>
                             <div class="diagram-legend mt-3">
                                 <h6><i class="material-icons align-middle" style="font-size: 16px;">info</i> 原理说明</h6>
                                 <p><strong>点 - 线对偶性</strong>：图像空间中的一条直线对应参数空间中的一个点；图像空间中的一个点对应参数空间中的一条正弦曲线。共线的点在参数空间中表现为相交的正弦曲线，交点即为所求直线的参数。</p>
@@ -199,19 +185,19 @@ flowchart LR
                         <div class="card-body">
                             <h4 class="card-title text-center">直线极坐标表示</h4>
                             <div class="display-6 text-center my-4">
-                                <code>ρ = x · cos(θ) + y · sin(θ)</code>
+                                <code>ρ = x · cos(theta) + y · sin(theta)</code>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <ul class="list-unstyled">
                                         <li><strong>ρ (rho):</strong> 直线到原点的垂直距离</li>
-                                        <li><strong>θ (theta):</strong> 垂线与 x 轴的夹角</li>
+                                        <li><strong>theta (theta):</strong> 垂线与 x 轴的夹角</li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
                                     <ul class="list-unstyled">
-                                        <li><strong>ρ 范围:</strong> [0, √(W²+H²)]</li>
-                                        <li><strong>θ 范围:</strong> [0°, 180°]</li>
+                                        <li><strong>ρ 范围:</strong> [0, sqrt(W2+H2)]</li>
+                                        <li><strong>theta 范围:</strong> [0°, 180°]</li>
                                     </ul>
                                 </div>
                             </div>
@@ -234,16 +220,16 @@ sequenceDiagram
     
     Input->>Edge: Canny 边缘检测
     Note over Edge: 获取边缘点集
-    Edge->>Init: 创建 A[ρ,θ]累加器
-    Note over Init: ρ和θ离散化
+    Edge->>Init: 创建 A[ρ,theta]累加器
+    Note over Init: ρ和theta离散化
     Init->>Vote: 遍历边缘点
     loop 每个边缘点 (x,y)
-        Vote->>Vote: 遍历所有θ
-        Note over Vote: 计算ρ=x·cosθ+y·sinθ
-        Vote->>Vote: A[ρ,θ]++
+        Vote->>Vote: 遍历所有theta
+        Note over Vote: 计算ρ=x·costheta+y·sintheta
+        Vote->>Vote: A[ρ,theta]++
     end
     Vote->>Find: 寻找局部最大值
-    Note over Find: A[ρ,θ] > 阈值
+    Note over Find: A[ρ,theta] > 阈值
     Find->>Convert: 峰值转直线参数
     Convert->>Output: 绘制检测直线
                             </div>
@@ -284,14 +270,14 @@ flowchart LR
                                     <p>将连续的参数空间离散化为累加器数组：</p>
                                     <ul>
                                         <li><strong>ρ 轴:</strong> 从 -ρ_max 到 +ρ_max，步长通常为 1 像素</li>
-                                        <li><strong>θ 轴:</strong> 从 0°到 180°，步长通常为 1°</li>
+                                        <li><strong>theta 轴:</strong> 从 0°到 180°，步长通常为 1°</li>
                                     </ul>
                                     <div class="code-container">
     <div class="code-header">
         <span class="language-badge">Python</span>
     </div>
     <pre><code class="language-python"># 参数空间大小
-rho_max = sqrt(width² + height²)
+rho_max = sqrt(width2 + height2)
 rho_bins = 2 * rho_max  # 步长为 1
 theta_bins = 180  # 步长为 1 度
 accumulator = zeros((rho_bins, theta_bins))</code></pre>
@@ -307,14 +293,14 @@ accumulator = zeros((rho_bins, theta_bins))</code></pre>
                             </h2>
                             <div id="step3" class="accordion-collapse collapse" data-bs-parent="#stepsAccordion">
                                 <div class="accordion-body">
-                                    <p>对每个边缘点，遍历所有可能的θ值，计算对应的ρ值，并在累加器中对应位置投票。</p>
+                                    <p>对每个边缘点，遍历所有可能的theta值，计算对应的ρ值，并在累加器中对应位置投票。</p>
                                     <div class="mermaid">
 flowchart TD
     A[边缘点集] --> B{遍历每个点}
-    B --> C[遍历θ∈[0°,180°]]
-    C --> D[计算ρ=x·cosθ+y·sinθ]
-    D --> E[累加器 A[ρ,θ]++]
-    E --> F{θ遍历完？}
+    B --> C[遍历theta∈[0°,180°]]
+    C --> D[计算ρ=x·costheta+y·sintheta]
+    D --> E[累加器 A[ρ,theta]++]
+    E --> F{theta遍历完？}
     F -->|否 | C
     F -->|是 | G{点遍历完？}
     G -->|否 | B
@@ -337,7 +323,7 @@ flowchart TD
                                     <div class="mermaid">
 flowchart LR
     A[累加器] --> B[寻找局部最大值]
-    B --> C{A[ρ,θ] > 阈值？}
+    B --> C{A[ρ,theta] > 阈值？}
     C -->|是 | D[记录直线参数]
     C -->|否 | E[忽略]
     
@@ -366,7 +352,7 @@ flowchart TD
         C1[正弦曲线 1]
         C2[正弦曲线 2]
         C3[正弦曲线 3]
-        IP[交点 ρ₀,θ₀]
+        IP[交点 ρ₀,theta₀]
     end
     
     P1 --> C1
@@ -390,48 +376,17 @@ flowchart TD
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-flowchart TD
-    A[输入图像] --> B[边缘检测]
-    B --> C[初始化累加器]
-    C --> D[遍历边缘点]
-    D --> E[对每个θ计算ρ]
-    E --> F[累加器投票]
-    F --> G{遍历完成？}
-    G -->|否 | D
-    G -->|是 | H[查找累加器峰值]
-    H --> I[提取直线参数]
-    I --> J[绘制直线]
-    
-    style A fill:#e3f2fd
-    style J fill:#c8e6c9
-    style F fill:#fff3e0
-```
-
+<div class="mermaid">
+flowchart LR
+    A[边缘图] --> B[累加器]
+    B --> C[投票]
+    C --> D[找峰值]
+    D --> E[提取直线]
+    E --> F[绘制]
+</div>
                         </div>
 
-                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
-                        <div class="mermaid-container bg-white p-4 rounded">
-
-```mermaid
-sequenceDiagram
-    participant Image as 输入图像
-    participant Edge as 边缘图
-    participant Accumulator as 累加器空间
-    participant Peak as 峰值检测
-    participant Line as 直线输出
-    
-    Image->>Edge: Canny 边缘检测
-    Edge->>Accumulator: 初始化 (ρ,θ) 空间
-    loop 每个边缘点
-        Edge->>Accumulator: 遍历所有θ
-        Accumulator->>Accumulator: 计算ρ并投票
-    end
-    Accumulator->>Peak: 查找局部最大值
-    Peak->>Line: 提取 (ρ,θ) 参数
-    Line->>Line: 绘制检测直线
-```
+                        
 
                         </div>
 
@@ -444,7 +399,7 @@ sequenceDiagram
 </thead>
 <tbody>
 <tr><td>ρ分辨率</td><td>距离量化精度</td><td>越小检测越精确</td></tr>
-<tr><td>θ分辨率</td><td>角度量化精度</td><td>影响角度精度</td></tr>
+<tr><td>theta分辨率</td><td>角度量化精度</td><td>影响角度精度</td></tr>
 <tr><td>阈值</td><td>最小投票数</td><td>决定直线检测灵敏度</td></tr>
 </tbody>
 </table>

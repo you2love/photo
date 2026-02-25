@@ -235,20 +235,22 @@ if __name__ == "__main__":
 
                         <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
                         <div class="mermaid-container bg-white p-4 rounded">
+<div class="mermaid">
+flowchart LR
+    A[输入] --> B[平移向量]
+    B --> C[平移]
+    C --> D[输出]
+</div>
+                        </div>
 
-```mermaid
-flowchart TD
-    A[原始图像] --> B[确定平移向量<br/>tx, ty]
-    B --> C[创建变换矩阵]
-    C --> D[应用变换到每个像素]
-    D --> E[处理边界]
-    E --> F[输出平移后图像]
-    
-    matrix["变换矩阵：<br/>[1 0 tx]<br/>[0 1 ty]"]
-    
-    style A fill:#e3f2fd
-    style F fill:#c8e6c9
-```
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+<div class="mermaid">flowchart LR
+    A[输入图像] --> B[确定平移向量]
+    B --> C[应用平移变换]
+    C --> D[处理边界]
+    D --> E[输出平移图像]</div>
 
                         </div>
 
@@ -330,6 +332,23 @@ flowchart TD
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
     <script src="../../libs/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                diagramMarginX: 50,
+                diagramMarginY: 10
+            }
+        });
+    </script>
+
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>
