@@ -93,55 +93,52 @@
             <div class="mermaid-container bg-white">
                 <div class="mermaid">
 flowchart TD
-    subgraph 输入
+    subgraph Input["输入"]
         IMG[输入图像]
     end
-    
-    subgraph 预处理
-        direction TB
+
+    subgraph Preprocess["预处理"]
         GEO[几何变换]
         FIL[滤波去噪]
         ENH[图像增强]
     end
-    
-    subgraph 特征提取
-        direction TB
+
+    subgraph Feature["特征提取"]
         EDGE[边缘检测]
         LINE[直线检测]
         MORPH[形态学]
         FEAT[特征描述]
     end
-    
-    subgraph 高级处理
-        direction TB
+
+    subgraph Advanced["高级处理"]
         SEG[图像分割]
         REC[图像复原]
         REG[图像配准]
         COMP[图像压缩]
     end
-    
-    subgraph 输出
+
+    subgraph Output["输出"]
         RESULT[分析结果]
     end
-    
-    IMG --> 预处理
-    预处理 --> 特征提取
-    特征提取 --> 高级处理
-    高级处理 --> 输出
-    
-    GEO --> 平移旋转缩放
-    FIL --> 均值高斯中值
-    ENH --> 直方图锐化
-    
-    EDGE --> Canny/Sobel
-    LINE --> Hough 变换
-    MORPH --> 腐蚀膨胀
-    FEAT --> SIFT/HOG
-    
-    SEG --> 阈值/区域
-    REC --> 去模糊去噪
-    REG --> 特征配准
-    COMP --> JPEG 压缩
+
+    IMG --> Preprocess
+    Preprocess --> Feature
+    Feature --> Advanced
+    Advanced --> Output
+
+    GEO --> GeoDetail[平移旋转缩放]
+    FIL --> FilDetail[均值高斯中值]
+    ENH --> EnhDetail[直方图锐化]
+
+    EDGE --> EdgeDetail[Canny/Sobel]
+    LINE --> LineDetail[Hough 变换]
+    MORPH --> MorphDetail[腐蚀膨胀]
+    FEAT --> FeatDetail[SIFT/HOG]
+
+    SEG --> SegDetail[阈值/区域]
+    REC --> RecDetail[去模糊去噪]
+    REG --> RegDetail[特征配准]
+    COMP --> CompDetail[JPEG 压缩]
                 </div>
             </div>
         </div>
@@ -167,14 +164,14 @@ flowchart TD
                             <div class="col-lg-6">
                                 <div class="mermaid">
 flowchart LR
-    subgraph 几何变换
+    subgraph Transform["几何变换"]
         A[输入图像] --> B[变换矩阵]
         B --> C[坐标映射]
         C --> D[灰度插值]
         D --> E[输出图像]
     end
-    
-    subgraph 插值方法
+
+    subgraph Interpolation["插值方法"]
         D --> D1[最近邻]
         D --> D2[双线性]
         D --> D3[双三次]
@@ -235,7 +232,7 @@ flowchart LR
                     <div class="card-body">
                         <div class="mermaid mb-4">
 flowchart TD
-    subgraph 空域滤波
+    subgraph SpatialFilter["空域滤波"]
         A[输入图像] --> B{滤波类型}
         B -->|平滑 | C[低通滤波]
         B -->|锐化 | D[高通滤波]
@@ -246,8 +243,8 @@ flowchart TD
         D --> D1[Laplacian]
         D --> D2[非锐化掩蔽]
     end
-    
-    subgraph 频域滤波
+
+    subgraph FrequencyFilter["频域滤波"]
         A --> E[傅里叶变换]
         E --> F[频域滤波]
         F --> G[逆傅里叶变换]
@@ -314,22 +311,23 @@ flowchart TD
                             <div class="col-lg-8">
                                 <div class="mermaid">
 flowchart LR
-    subgraph 一阶微分算子
+    subgraph FirstOrder["一阶微分算子"]
         A[Sobel] --> D[梯度计算]
         B[Prewitt] --> D
         C[Roberts] --> D
     end
-    
-    subgraph 二阶微分算子
+
+    subgraph SecondOrder["二阶微分算子"]
         E[Laplacian] --> F[零交叉检测]
         G[LoG] --> F
     end
-    
-    subgraph 最优检测
+
+    subgraph Optimal["最优检测"]
         H[高斯平滑] --> I[Canny]
         I --> J[非极大值抑制]
         J --> K[双阈值]
         K --> L[边缘连接]
+    end
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -414,20 +412,20 @@ sequenceDiagram
                             <div class="col-lg-6">
                                 <div class="mermaid">
 flowchart TD
-    subgraph 基本操作
+    subgraph BasicOp["基本操作"]
         A[输入图像] --> B{结构元素}
         B --> C[腐蚀]
         B --> D[膨胀]
     end
-    
-    subgraph 组合操作
+
+    subgraph CombinedOp["组合操作"]
         C --> E[开运算<br/>先腐后膨]
         D --> F[闭运算<br/>先膨后腐]
         E --> G[去除小物体]
         F --> H[填充孔洞]
     end
-    
-    subgraph 衍生操作
+
+    subgraph DerivedOp["衍生操作"]
         G --> I[骨架化]
         H --> J[顶帽/底帽]
     end
@@ -482,19 +480,19 @@ flowchart TD
                     <div class="card-body">
                         <div class="mermaid mb-4">
 flowchart LR
-    subgraph 传统方法
+    subgraph Traditional["传统方法"]
         A[阈值分割] --> A1[全局/自适应]
         B[区域生长] --> B1[种子点选择]
         C[边缘分割] --> C1[边缘连接]
     end
-    
-    subgraph 现代方法
+
+    subgraph Modern["现代方法"]
         D[图割] --> D1[能量最小化]
         E[分水岭] --> E1[梯度图]
         F[深度学习] --> F1[FCN/U-Net]
     end
-    
-    subgraph 聚类方法
+
+    subgraph Clustering["聚类方法"]
         G[K-means] --> G1[迭代优化]
         H[Mean Shift] --> H1[密度峰值]
     end
@@ -606,15 +604,15 @@ flowchart LR
                             <div class="col-lg-6">
                                 <div class="mermaid">
 flowchart TD
-    subgraph 特征提取流程
+    subgraph FeatureProcess["特征提取流程"]
         A[输入图像] --> B[特征点检测]
         B --> C[关键点定位]
         C --> D[方向分配]
         D --> E[描述子计算]
         E --> F[特征匹配]
     end
-    
-    subgraph 应用
+
+    subgraph Application["应用"]
         F --> G[目标识别]
         F --> H[图像拼接]
         F --> I[3D 重建]
