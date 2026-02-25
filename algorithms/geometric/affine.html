@@ -6,7 +6,7 @@
     <title>仿射变换 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
-    <link href="../../libs/material-icons.css" rel="stylesheet">
+    <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
     <link href="../../libs/bootstrap.min.css" rel="stylesheet">
     <!-- 引入Prism.js CSS -->
@@ -80,7 +80,25 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    
+    <!-- 算法详情页头部 -->
+    <section class="algorithm-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html"><i class="material-icons align-middle" style="font-size: 14px;">home</i> 首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">仿射变换</li>
+                        </ol>
+                    </nav>
+                    <h1><i class="material-icons align-middle me-2">crop_rotate</i>仿射变换</h1>
+                    <p class="lead">深入理解仿射变换的原理、实现与应用</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- 仿射变换算法详解 -->
     <section class="py-5">
@@ -123,7 +141,11 @@
                     </ol>
 
                     <h2>Python实现</h2>
-                    <pre><code class="language-python">import cv2
+                    <div class="code-container">
+    <div class="code-header">
+        <span class="language-badge">Python</span>
+    </div>
+    <pre><code class="language-python">import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -293,6 +315,7 @@ if __name__ == "__main__":
     # scale_img, scale_result = scaling_affine('image.jpg', 1.2, 1.2)
     # shear_img, shear_result = shear_affine('image.jpg', 0.2, 0.1)
     pass</code></pre>
+</div>
 
                     <h2>算法优缺点</h2>
                     <h3>优点</h3>
@@ -355,9 +378,20 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/prism-python.js"></script>
+    <script src="../../libs/prism-bash.js"></script>
+    <script src="../../libs/prism-go.js"></script>
     <!-- 引入TensorFlow.js -->
     <script src="../../libs/tf.min.js"></script>
     <!-- 主要JavaScript -->
     <script src="../../js/main.js"></script>
+
+    <!-- 页脚 -->
+    <footer class="algorithm-footer">
+        <div class="container text-center">
+            <p class="mb-2"><i class="material-icons align-middle">school</i> 图像处理教程 &copy; 2024</p>
+            <p class="small mb-0">学习图像处理的完整指南 - 从传统方法到 AI 驱动技术</p>
+        </div>
+    </footer>
 </body>
 </html>

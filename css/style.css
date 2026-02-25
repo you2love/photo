@@ -342,24 +342,544 @@ html {
     background-color: #121212;
     color: #e0e0e0;
   }
-  
+
   .card {
     background-color: #2d2d2d;
     color: #e0e0e0;
   }
-  
+
   .card-header {
     background-color: #333;
     border-color: #444;
   }
-  
+
   pre {
     background-color: #1e1e1e;
   }
-  
+
   .form-control {
     background-color: #333;
     border-color: #444;
     color: #e0e0e0;
+  }
+}
+
+/* ========================================
+   算法详情页美化样式
+   ======================================== */
+
+/* 算法详情页头部区域 */
+.algorithm-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 4rem 0;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.algorithm-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.algorithm-header::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.algorithm-header .container {
+  position: relative;
+  z-index: 1;
+}
+
+.algorithm-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.algorithm-header .lead {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 800px;
+}
+
+/* 面包屑导航 */
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.breadcrumb-item a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--accent-color);
+}
+
+.breadcrumb-item.active {
+  color: #6c757d;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  color: #adb5bd;
+}
+
+/* 内容卡片样式 */
+.content-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.content-card h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--primary-color);
+  display: inline-block;
+}
+
+.content-card h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 2rem 0 1rem;
+}
+
+.content-card p {
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.content-card ul,
+.content-card ol {
+  color: #555;
+  line-height: 1.8;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.content-card ul li,
+.content-card ol li {
+  margin-bottom: 0.5rem;
+}
+
+.content-card ol {
+  counter-reset: item;
+  list-style-type: none;
+  padding: 0;
+}
+
+.content-card ol li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.content-card ol li::before {
+  content: counter(item);
+  counter-increment: item;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.content-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.content-card ul li {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.content-card ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(135deg, var(--success-color), #2ecc71);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 代码块美化 */
+.code-container {
+  background: #1e1e1e;
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-container .code-header {
+  background: #2d2d2d;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-container .code-header .language-badge {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.code-container pre {
+  margin: 0;
+  padding: 1.5rem;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* 侧边信息卡片 */
+.info-sidebar .card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  border: none;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.info-sidebar .card-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: white;
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+  border: none;
+}
+
+.info-sidebar .card-body {
+  padding: 1.25rem;
+}
+
+.info-sidebar .list-unstyled li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #555;
+}
+
+.info-sidebar .list-unstyled li:last-child {
+  border-bottom: none;
+}
+
+.info-sidebar .list-unstyled li a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.info-sidebar .list-unstyled li a:hover {
+  color: var(--accent-color);
+  padding-left: 5px;
+}
+
+.info-sidebar .list-unstyled li a::before {
+  content: '📄';
+  margin-right: 8px;
+  font-size: 0.9rem;
+}
+
+/* 优缺点卡片 */
+.pros-cons-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+  .pros-cons-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pros-card,
+.cons-card {
+  border-radius: 15px;
+  padding: 1.5rem;
+  height: 100%;
+}
+
+.pros-card {
+  background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+  border: 2px solid var(--success-color);
+}
+
+.cons-card {
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(239, 83, 80, 0.1));
+  border: 2px solid var(--danger-color);
+}
+
+.pros-card h4,
+.cons-card h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.pros-card h4::before {
+  content: '👍';
+  margin-right: 10px;
+}
+
+.cons-card h4::before {
+  content: '👎';
+  margin-right: 10px;
+}
+
+.pros-card ul,
+.cons-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pros-card ul li,
+.cons-card ul li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #555;
+}
+
+/* 应用场景卡片 */
+.scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.scenario-item {
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(52, 152, 219, 0.2);
+}
+
+.scenario-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+}
+
+.scenario-item::before {
+  content: '🎯';
+  margin-right: 12px;
+  font-size: 1.2rem;
+}
+
+/* 公式展示框 */
+.formula-box {
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(155, 89, 182, 0.05));
+  border-left: 4px solid var(--primary-color);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 10px 10px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 1.05rem;
+  color: var(--dark-color);
+}
+
+/* 提示框 */
+.tip-box {
+  background: linear-gradient(135deg, rgba(26, 188, 156, 0.1), rgba(46, 204, 113, 0.1));
+  border: 1px solid var(--info-color);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.tip-box::before {
+  content: '💡';
+  margin-right: 12px;
+  font-size: 1.3rem;
+}
+
+.tip-box strong {
+  color: var(--info-color);
+  margin-right: 0.5rem;
+}
+
+/* 警告框 */
+.warning-box {
+  background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(230, 126, 34, 0.1));
+  border: 1px solid var(--warning-color);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.warning-box::before {
+  content: '⚠️';
+  margin-right: 12px;
+  font-size: 1.3rem;
+}
+
+.warning-box strong {
+  color: var(--warning-color);
+  margin-right: 0.5rem;
+}
+
+/* 算法对比表 */
+.algorithm-comparison {
+  overflow-x: auto;
+  margin: 2rem 0;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.algorithm-comparison table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.algorithm-comparison th {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.algorithm-comparison td {
+  padding: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #555;
+}
+
+.algorithm-comparison tr:hover {
+  background: rgba(52, 152, 219, 0.05);
+}
+
+.algorithm-comparison tr:last-child td {
+  border-bottom: none;
+}
+
+/* 页脚 */
+.algorithm-footer {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  padding: 3rem 0;
+  margin-top: 4rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.algorithm-footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.algorithm-footer a:hover {
+  color: var(--accent-color);
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .content-card {
+    background: #2d2d2d;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .content-card h2,
+  .content-card h3,
+  .content-card p,
+  .content-card ul li,
+  .content-card ol li {
+    color: #e0e0e0;
+  }
+
+  .info-sidebar .card {
+    background: #2d2d2d;
+  }
+
+  .info-sidebar .list-unstyled li {
+    border-bottom-color: #444;
+    color: #e0e0e0;
+  }
+
+  .pros-card,
+  .cons-card,
+  .scenario-item {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .algorithm-comparison table {
+    background: #2d2d2d;
+  }
+
+  .algorithm-comparison td {
+    color: #e0e0e0;
+    border-bottom-color: #444;
   }
 }

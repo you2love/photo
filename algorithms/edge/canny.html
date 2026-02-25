@@ -80,7 +80,25 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    
+    <!-- 算法详情页头部 -->
+    <section class="algorithm-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="../../index.html"><i class="material-icons align-middle" style="font-size: 14px;">home</i> 首页</a></li>
+                            <li class="breadcrumb-item"><a href="../../algorithms_detail.html">算法详解</a></li>
+                            <li class="breadcrumb-item active">Canny 边缘检测</li>
+                        </ol>
+                    </nav>
+                    <h1><i class="material-icons align-middle me-2">edges</i>Canny 边缘检测</h1>
+                    <p class="lead">深入理解Canny 边缘检测的原理、实现与应用</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Canny 边缘检测算法详解 -->
     <section class="py-5">
@@ -345,7 +363,11 @@ flowchart LR
 
                     <!-- Python 实现 -->
                     <h2>Python 实现</h2>
-                    <pre><code class="language-python">import cv2
+                    <div class="code-container">
+    <div class="code-header">
+        <span class="language-badge">Python</span>
+    </div>
+    <pre><code class="language-python">import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -378,6 +400,7 @@ if __name__ == "__main__":
     plt.imshow(edges, cmap='gray')
     plt.title('Canny Edges')
     plt.show()</code></pre>
+</div>
 
                     <!-- 算法优缺点 -->
                     <h2>算法优缺点</h2>
@@ -549,8 +572,19 @@ if __name__ == "__main__":
 
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/prism-python.js"></script>
+    <script src="../../libs/prism-bash.js"></script>
+    <script src="../../libs/prism-go.js"></script>
     <script src="../../libs/tf.min.js"></script>
     <script src="../../js/diagram.js"></script>
     <script src="../../js/main.js"></script>
+
+    <!-- 页脚 -->
+    <footer class="algorithm-footer">
+        <div class="container text-center">
+            <p class="mb-2"><i class="material-icons align-middle">school</i> 图像处理教程 &copy; 2024</p>
+            <p class="small mb-0">学习图像处理的完整指南 - 从传统方法到 AI 驱动技术</p>
+        </div>
+    </footer>
 </body>
 </html>
