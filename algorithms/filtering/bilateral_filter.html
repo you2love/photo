@@ -123,7 +123,39 @@
                     <p class="lead">双边滤波是一种非线性滤波技术，能够在平滑图像的同时很好地保持边缘信息，广泛用于图像去噪和美颜。</p>
 
                     <h2>算法原理</h2>
-                    <p>双边滤波结合了空间邻近度和像素值相似度的双重考虑，为每个像素的邻域内的其他像素分配权重。与传统的高斯滤波只考虑空间距离不同，双边滤波还考虑像素值的差异。</p>
+                    <p>双边滤波结合了空间邻近度和像素值相似度的双重考虑，为每个像素的邻域内的其他像素分配权重。与传统的高斯滤波只考虑空间距离不同，双边滤波还考虑像素值的差异。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[对每个像素 p]
+    B --> C[计算空间权重<br/>ws = exp(-||p-q||²/2σs²)]
+    B --> D[计算灰度权重<br/>wr = exp(-|Ip-Iq|²/2σr²)]
+    C --> E[组合权重<br/>w = ws × wr]
+    D --> E
+    E --> F[加权平均]
+    F --> G[输出像素]
+    
+    style E fill:#fff3e0
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>参数</th><th>说明</th><th>典型值</th></tr>
+</thead>
+<tbody>
+<tr><td>d</td><td>邻域直径</td><td>9</td></tr>
+<tr><td>σ_color</td><td>颜色空间标准差</td><td>75</td></tr>
+<tr><td>σ_space</td><td>坐标空间标准差</td><td>75</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>双边滤波的公式为：</p>
                     <p>I'(p) = (1/Wp) × Σ I(q) × Gs(||p-q||) × Gr(|I(p)-I(q)|)</p>

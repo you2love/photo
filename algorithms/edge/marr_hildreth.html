@@ -130,7 +130,42 @@
                         <li>应用拉普拉斯算子检测边缘</li>
                     </ol>
                     
-                    <p>该算法的核心思想是在不同尺度下检测边缘，通过寻找拉普拉斯算子的零交叉点来确定边缘位置。</p>
+                    <p>该算法的核心思想是在不同尺度下检测边缘，通过寻找拉普拉斯算子的零交叉点来确定边缘位置。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[高斯函数 G(x,y)]
+    B --> C[与图像卷积]
+    C --> D[应用 Laplacian]
+    D --> E[LoG 响应图]
+    E --> F[过零点检测]
+    F --> G[边缘图]
+    
+    subgraph 公式
+        H[LoG = ∇²(G * f)]
+    end
+    
+    E -.-> H
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>参数</th><th>说明</th><th>影响</th></tr>
+</thead>
+<tbody>
+<tr><td>σ (sigma)</td><td>高斯标准差</td><td>决定平滑程度和边缘尺度</td></tr>
+<tr><td>核大小</td><td>LoG 滤波器尺寸</td><td>通常取 6σ 或更大</td></tr>
+<tr><td>阈值</td><td>过零点检测阈值</td><td>控制边缘灵敏度</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>LoG（Laplacian of Gaussian）函数的数学表达式为：</p>
                     <p>LoG(x, y) = [x2 + y2 - 2σ2] / [σ⁴] × e^[-(x2 + y2)/(2σ2)]</p>

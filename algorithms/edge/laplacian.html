@@ -123,7 +123,36 @@
                     <p class="lead">Laplacian算子是一种各向同性的二阶导数算子，用于检测图像中的边缘和细节，对边缘方向不敏感。</p>
 
                     <h2>算法原理</h2>
-                    <p>Laplacian算子是一个二阶微分算子，用于检测图像中的边缘。它通过对图像进行二阶微分来突出图像中的快速变化区域（如边缘）。Laplacian算子的数学表达式为：</p>
+                    <p>Laplacian算子是一个二阶微分算子，用于检测图像中的边缘。它通过对图像进行二阶微分来突出图像中的快速变化区域（如边缘）。Laplacian算子的数学表达式为：
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[灰度转换]
+    B --> C[Laplacian 核<br/>0 -1 0<br/>-1 4 -1<br/>0 -1 0]
+    C --> D[二阶导数计算]
+    D --> E[过零点检测]
+    E --> F[边缘图]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>特性</th><th>说明</th></tr>
+</thead>
+<tbody>
+<tr><td>算子类型</td><td>二阶微分算子</td></tr>
+<tr><td>边缘定位</td><td>过零点位置</td></tr>
+<tr><td>方向敏感性</td><td>各向同性</td></tr>
+<tr><td>噪声敏感</td><td>较高，通常先高斯平滑</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>∇2f = ∂2f/∂x2 + ∂2f/∂y2</p>
                     

@@ -123,7 +123,39 @@
                     <p class="lead">高斯滤波是一种线性滤波技术，使用高斯函数作为权重对图像进行平滑处理，广泛用于图像去噪和预处理。</p>
 
                     <h2>算法原理</h2>
-                    <p>高斯滤波基于高斯函数（正态分布）构建滤波器核，对图像进行卷积操作。与均值滤波不同，高斯滤波给距离中心点较近的像素分配更高的权重，从而在平滑图像的同时更好地保持边缘信息。</p>
+                    <p>高斯滤波基于高斯函数（正态分布）构建滤波器核，对图像进行卷积操作。与均值滤波不同，高斯滤波给距离中心点较近的像素分配更高的权重，从而在平滑图像的同时更好地保持边缘信息。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[生成高斯核<br/>G(x,y) = (1/2πσ²)e^(-(x²+y²)/2σ²)]
+    B --> C[加权卷积<br/>中心权重高，边缘权重低]
+    C --> D[输出平滑图像<br/>保留边缘信息]
+    
+    subgraph 高斯核示例 (σ=1)
+        E[1 2 1<br/>2 4 2<br/>1 2 1]
+    end
+    
+    B -.-> E
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>参数</th><th>说明</th><th>影响</th></tr>
+</thead>
+<tbody>
+<tr><td>核大小</td><td>滤波器窗口尺寸</td><td>越大平滑效果越强</td></tr>
+<tr><td>σ (sigma)</td><td>标准差</td><td>决定高斯分布宽度</td></tr>
+<tr><td>权重分布</td><td>中心高边缘低</td><td>保边效果优于均值滤波</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>二维高斯函数定义为：</p>
                     <p>G(x, y) = (1 / (2πσ2)) × e^(-(x2+y2)/(2σ2))</p>

@@ -123,7 +123,42 @@
                     <p class="lead">Otsu算法是一种自动阈值选择方法，通过最大化类间方差来确定最优阈值，适用于双峰直方图的图像二值化。</p>
 
                     <h2>算法原理</h2>
-                    <p>Otsu算法由日本学者Nobuyuki Otsu在1979年提出，是一种自动确定阈值的方法。该算法基于图像的灰度直方图，通过最大化前景和背景之间的类间方差来确定最优阈值。</p>
+                    <p>Otsu算法由日本学者Nobuyuki Otsu在1979年提出，是一种自动确定阈值的方法。该算法基于图像的灰度直方图，通过最大化前景和背景之间的类间方差来确定最优阈值。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart TD
+    A[输入灰度图像] --> B[计算直方图<br/>统计各灰度级像素数]
+    B --> C[初始化 t=0<br/>最大类间方差=0]
+    C --> D[t++]
+    D --> E[按 t 分割<br/>前景 (0~t) / 背景 (t~255)]
+    E --> F[计算类间方差<br/>σ²(t) = w0·w1·(μ0-μ1)²]
+    F --> G{σ²(t) > 最大方差？}
+    G -->|是 | H[更新最优阈值<br/>t* = t]
+    G -->|否 | I{t < 255？}
+    H --> I
+    I -->|是 | D
+    I -->|否 | J[应用最优阈值 t*]
+    J --> K[输出二值图像]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>符号</th><th>说明</th><th>计算</th></tr>
+</thead>
+<tbody>
+<tr><td>w0, w1</td><td>前景/背景权重</td><td>像素数占比</td></tr>
+<tr><td>μ0, μ1</td><td>前景/背景均值</td><td>平均灰度</td></tr>
+<tr><td>σ²</td><td>类间方差</td><td>w0·w1·(μ0-μ1)²</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>算法的核心思想是找到一个阈值T，使得前景和背景之间的类间方差最大，或者等价地，使得前景和背景的类内方差最小。</p>
                     

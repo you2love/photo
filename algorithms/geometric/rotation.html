@@ -123,7 +123,36 @@
                     <p class="lead">旋转变换是图像几何变换的重要组成部分，用于绕指定中心点旋转图像一定角度。</p>
 
                     <h2>算法原理</h2>
-                    <p>旋转变换是指将图像绕某个固定点（通常是图像中心）按指定角度旋转的操作。设原始点为(x, y)，旋转角度为theta，则变换后的点为(x', y')：</p>
+                    <p>旋转变换是指将图像绕某个固定点（通常是图像中心）按指定角度旋转的操作。设原始点为(x, y)，旋转角度为theta，则变换后的点为(x', y')：
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[原始图像] --> B[确定旋转中心<br/>(cx, cy)]
+    B --> C[确定旋转角度 θ]
+    C --> D[计算旋转矩阵<br/>cosθ -sinθ<br/>sinθ cosθ]
+    D --> E[应用变换<br/>x' = x·cosθ - y·sinθ<br/>y' = x·sinθ + y·cosθ]
+    E --> F[插值处理]
+    F --> G[旋转后图像]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>角度</th><th>cosθ</th><th>sinθ</th><th>效果</th></tr>
+</thead>
+<tbody>
+<tr><td>90°</td><td>0</td><td>1</td><td>顺时针 90 度</td></tr>
+<tr><td>180°</td><td>-1</td><td>0</td><td>旋转 180 度</td></tr>
+<tr><td>45°</td><td>√2/2</td><td>√2/2</td><td>旋转 45 度</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     <p>x' = x cos(theta) - y sin(theta)</p>
                     <p>y' = x sin(theta) + y cos(theta)</p>
                     

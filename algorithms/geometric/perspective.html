@@ -123,7 +123,41 @@
                     <p class="lead">透视变换是一种更通用的几何变换，能够模拟三维空间中的视角变化，常用于校正图像的透视失真。</p>
 
                     <h2>算法原理</h2>
-                    <p>透视变换（也称为投影变换）是一种将图像从一个视平面投影到另一个视平面的变换。它能够处理由于相机视角不同而产生的透视失真，例如拍摄矩形物体时由于角度问题导致的梯形变形。</p>
+                    <p>透视变换（也称为投影变换）是一种将图像从一个视平面投影到另一个视平面的变换。它能够处理由于相机视角不同而产生的透视失真，例如拍摄矩形物体时由于角度问题导致的梯形变形。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[原始图像] --> B[选择 4 个对应点对<br/>任意三点不共线]
+    B --> C[计算透视矩阵 3×3<br/>h11 h12 h13<br/>h21 h22 h23<br/>h31 h32 h33]
+    C --> D[应用齐次坐标变换<br/>x' = (h11x+h12y+h13)/(h31x+h32y+h33)<br/>y' = (h21x+h22y+h23)/(h31x+h32y+h33)]
+    D --> E[输出透视变换图像]
+    
+    subgraph 应用
+        F[矫正倾斜文档]
+    end
+    
+    E -.-> F
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>对比项</th><th>仿射变换</th><th>透视变换</th></tr>
+</thead>
+<tbody>
+<tr><td>点对数量</td><td>3 对</td><td>4 对</td></tr>
+<tr><td>矩阵大小</td><td>2×3</td><td>3×3</td></tr>
+<tr><td>保持平行</td><td>是</td><td>否（会聚）</td></tr>
+<tr><td>应用场景</td><td>旋转缩放</td><td>视角矫正</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>透视变换使用3×3的投影矩阵来描述变换关系：</p>
                     <p>[x']   [h11  h12  h13] [x]</p>

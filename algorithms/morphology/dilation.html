@@ -123,7 +123,44 @@
                     <p class="lead">膨胀是数学形态学的基本操作之一，主要用于扩大图像中的前景对象，常用于填补对象中的空洞或连接相近的对象。</p>
 
                     <h2>算法原理</h2>
-                    <p>膨胀是数学形态学中与腐蚀相对的基本操作。它使用一个结构元素（也称为核或模板）在图像上滑动，并执行最大值操作。对于二值图像，膨胀操作的定义如下：</p>
+                    <p>膨胀是数学形态学中与腐蚀相对的基本操作。它使用一个结构元素（也称为核或模板）在图像上滑动，并执行最大值操作。对于二值图像，膨胀操作的定义如下：
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入二值图像] --> B[选择结构元素 B]
+    B --> C[滑动结构元素]
+    C --> D{结构元素内<br/>存在像素为 1？}
+    D -->|是 | E[中心像素置 1]
+    D -->|否 | F[中心像素保持 0]
+    E --> G[输出像素]
+    F --> G
+    G --> H[膨胀后图像<br/>物体扩大]
+    
+    subgraph 效果
+        I[填充孔洞<br/>连接邻近物体]
+    end
+    
+    H -.-> I
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>结构元素</th><th>效果</th><th>应用</th></tr>
+</thead>
+<tbody>
+<tr><td>3×3 方形</td><td>轻微膨胀</td><td>填充小孔</td></tr>
+<tr><td>5×5 方形</td><td>中度膨胀</td><td>连接物体</td></tr>
+<tr><td>3×3 十字</td><td>方向性膨胀</td><td>保留特定方向</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>对于图像A和结构元素B，A被B膨胀定义为：</p>
                     <p>A ⊕ B = {z | (B^z) ∩ A ≠ Ø}</p>

@@ -123,7 +123,38 @@
                     <p class="lead">Prewitt算子是一种离散微分算子，用于计算图像亮度函数的梯度近似值，在图像处理中用于边缘检测，与Sobel算子类似但权重分布不同。</p>
 
                     <h2>算法原理</h2>
-                    <p>Prewitt算子通过计算图像在水平和垂直方向上的梯度来检测边缘。它使用两个3×3的卷积核分别计算x方向和y方向的梯度：</p>
+                    <p>Prewitt算子通过计算图像在水平和垂直方向上的梯度来检测边缘。它使用两个3×3的卷积核分别计算x方向和y方向的梯度：
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[Prewitt X 核<br/>-1 0 1<br/>-1 0 1<br/>-1 0 1]
+    A --> C[Prewitt Y 核<br/>-1 -1 -1<br/>0 0 0<br/>1 1 1]
+    B --> D[Gx 卷积]
+    C --> E[Gy 卷积]
+    D --> F[合并梯度]
+    E --> F
+    F --> G[输出边缘]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>对比项</th><th>Prewitt</th><th>Sobel</th></tr>
+</thead>
+<tbody>
+<tr><td>X 核权重</td><td>[-1 0 1] 重复</td><td>[-1 0 1] 中间加权</td></tr>
+<tr><td>平滑效果</td><td>较弱</td><td>较强（中心加权）</td></tr>
+<tr><td>抗噪性</td><td>一般</td><td>较好</td></tr>
+<tr><td>计算复杂度</td><td>低</td><td>低</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p><strong>x方向核 (Px):</strong></p>
                     <p>[-1  0  +1]</p>

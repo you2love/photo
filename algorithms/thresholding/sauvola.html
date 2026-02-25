@@ -123,7 +123,42 @@
                     <p class="lead">Sauvola算法是一种改进的局部阈值方法，通过考虑局部均值和标准差来确定动态阈值，特别适用于文档图像的二值化。</p>
 
                     <h2>算法原理</h2>
-                    <p>Sauvola算法是基于Niblack算法的改进版本，由J. Sauvola等人在1999年提出，专门用于文档图像的二值化。该算法考虑了局部对比度，能够更好地处理光照不均匀的文档图像。</p>
+                    <p>Sauvola算法是基于Niblack算法的改进版本，由J. Sauvola等人在1999年提出，专门用于文档图像的二值化。该算法考虑了局部对比度，能够更好地处理光照不均匀的文档图像。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[定义滑动窗口<br/>w×w]
+    B --> C[遍历每个像素]
+    C --> D[计算窗口内<br/>均值 m 和标准差 s]
+    D --> E[计算动态阈值<br/>T = m × (1 + k × (s/R - 1))]
+    E --> F[应用阈值]
+    F --> G[输出二值图像]
+    
+    subgraph 参数
+        H[k=0.2~0.5<br/>R=128]
+    end
+    
+    E -.-> H
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>参数</th><th>说明</th><th>典型值</th><th>影响</th></tr>
+</thead>
+<tbody>
+<tr><td>窗口大小</td><td>局部统计窗口</td><td>15×15 或 25×25</td><td>决定局部范围</td></tr>
+<tr><td>k</td><td>灵敏度参数</td><td>0.2-0.5</td><td>影响文本检测</td></tr>
+<tr><td>R</td><td>标准差最大值</td><td>128</td><td>归一化因子</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>Sauvola算法的阈值计算公式为：</p>
                     

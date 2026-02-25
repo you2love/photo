@@ -123,7 +123,44 @@
                     <p class="lead">维纳滤波是一种基于统计学原理的最优滤波技术，旨在最小化估计误差的均方值，常用于图像复原和去模糊。</p>
 
                     <h2>算法原理</h2>
-                    <p>维纳滤波是由数学家诺伯特·维纳提出的线性滤波技术，用于估计原始信号。它假设信号和噪声都是平稳线性随机过程，并且已知它们的谱特性或统计特性。</p>
+                    <p>维纳滤波是由数学家诺伯特·维纳提出的线性滤波技术，用于估计原始信号。它假设信号和噪声都是平稳线性随机过程，并且已知它们的谱特性或统计特性。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[含噪图像 g(x,y)] --> B[估计局部统计量]
+    B --> C[计算局部均值 μ]
+    B --> D[计算局部方差 σ²]
+    C --> E[估计噪声方差 v²]
+    D --> E
+    E --> F[计算自适应权重<br/>(σ²-v²)/σ²]
+    F --> G[应用维纳公式]
+    G --> H[输出复原图像 f(x,y)]
+    
+    subgraph 维纳公式
+        I["f(x,y) = μ + ((σ²-v²)/σ²) × (g(x,y)-μ)"]
+    end
+    
+    G -.-> I
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>区域类型</th><th>σ² 与 v² 关系</th><th>滤波效果</th></tr>
+</thead>
+<tbody>
+<tr><td>平坦区域</td><td>σ² ≈ v²</td><td>接近均值滤波</td></tr>
+<tr><td>边缘区域</td><td>σ² >> v²</td><td>保留原图像</td></tr>
+<tr><td>一般区域</td><td>σ² > v²</td><td>自适应平滑</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>在频域中，维纳滤波器的传递函数为：</p>
                     <p>H(u,v) = [S_f(u,v)] / [S_f(u,v) + S_n(u,v)]</p>

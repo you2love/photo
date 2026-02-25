@@ -123,7 +123,36 @@
                     <p class="lead">中值滤波是一种非线性滤波技术，通过将像素邻域内的中值作为输出值来去除噪声，特别适用于去除椒盐噪声。</p>
 
                     <h2>算法原理</h2>
-                    <p>中值滤波是一种非线性滤波方法，它将每个像素的值替换为其邻域内所有像素值的中值。与均值滤波不同，中值滤波不会将噪声值平均到输出中，因此对脉冲噪声（如椒盐噪声）特别有效。</p>
+                    <p>中值滤波是一种非线性滤波方法，它将每个像素的值替换为其邻域内所有像素值的中值。与均值滤波不同，中值滤波不会将噪声值平均到输出中，因此对脉冲噪声（如椒盐噪声）特别有效。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[滑动窗口]
+    B --> C[收集窗口内<br/>所有像素值]
+    C --> D[排序像素值<br/>升序排列]
+    D --> E[取中值<br/>中间位置的像素]
+    E --> F[替换中心像素]
+    F --> G[输出滤波图像]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>噪声类型</th><th>中值滤波</th><th>均值滤波</th><th>高斯滤波</th></tr>
+</thead>
+<tbody>
+<tr><td>椒盐噪声</td><td>★★★ 优秀</td><td>★☆☆ 差</td><td>★☆☆ 差</td></tr>
+<tr><td>高斯噪声</td><td>★★☆ 良好</td><td>★★★ 优秀</td><td>★★★ 优秀</td></tr>
+<tr><td>边缘保持</td><td>★★★ 好</td><td>★☆☆ 差</td><td>★★☆ 中</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>对于一个大小为M×N的滤波窗口，输出像素值的计算公式为：</p>
                     <p>g(i, j) = median{f(i+m, j+n)}</p>

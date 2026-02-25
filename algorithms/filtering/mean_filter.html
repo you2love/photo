@@ -123,7 +123,37 @@
                     <p class="lead">均值滤波是一种线性滤波技术，通过计算像素邻域内的平均值来平滑图像，常用于去除噪声和平滑图像。</p>
 
                     <h2>算法原理</h2>
-                    <p>均值滤波是一种简单的线性滤波器，它将每个像素的值替换为其邻域内所有像素值的平均值。这种操作可以有效地减少图像中的噪声，但同时也会降低图像的锐度。</p>
+                    <p>均值滤波是一种简单的线性滤波器，它将每个像素的值替换为其邻域内所有像素值的平均值。这种操作可以有效地减少图像中的噪声，但同时也会降低图像的锐度。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[滑动窗口<br/>3×3 或 5×5]
+    B --> C[计算窗口内<br/>像素平均值]
+    C --> D[替换中心像素]
+    D --> E[滑动到下一位置]
+    E --> F{遍历完成？}
+    F -->|否 | B
+    F -->|是 | G[输出平滑图像]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>核大小</th><th>去噪效果</th><th>模糊程度</th><th>适用场景</th></tr>
+</thead>
+<tbody>
+<tr><td>3×3</td><td>★☆☆</td><td>低</td><td>轻微噪声</td></tr>
+<tr><td>5×5</td><td>★★☆</td><td>中</td><td>一般噪声</td></tr>
+<tr><td>7×7</td><td>★★★</td><td>高</td><td>严重噪声</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>对于一个大小为M×N的滤波窗口，输出像素值的计算公式为：</p>
                     <p>g(i, j) = (1/(M×N)) × Σ Σ f(i+m, j+n)</p>

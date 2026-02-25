@@ -123,7 +123,40 @@
                     <p class="lead">开运算是数学形态学的基本复合操作，定义为先腐蚀后膨胀，常用于去除小的噪声点和分离相连的对象。</p>
 
                     <h2>算法原理</h2>
-                    <p>开运算是数学形态学中的一种复合操作，定义为先对图像进行腐蚀操作，然后再进行膨胀操作。用数学公式表示为：</p>
+                    <p>开运算是数学形态学中的一种复合操作，定义为先对图像进行腐蚀操作，然后再进行膨胀操作。用数学公式表示为：
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[输入图像] --> B[腐蚀操作<br/>A ⊖ B]
+    B --> C[去除小物体<br/>断开狭窄连接]
+    C --> D[膨胀操作<br/>(A ⊖ B) ⊕ B]
+    D --> E[恢复物体大小<br/>保持分离状态]
+    E --> F[输出开运算图像<br/>A ○ B = (A ⊖ B) ⊕ B]
+    
+    subgraph 应用
+        G[去除小亮点<br/>平滑轮廓]
+    end
+    
+    F -.-> G
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>操作</th><th>公式</th><th>效果</th><th>应用</th></tr>
+</thead>
+<tbody>
+<tr><td>开运算</td><td>A ○ B = (A ⊖ B) ⊕ B</td><td>去小物体</td><td>去除小亮点</td></tr>
+<tr><td>闭运算</td><td>A • B = (A ⊕ B) ⊖ B</td><td>填充小孔</td><td>填充小暗点</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>A ○ B = (A ⊖ B) ⊕ B</p>
                     

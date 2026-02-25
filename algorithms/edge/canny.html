@@ -293,7 +293,42 @@ flowchart LR
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <p><strong>梯度幅值:</strong> G = sqrt(Gx2 + Gy2)</p>
+                                    <p><strong>梯度幅值:</strong> G = sqrt(Gx2 + Gy2)
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart TD
+    A[原始图像] --> B[高斯滤波<br/>去除噪声]
+    B --> C[计算梯度<br/>幅值和方向]
+    C --> D[非极大值抑制<br/>细化边缘]
+    D --> E[双阈值检测<br/>高阈值/低阈值]
+    E --> F{边缘点分类}
+    F -->|梯度>高阈值 | G[强边缘点]
+    F -->|低阈值<梯度<高阈值 | H[弱边缘点]
+    F -->|梯度<低阈值 | I[抑制]
+    G --> J[边缘连接]
+    H --> J
+    J --> K[最终边缘图]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>步骤</th><th>输入</th><th>输出</th><th>目的</th></tr>
+</thead>
+<tbody>
+<tr><td>高斯滤波</td><td>原始图像</td><td>平滑图像</td><td>去除噪声</td></tr>
+<tr><td>计算梯度</td><td>平滑图像</td><td>梯度图</td><td>找到边缘候选</td></tr>
+<tr><td>非极大值抑制</td><td>梯度图</td><td>细化梯度</td><td>单像素边缘</td></tr>
+<tr><td>双阈值</td><td>细化梯度</td><td>边缘点</td><td>连接真实边缘</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                                     <p><strong>梯度方向:</strong> theta = arctan(Gy/Gx)</p>
                                 </div>
                             </div>

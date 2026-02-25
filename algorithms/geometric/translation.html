@@ -123,7 +123,35 @@
                     <p class="lead">平移变换是最基本的几何变换之一，用于将图像中的每个点按照指定的方向和距离移动。</p>
 
                     <h2>算法原理</h2>
-                    <p>平移变换是指将图像中的每个像素点按照指定的水平和垂直方向移动一定距离的操作。设原始点为(x, y)，平移量为(tx, ty)，则变换后的点为(x', y')：</p>
+                    <p>平移变换是指将图像中的每个像素点按照指定的水平和垂直方向移动一定距离的操作。设原始点为(x, y)，平移量为(tx, ty)，则变换后的点为(x', y')：
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[原始图像<br/>点 (x,y)] --> B[平移向量<br/>(tx, ty)]
+    B --> C[变换矩阵<br/>1 0 tx<br/>0 1 ty<br/>0 0 1]
+    C --> D[应用变换<br/>x' = x + tx<br/>y' = y + ty]
+    D --> E[处理边界<br/>填充或裁剪]
+    E --> F[平移后图像<br/>点 (x',y')]
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>变换类型</th><th>变换矩阵</th><th>效果</th></tr>
+</thead>
+<tbody>
+<tr><td>水平平移</td><td>tx≠0, ty=0</td><td>左右移动</td></tr>
+<tr><td>垂直平移</td><td>tx=0, ty≠0</td><td>上下移动</td></tr>
+<tr><td>对角平移</td><td>tx≠0, ty≠0</td><td>斜向移动</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     <p>x' = x + tx</p>
                     <p>y' = y + ty</p>
                     

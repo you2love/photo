@@ -123,7 +123,42 @@
                     <p class="lead">仿射变换是图像几何变换的一种高级形式，能够执行平移、旋转、缩放和剪切等多种变换的组合。</p>
 
                     <h2>算法原理</h2>
-                    <p>仿射变换是一种二维坐标空间的线性变换，它保持了点之间的共线性（即变换前共线的点变换后仍然共线）和平行性（即变换前平行的线变换后仍然平行）。仿射变换可以表示为线性变换和平移的组合。</p>
+                    <p>仿射变换是一种二维坐标空间的线性变换，它保持了点之间的共线性（即变换前共线的点变换后仍然共线）和平行性（即变换前平行的线变换后仍然平行）。仿射变换可以表示为线性变换和平移的组合。
+                    
+                    <div class="mermaid-container bg-white p-4 rounded mt-3">
+                        <div class="mermaid">
+flowchart LR
+    A[原始图像] --> B[选择 3 个对应点对<br/>不共线]
+    B --> C[计算仿射矩阵 2×3<br/>a b tx<br/>c d ty]
+    C --> D[应用变换<br/>x' = ax + by + tx<br/>y' = cx + dy + ty]
+    D --> E[插值处理]
+    E --> F[输出变换图像]
+    
+    subgraph 保持性质
+        G[平行线仍平行]
+    end
+    
+    D -.-> G
+
+                        </div>
+                    </div>
+                    
+                    
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>变换类型</th><th>自由度</th><th>保持性质</th></tr>
+</thead>
+<tbody>
+<tr><td>平移</td><td>2 (tx, ty)</td><td>形状、大小、方向</td></tr>
+<tr><td>旋转 + 平移</td><td>3 (θ, tx, ty)</td><td>形状、大小</td></tr>
+<tr><td>缩放 + 旋转 + 平移</td><td>5 (sx, sy, θ, tx, ty)</td><td>形状（相似性）</td></tr>
+<tr><td>完整仿射</td><td>6 (矩阵参数)</td><td>平行性</td></tr>
+</tbody>
+</table>
+</div>
+
+</p>
                     
                     <p>在齐次坐标系下，仿射变换可以用3×3矩阵表示，但只有6个自由度：</p>
                     <p>[x']   [a11  a12  a13] [x]</p>
