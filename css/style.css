@@ -561,6 +561,46 @@ html {
   margin: 1.5rem 0;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: max-height 0.3s ease;
+}
+
+/* 代码折叠样式 */
+.code-container.collapsed {
+  max-height: 50px;
+  overflow: hidden;
+}
+
+.code-container.collapsed pre {
+  display: none;
+}
+
+.code-collapse-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  margin: 0.75rem 1.25rem;
+}
+
+.code-collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.code-container.collapsed .code-collapse-btn i {
+  transform: rotate(-90deg);
+  transition: transform 0.3s ease;
+}
+
+.code-container:not(.collapsed) .code-collapse-btn i {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
 }
 
 .code-container .code-header {

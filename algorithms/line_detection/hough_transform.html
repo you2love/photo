@@ -272,9 +272,13 @@ flowchart LR
                                         <li><strong>ρ 轴:</strong> 从 -ρ_max 到 +ρ_max，步长通常为 1 像素</li>
                                         <li><strong>theta 轴:</strong> 从 0°到 180°，步长通常为 1°</li>
                                     </ul>
-                                    <div class="code-container">
+                                    <div class="code-container collapsed">
     <div class="code-header">
         <span class="language-badge">Python</span>
+        <button class="code-collapse-btn" onclick="this.parentElement.parentElement.classList.toggle('collapsed')">
+            <i class="material-icons">expand_more</i>
+            <span>查看代码</span>
+        </button>
     </div>
     <pre><code class="language-python"># 参数空间大小
 rho_max = sqrt(width2 + height2)
@@ -408,9 +412,13 @@ flowchart LR
                     </div>
 
 <h2>Python 实现</h2>
-                    <div class="code-container">
+                    <div class="code-container collapsed">
     <div class="code-header">
         <span class="language-badge">Python</span>
+        <button class="code-collapse-btn" onclick="this.parentElement.parentElement.classList.toggle('collapsed')">
+            <i class="material-icons">expand_more</i>
+            <span>查看代码</span>
+        </button>
     </div>
     <pre><code class="language-python">import cv2
 import numpy as np
