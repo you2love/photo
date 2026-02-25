@@ -383,7 +383,76 @@ flowchart TD
                     </div>
 
                     <!-- Python 实现 -->
-                    <h2>Python 实现</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[输入图像] --> B[边缘检测]
+    B --> C[初始化累加器]
+    C --> D[遍历边缘点]
+    D --> E[对每个θ计算ρ]
+    E --> F[累加器投票]
+    F --> G{遍历完成？}
+    G -->|否 | D
+    G -->|是 | H[查找累加器峰值]
+    H --> I[提取直线参数]
+    I --> J[绘制直线]
+    
+    style A fill:#e3f2fd
+    style J fill:#c8e6c9
+    style F fill:#fff3e0
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+sequenceDiagram
+    participant Image as 输入图像
+    participant Edge as 边缘图
+    participant Accumulator as 累加器空间
+    participant Peak as 峰值检测
+    participant Line as 直线输出
+    
+    Image->>Edge: Canny 边缘检测
+    Edge->>Accumulator: 初始化 (ρ,θ) 空间
+    loop 每个边缘点
+        Edge->>Accumulator: 遍历所有θ
+        Accumulator->>Accumulator: 计算ρ并投票
+    end
+    Accumulator->>Peak: 查找局部最大值
+    Peak->>Line: 提取 (ρ,θ) 参数
+    Line->>Line: 绘制检测直线
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">table_chart</i> 参数与特性</h3>
+
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>参数</th><th>说明</th><th>影响</th></tr>
+</thead>
+<tbody>
+<tr><td>ρ分辨率</td><td>距离量化精度</td><td>越小检测越精确</td></tr>
+<tr><td>θ分辨率</td><td>角度量化精度</td><td>影响角度精度</td></tr>
+<tr><td>阈值</td><td>最小投票数</td><td>决定直线检测灵敏度</td></tr>
+</tbody>
+</table>
+</div>
+
+                    </div>
+
+<h2>Python 实现</h2>
                     <div class="code-container">
     <div class="code-header">
         <span class="language-badge">Python</span>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otsu算法 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -411,7 +412,62 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[输入灰度图像] --> B[计算直方图]
+    B --> C[初始化类间方差]
+    C --> D[遍历所有可能阈值 t]
+    D --> E[分割前景/背景]
+    E --> F[计算类间方差]
+    F --> G{方差最大？}
+    G -->|是 | H[记录最优阈值]
+    G -->|否 | I{t<255?}
+    H --> I
+    I -->|是 | D
+    I -->|否 | J[应用最优阈值]
+    J --> K[输出二值图像]
+    
+    style A fill:#e3f2fd
+    style K fill:#c8e6c9
+    style F fill:#fff3e0
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+sequenceDiagram
+    participant Image as 输入图像
+    participant Histogram as 直方图
+    participant Threshold as 阈值遍历
+    participant Variance as 方差计算
+    participant Result as 二值结果
+    
+    Image->>Histogram: 统计灰度分布
+    Histogram->>Threshold: 遍历 t=0 to 255
+    loop 每个阈值 t
+        Threshold->>Variance: 分割前景背景
+        Variance->>Variance: 计算类间方差
+        Variance->>Threshold: 更新最大方差
+    end
+    Threshold->>Result: 应用最优阈值
+    Result->>Result: 输出二值图像
+```
+
+                        </div>
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>自动确定最优阈值</li>
@@ -474,6 +530,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

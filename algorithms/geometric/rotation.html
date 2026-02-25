@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>旋转变换 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -248,7 +249,33 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[原始图像] --> B[确定旋转中心<br/>cx, cy]
+    B --> C[确定旋转角度θ]
+    C --> D[计算旋转矩阵]
+    D --> E[应用旋转变换]
+    E --> F[插值处理]
+    F --> G[输出旋转图像]
+    
+    matrix["旋转矩阵：<br/>[cosθ -sinθ]<br/>[sinθ cosθ]"]
+    
+    style A fill:#e3f2fd
+    style G fill:#c8e6c9
+```
+
+                        </div>
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>保持图像的形状特性（角度、长度比例）</li>
@@ -309,6 +336,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

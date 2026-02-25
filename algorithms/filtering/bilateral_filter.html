@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>双边滤波 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -330,7 +331,52 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[输入图像] --> B[对每个像素]
+    B --> C[计算空间距离权重]
+    B --> D[计算灰度差异权重]
+    C --> E[组合权重]
+    D --> E
+    E --> F[加权平均]
+    F --> G[输出像素]
+    G --> H{处理完成？}
+    H -->|否 | B
+    H -->|是 | I[输出保边平滑图像]
+    
+    style A fill:#e3f2fd
+    style I fill:#c8e6c9
+    style E fill:#fff3e0
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">table_chart</i> 参数与特性</h3>
+
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>参数</th><th>说明</th><th>典型值</th></tr>
+</thead>
+<tbody>
+<tr><td>d</td><td>邻域直径</td><td>9</td></tr>
+<tr><td>σ_color</td><td>颜色空间标准差</td><td>75</td></tr>
+<tr><td>σ_space</td><td>坐标空间标准差</td><td>75</td></tr>
+</tbody>
+</table>
+</div>
+
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>能够平滑图像的同时保持边缘信息</li>
@@ -391,6 +437,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

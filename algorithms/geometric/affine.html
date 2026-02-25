@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>仿射变换 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -318,7 +319,53 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[原始图像] --> B[确定 3 个对应点对]
+    B --> C[计算仿射变换矩阵]
+    C --> D[应用变换]
+    D --> E[插值处理]
+    E --> F[输出变换图像]
+    
+    matrix["仿射矩阵 2×3:<br/>[a b tx]<br/>[c d ty]"]
+    
+    style A fill:#e3f2fd
+    style F fill:#c8e6c9
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+sequenceDiagram
+    participant Src as 源图像
+    participant Points as 点对选择
+    participant Matrix as 矩阵计算
+    participant Transform as 变换应用
+    participant Dst as 目标图像
+    
+    Src->>Points: 选择 3 个源点
+    Points->>Points: 选择 3 个目标点
+    Points->>Matrix: 计算变换矩阵
+    Matrix->>Transform: 应用变换
+    Transform->>Dst: 逐像素映射
+    Dst->>Dst: 输出结果
+```
+
+                        </div>
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>能够同时执行多种几何变换（平移、旋转、缩放、剪切）</li>
@@ -379,6 +426,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

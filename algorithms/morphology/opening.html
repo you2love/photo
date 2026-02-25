@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开运算 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -379,7 +380,48 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[输入图像] --> B[腐蚀操作]
+    B --> C[去除小物体]
+    C --> D[断开狭窄连接]
+    D --> E[膨胀操作]
+    E --> F[恢复物体大小]
+    F --> G[输出开运算图像]
+    
+    style A fill:#e3f2fd
+    style G fill:#c8e6c9
+    style B fill:#fff3e0
+    style E fill:#fff3e0
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">table_chart</i> 参数与特性</h3>
+
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>操作</th><th>公式</th><th>效果</th><th>应用</th></tr>
+</thead>
+<tbody>
+<tr><td>开运算</td><td>A ○ B = (A ⊖ B) ⊕ B</td><td>去噪、断开连接</td><td>去除小亮点</td></tr>
+<tr><td>闭运算</td><td>A • B = (A ⊕ B) ⊖ B</td><td>填充孔洞、连接</td><td>填充小暗点</td></tr>
+</tbody>
+</table>
+</div>
+
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>有效去除小的噪声点</li>
@@ -441,6 +483,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

@@ -363,7 +363,79 @@ flowchart LR
                     </div>
 
                     <!-- Python 实现 -->
-                    <h2>Python 实现</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[输入图像] --> B[高斯滤波去噪]
+    B --> C[计算梯度幅值和方向]
+    C --> D[非极大值抑制]
+    D --> E[双阈值检测]
+    E --> F{梯度强度 > 高阈值？}
+    F -->|是 | G[标记为强边缘]
+    F -->|否 | H{梯度强度 > 低阈值？}
+    H -->|是 | I[标记为弱边缘]
+    H -->|否 | J[抑制]
+    G --> K[边缘连接]
+    I --> K
+    K --> L[输出最终边缘图]
+    
+    style A fill:#e3f2fd
+    style L fill:#c8e6c9
+    style D fill:#fff3e0
+    style E fill:#fff3e0
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">sync_alt</i> 数据处理时序图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+sequenceDiagram
+    participant Input as 输入图像
+    participant Gaussian as 高斯滤波
+    participant Gradient as 梯度计算
+    participant NMS as 非极大值抑制
+    participant Threshold as 双阈值
+    participant Output as 输出
+    
+    Input->>Gaussian: 原始像素
+    Gaussian->>Gradient: 平滑后图像
+    Gradient->>NMS: 梯度幅值/方向
+    NMS->>Threshold: 细化后梯度
+    Threshold->>Threshold: 应用高低阈值
+    Threshold->>Output: 连接边缘
+    Output->>Output: 最终二值边缘图
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">table_chart</i> 参数与特性</h3>
+
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>参数</th><th>说明</th><th>典型值</th><th>影响</th></tr>
+</thead>
+<tbody>
+<tr><td>低阈值</td><td>弱边缘阈值</td><td>50-100</td><td>影响边缘连续性</td></tr>
+<tr><td>高阈值</td><td>强边缘阈值</td><td>100-200</td><td>影响边缘准确性</td></tr>
+<tr><td>高斯核大小</td><td>去噪程度</td><td>3 或 5</td><td>越大去噪越强但细节丢失</td></tr>
+<tr><td>梯度方向</td><td>边缘法线方向</td><td>0°,45°,90°,135°</td><td>用于非极大值抑制</td></tr>
+</tbody>
+</table>
+</div>
+
+                    </div>
+
+<h2>Python 实现</h2>
                     <div class="code-container">
     <div class="code-header">
         <span class="language-badge">Python</span>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prewitt算子 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -379,7 +380,61 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[输入图像] --> B[灰度转换]
+    B --> C[应用 Prewitt X 核]
+    B --> D[应用 Prewitt Y 核]
+    C --> E[Gx 梯度]
+    D --> F[Gy 梯度]
+    E --> G[合并梯度]
+    F --> G
+    G --> H[阈值处理]
+    H --> I[输出边缘]
+    
+    style A fill:#e3f2fd
+    style I fill:#c8e6c9
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">table_chart</i> 参数与特性</h3>
+
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>算子</th><th>Prewitt X 核</th><th>Prewitt Y 核</th></tr>
+</thead>
+<tbody>
+<tr><td>核矩阵</td><td>
+<pre>
+-1  0  1
+-1  0  1
+-1  0  1
+</pre>
+</td><td>
+<pre>
+-1 -1 -1
+ 0  0  0
+ 1  1  1
+</pre>
+</td></tr>
+<tr><td>特点</td><td colspan="2">对水平/垂直边缘敏感，抗噪性一般</td></tr>
+</tbody>
+</table>
+</div>
+
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>计算简单，效率高</li>
@@ -440,6 +495,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

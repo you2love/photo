@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laplacian算子 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -367,7 +368,59 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[输入图像] --> B[转换为灰度图]
+    B --> C[应用 Laplacian 核]
+    C --> D[计算二阶导数]
+    D --> E{过零点检测}
+    E --> F[标记边缘点]
+    F --> G[输出边缘图]
+    
+    style A fill:#e3f2fd
+    style G fill:#c8e6c9
+    style C fill:#fff3e0
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">table_chart</i> 参数与特性</h3>
+
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>Laplacian 核</th><th>核 1</th><th>核 2</th></tr>
+</thead>
+<tbody>
+<tr><td></td><td>
+<pre>
+ 0 -1  0
+-1  4 -1
+ 0 -1  0
+</pre>
+</td><td>
+<pre>
+-1 -1 -1
+-1  8 -1
+-1 -1 -1
+</pre>
+</td></tr>
+<tr><td>特点</td><td>4 邻域</td><td>8 邻域，更敏感</td></tr>
+</tbody>
+</table>
+</div>
+
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>各向同性，对边缘方向不敏感</li>
@@ -428,6 +481,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>

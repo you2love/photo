@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>平移变换 - 图像处理算法详解</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/diagram.css">
     <link href="../../libs/roboto-font.css" rel="stylesheet">
     <link href="../../libs/material-icons-complete.css" rel="stylesheet">
     <!-- 引入Bootstrap CSS -->
@@ -227,7 +228,48 @@ if __name__ == "__main__":
     pass</code></pre>
 </div>
 
-                    <h2>算法优缺点</h2>
+                    
+                    <!-- 算法可视化 -->
+                    <div class="content-card mt-4">
+                        <h2><i class="material-icons align-middle">analytics</i> 算法可视化</h2>
+
+                        <h3><i class="material-icons align-middle">flowchart</i> 算法流程图</h3>
+                        <div class="mermaid-container bg-white p-4 rounded">
+
+```mermaid
+flowchart TD
+    A[原始图像] --> B[确定平移向量<br/>tx, ty]
+    B --> C[创建变换矩阵]
+    C --> D[应用变换到每个像素]
+    D --> E[处理边界]
+    E --> F[输出平移后图像]
+    
+    matrix["变换矩阵：<br/>[1 0 tx]<br/>[0 1 ty]"]
+    
+    style A fill:#e3f2fd
+    style F fill:#c8e6c9
+```
+
+                        </div>
+
+                        <h3><i class="material-icons align-middle">table_chart</i> 参数与特性</h3>
+
+<div class="table-responsive algorithm-comparison">
+<table class="table">
+<thead>
+<tr><th>变换类型</th><th>变换矩阵</th><th>效果</th></tr>
+</thead>
+<tbody>
+<tr><td>水平平移</td><td>tx≠0, ty=0</td><td>左右移动</td></tr>
+<tr><td>垂直平移</td><td>tx=0, ty≠0</td><td>上下移动</td></tr>
+<tr><td>对角平移</td><td>tx≠0, ty≠0</td><td>斜向移动</td></tr>
+</tbody>
+</table>
+</div>
+
+                    </div>
+
+<h2>算法优缺点</h2>
                     <h3>优点</h3>
                     <ul>
                         <li>实现简单，计算效率高</li>
@@ -287,6 +329,7 @@ if __name__ == "__main__":
     <script src="../../libs/bootstrap.bundle.min.js"></script>
     <!-- 引入Prism.js用于代码高亮 -->
     <script src="../../libs/prism.js"></script>
+    <script src="../../libs/mermaid.min.js"></script>
     <script src="../../libs/prism-python.js"></script>
     <script src="../../libs/prism-bash.js"></script>
     <script src="../../libs/prism-go.js"></script>
